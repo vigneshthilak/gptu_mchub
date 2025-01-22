@@ -1,0 +1,8 @@
+#This is for Kali Linux only
+( 
+    # Always activate your virtual environment before start your work
+        >source "venv_name"/bin/activate
+
+    # Always Deactivate your virtual environment after finishing your work
+        >deactivate
+)
