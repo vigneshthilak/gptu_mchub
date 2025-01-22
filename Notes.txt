@@ -6,3 +6,15 @@
     # Always Deactivate your virtual environment after finishing your work
         >deactivate
 )
+
+# (Reminder: After creating the style.css the below given styles should be add in the style sheet to change the font)
+
+    // <uniquifier>: Use a unique and descriptive class name
+    // <weight>: Use a value from 100 to 900
+
+    .montserrat-<uniquifier> {
+      font-family: "Montserrat", serif;
+      font-optical-sizing: auto;
+      font-weight: <weight>;
+      font-style: normal;
+    }
