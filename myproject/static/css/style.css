@@ -9,6 +9,7 @@
     
     body{
         background: whitesmoke;
+        min-height: 700vh;
     }
     
     h1{
@@ -31,10 +32,47 @@
         ::-webkit-scrollbar-thumb{
             border-radius: 6px;
             border: 2px solid white;
-            background: rgb(0, 102, 255);
+            background: rgb(10, 179, 10);
         }
     
     /*-------------- Scroll Bar End --------------*/
+
+
+    /*-------------- Menu Bar (Navigation Bar) --------------*/
+
+        .navbar{
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgb(10, 179, 10);
+            z-index: 1000;
+        }
+
+        nav .logo{
+            display: inline-block;
+        }
+
+        .navbar nav ul{
+            float: right;
+            list-style: none;
+            padding: 17px 0 0 0;
+            margin-right: 50px;
+        }
+
+        .navbar nav ul li{
+            display: inline-block;
+            float: left;
+        }
+
+        .navbar nav ul a{
+            text-decoration: none;
+            color: white;
+            margin: auto 18px;
+            font-size: 22px;
+        }
+
+    /*-------------- Menu Bar (Navigation Bar) --------------*/
     
     
     /*-------------- Text Selection Color --------------*/
@@ -45,34 +83,34 @@
         h4::selection,
         h5::selection,
         h6::selection{
-            background: rgb(255, 60, 0);
+            background: rgb(10, 179, 10);
             color: white;
         }
     
         p::selection,
         b::selection{
-            background: rgb(255, 60, 0);
+            background: rgb(10, 179, 10);
             color: white;
         }
     
         br::selection{
-            background: rgb(255, 60, 0);
+            background: rgb(10, 179, 10);
             color: white;
         }
     
         ul li::selection,
         ol li::selection{
-            background: rgb(255, 60, 0);
+            background: rgb(10, 179, 10);
             color: white;
         }
     
         img::selection{
-            background: rgb(255, 60, 0);
+            background: rgb(10, 179, 10);
             color: white;
         }
     
         nav ul li a::selection{
-            background: rgb(255, 60, 0);
+            background: rgb(10, 179, 10);
             color: white;
         }
     
@@ -80,7 +118,7 @@
         .btn2::selection,
         .btn3::selection,
         .btn4::selection{
-            background: rgb(255, 60, 0);
+            background: rgb(10, 179, 10);
             color: white;
         }
     
@@ -92,7 +130,7 @@
     
         input::selection,
         textarea::selection{
-            background: rgb(255, 60, 0);
+            background: rgb(10, 179, 10);
             color: white;
         }
     
@@ -106,17 +144,17 @@
         small::selection,
         br::selection{
             background: white;
-            color: rgb(255, 60, 0);
+            color: rgb(10, 179, 10);
         }
     
         .footer ul li::selection{
             background: white;
-            color: rgb(255, 60, 0);
+            color: rgb(10, 179, 10);
         }
     
         .footer ul li a::selection{
             background: white;
-            color: rgb(255, 60, 0);
+            color: rgb(10, 179, 10);
         }
     
     /*-------------- Text Selection Color End --------------*/
