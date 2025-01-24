@@ -1,8 +1,77 @@
 #This is for Kali Linux only
-( 
+(
+
     # Always activate your virtual environment before start your work
         >source "venv_name"/bin/activate
 
     # Always Deactivate your virtual environment after finishing your work
         >deactivate
+
+)
+
+#Unnessary CSS style
+(x
+
+    # (Reminder: After creating the style.css the below given styles should be add in the style sheet to change the font)
+
+        // <uniquifier>: Use a unique and descriptive class name
+        // <weight>: Use a value from 100 to 900
+
+        .montserrat-<uniquifier> {
+          font-family: "Montserrat", serif;
+          font-optical-sizing: auto;
+          font-weight: <weight>;
+          font-style: normal;
+        }
+
+x)
+
+#To install the Virtual Environment in Windows
+(
+
+    First you have to install the python and pip on your Windows before installing the virtual environment.
+
+        To verify the installation, open CMD and type
+            >python --version
+            >pip --version
+
+    Navigate to your project directory using CMD
+        >cd gptu_mchub
+
+    Create a virtual environment named myenv (use this name only -myenv-)
+        >python -m venv myenv
+
+    Activate the Virtual Environment
+
+        Use this command each and everytime before you start the project work everyday
+            >myenv\Scripts\activate
+
+    Deactivate the virtual environment after your finishing the work everyday
+        >deactivate
+
+)
+
+#To install the project dependencies
+(
+
+    >pip install -r requirements.txt
+
+)
+
+#The basic Git command to work with GitHub
+(
+
+    To add the changes to the GitHub using this command
+        >git add .
+    
+    To commit the changes with the commit message
+        (The commit message is mandatory, you cannot commit the changes without any messages)
+            >git commit -m "Type your commit message"
+    
+    To push the changes into the Git Repository Branch (The Branch name is "First_Branch")
+        >git push origin First_Branch
+
+    If the project has any changes use this command to import the changes from the GitHub
+        >git pull
+
 )
