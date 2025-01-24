@@ -57,3 +57,18 @@ x)
     >pip install -r requirements.txt
 
 )
+
+#The basic Git command to work with GitHub
+(
+
+    To add the changes to the GitHub using this command
+        >git add .
+    
+    To commit the changes with the commit message
+        (The commit message is mandatory, you cannot commit the changes without any messages)
+            >git commit -m "Type your commit message"
+    
+    To push the changes into the Git Repository Branch (The Branch name is "First_Branch")
+        >git push origin First_Branch
+
+)
