@@ -62,7 +62,7 @@
 
         .navbar nav ul li{
             display: inline-block;
-            float: left;
+            /*float: left;*/
         }
 
         .navbar nav ul a{
