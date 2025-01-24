@@ -71,4 +71,6 @@ x)
     To push the changes into the Git Repository Branch (The Branch name is "First_Branch")
         >git push origin First_Branch
 
+    If the project has any changes use this command to import the changes from the GitHub
+        >git pull
 )
