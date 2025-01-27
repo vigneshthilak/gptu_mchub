@@ -375,6 +375,7 @@
 
     .for-pass a{
         color: rgb(10, 179, 10);
+        text-decoration: none;
     }
 
     .for-pass a:hover{
@@ -406,9 +407,10 @@
     .register-link label a{
         color: rgb(10, 179, 10);
         font-weight: 600;
+        text-decoration: none;
     }
 
-    .register-link label a:hover{
+    .register-link a:hover{
         text-decoration: underline;
     }
 
