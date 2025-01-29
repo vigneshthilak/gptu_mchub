@@ -181,139 +181,6 @@
             padding-bottom: 10px;
         }
 
-        .three-col{
-            flex-basis: 31%;
-            background: #fff3f3;
-            border-radius: 10px;
-            margin-bottom: 5%;
-            padding: 20px 12px;
-            box-sizing: border-box;
-            color: black;
-            text-decoration: none;
-        }
-
-        .two-col{
-            flex-basis: 48%;
-            background: #fff3f3;
-            border-radius: 10px;
-            margin-bottom: 5%;
-            padding: 20px 12px;
-            box-sizing: border-box;
-            color: black;
-            text-decoration: none;
-        }
-
-        .two-col h3, .three-col h3{
-            text-align: center;
-            font-weight: 600;
-            margin: 10px 0;
-        }
-
-        .two-col p, .three-col p{
-            text-align: center;
-            margin: 10px 0 30px;
-            font-size: 16px;
-        }
-
-        .two-col:hover, .three-col:hover{
-            background-color: rgb(255, 60, 0);
-            transition: 0.5s;
-            box-shadow: 0 0 30px rgb(255, 60, 0);
-            color: white;
-        }
-
-        .two-columns{
-            flex-basis: 48%;
-        }
-
-        .two-columns img{
-            width: 100%;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            box-shadow: 0 0 20px black;
-        }
-
-        .two-columns .sq-img{
-            width: 100%;
-            border-radius: 0;
-            box-shadow: none;
-            padding-bottom: 15px;
-        }
-
-        .two-columns h1{
-            font-size: 30px;
-            padding-bottom: 15px;
-        }
-
-        .two-columns h2{
-            font-size: 30px;
-            padding-bottom: 15px;
-        }
-
-        .two-columns h4{
-            padding-bottom: 15px;
-        }
-
-        .two-columns p{
-            padding-bottom: 15px;
-            text-align: justify;
-        }
-
-        .two-columns ul{
-            list-style: none;
-        }
-
-        .two-columns ul li{
-            padding-bottom: 15px;
-        }
-
-        .two-columns ol li{
-            padding-bottom: 15px;
-        }
-
-        .two-columns div{
-            display: flex;
-            align-items: center;
-            margin-bottom: 30px;
-            color: grey;
-        }
-
-        .two-columns div .fa{
-            margin-right: 15px;
-            font-size: 28px;
-            color: rgb(255, 60, 0);
-        }
-
-        .two-columns div h5{
-            font-size: medium;
-            color: black;
-        }
-
-        .two-columns div p{
-            font-size: 16px;
-        }
-
-        .two-columns h3{
-            font-size: 25px;
-            color: black;
-            margin-bottom: 15px;
-        }
-
-        .two-columns input, .two-columns textarea{
-            width: 100%;
-            border: 1px solid grey;
-            background: transparent;
-            padding: 10px;
-            outline: 0;
-            color: black;
-            margin-bottom: 15px;
-            box-sizing: border-box;
-        }
-
-        .two-columns input::placeholder, .two-columns textarea::placeholder{
-            color: grey;
-        }
-
     /*-------------- Rows & Columns End--------------*/
 
 /*-------------- Common Styles End --------------*/
@@ -366,7 +233,7 @@
     }
 
     .access-inp input::placeholder{
-        color: gray;
+        color: rgb(10, 179, 10);
     }
 
     .for-pass{
