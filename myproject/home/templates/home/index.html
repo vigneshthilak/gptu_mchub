@@ -36,14 +36,14 @@
         <div class="navbar">
             <nav>
                 <div class="logo">
-                    <a href="../templates/index.html"><img src="{% static 'images/logo.png' %}"></a>
+                    <a href=""><img src="{% static 'images/logo.png' %}"></a>
                 </div>
     
                 <ul>
                     <li><a href="#">Home</a></li>
                     <li><a href="#">About Us</a></li>
                     <li><a href="#">Contact</a></li>
-                    <li><a href="#">Sign Up</a></li>
+                    <li><a href="{% url 'signup' %}">Sign Up</a></li>
                 </ul>
             </nav>
         </div>
@@ -55,16 +55,17 @@
         <section class="header">
             <div class="container">
                 <div class="row">
-                    <div class="two-column">
+                    <div class="two-columns">
                         <h2>WELCOME TO</h2>
                         <h1>GPTU Mentor & Counselling Hub</h1>
                         <p>
-                            One of the Best Polytechnic college in Uthangari. Best of luck to each and everyone to 
-                            become a Junior Engineer.<br><br>
+                            Our website is designed to simplify the process of managing student data efficiently and securely. 
+                            With an intuitive interface and powerful backend functionality, this platform offers features such as 
+                            storing student data, retrieving information, and managing data.<br><br>
                             <b>“Education is the powerful weapon with which you can change the world”</b>
                         </p>
                     </div>
-                    <div class="two-column">
+                    <div class="two-columns">
                         <div class="login">
                             <form action="">
                                 <h1>Log In</h1>
@@ -79,7 +80,7 @@
                                 </div>
                                 <button class="access-btn" type="submit">Log In</button>
                                 <div class="register-link">
-                                    <label>Don't have an account? <a href="#">Create an account</a></label>
+                                    <label>Don't have an account? <a href="{% url 'signup' %}">Create an account</a></label>
                                 </div>
                             </form>
                         </div>
