@@ -36,7 +36,7 @@
         <div class="navbar">
             <nav>
                 <div class="logo">
-                    <a href=""><img src="{% static 'images/logo.png' %}"></a>
+                    <a href="{% url 'index' %}"><img src="{% static 'images/logo.png' %}"></a>
                 </div>
     
                 <ul>
@@ -67,13 +67,14 @@
                     </div>
                     <div class="two-columns">
                         <div class="login">
-                            <form action="">
+                            <form action="{% url 'index' %}" method="POST">
+                                {% csrf_token %}
                                 <h1>Log In</h1>
                                 <div class="access-inp">
-                                    <input type="text" placeholder="Enter the Username" required>
+                                    <input type="text" name="username" placeholder="Enter the Username" required>
                                 </div>
                                 <div class="access-inp">
-                                    <input type="password" placeholder="Enter the Password" required>
+                                    <input type="password" name="password" placeholder="Enter the Password" required>
                                 </div>
                                 <div class="for-pass">
                                     <a href="#">Forgot Password?</a>
@@ -91,5 +92,7 @@
 
     <!-- Home Page (Header) -->
 
+
+    
 </body>
 </html>

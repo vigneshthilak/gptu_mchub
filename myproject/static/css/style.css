@@ -229,7 +229,7 @@
         border-radius: 40px;
         padding: 0 20px;
         border: 1px solid rgb(10, 179, 10);
-        color: gray;
+        color: rgb(10, 179, 10);
     }
 
     .access-inp input::placeholder{
@@ -282,3 +282,68 @@
     }
 
 /*-------------- Log In --------------*/
+
+/*-------------- Sign Up --------------*/
+
+    .signup-header{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background: whitesmoke;
+    }
+
+    .signup{
+        width: 100%;
+        border-radius: 20px;
+        padding: 30px 40px 40px;
+        background-color: rgb(219, 255, 210);
+    }
+
+    .signup-col1 h1{
+        color: rgb(10, 179, 10);
+        margin: 5px 0 0;
+    }
+
+    .signup-row{
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .signup-col1, .signup-col2{
+        flex-basis: 48%;
+    }
+
+    .signup-col1 img{
+        width: 500px;
+    }
+
+    .signup-col2 input{
+        width: 100%;
+    }
+
+    .signup-row input, .signup-col2 select{
+        width: 100%;
+    }
+
+/*-------------- Sign Up --------------*/
+
+.thankyou{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.thankyou h1{
+    color: rgb(10, 179, 10);
+}
+
+.sorry{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.sorry h1{
+    color: red;
+}
