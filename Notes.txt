@@ -77,3 +77,19 @@ x)
 )
 
 
+#MySQL to create users
+(
+
+    show databases;
+    use gptumchub;
+    create database gptumchub;
+    CREATE USER 'usergptu'@'localhost' IDENTIFIED BY 'gptu139';
+    SELECT user, host FROM mysql.user;
+    GRANT ALL PRIVILEGES ON gptumchub.* TO 'usergptu'@'localhost';
+    FLUSH PRIVILEGES;
+    show tables;
+    select * from users;
+    delete from users;
+    set sql_safe_updates=0;
+
+)

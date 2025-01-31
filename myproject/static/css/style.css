@@ -181,6 +181,11 @@
             padding-bottom: 10px;
         }
 
+        .two-columns:first-child{
+            width: 750px;
+            padding-top: 50px;
+        }
+
     /*-------------- Rows & Columns End--------------*/
 
 /*-------------- Common Styles End --------------*/
@@ -290,24 +295,31 @@
         justify-content: center;
         align-items: center;
         min-height: 100vh;
-        background: whitesmoke;
+        background: rgb(10, 179, 10);
     }
 
     .signup{
         width: 100%;
+        min-height: 80vh;
         border-radius: 20px;
-        padding: 30px 40px 40px;
-        background-color: rgb(219, 255, 210);
+        padding: 30px 60px 30px 30px;
+        background: rgb(219, 255, 210);
+        border: 1px solid rgb(10, 179, 10);
+        box-shadow: 0 0 20px 0 white;
     }
 
     .signup-col1 h1{
         color: rgb(10, 179, 10);
-        margin: 5px 0 0;
+        margin: 5px 0;
     }
 
     .signup-row{
         display: flex;
         justify-content: space-between;
+    }
+
+    .signup-col1:first-child{
+        padding-top: 50px;
     }
 
     .signup-col1, .signup-col2{
@@ -318,12 +330,42 @@
         width: 500px;
     }
 
-    .signup-col2 input{
-        width: 100%;
-    }
-
     .signup-row input, .signup-col2 select{
         width: 100%;
+        margin: 20px 0 0 0;
+        padding: 15px 20px;
+        color: rgb(10, 179, 10);
+        outline: none;
+        border: 1px solid rgb(10, 179, 10);
+        border-radius: 10px;
+        background: whitesmoke;
+    }
+
+    .signup-col2 select option{
+        background: rgb(219, 255, 210);
+        outline: none;
+        border-bottom: 1px solid rgb(10, 179, 10);
+    }
+
+    .signup-row input::placeholder{
+        color: rgb(10, 179, 10);
+    }
+
+    .signup-btn{
+        background: rgb(10, 179, 10);
+        color: white;
+        font-weight: 800;
+        border-radius: 10px;
+        width: 100%;
+        border: none;
+        margin: 25px 0 0 0;
+        padding: 15px 20px;
+        cursor: pointer;
+    }
+
+    .signup-btn:hover{
+        box-shadow: 0 0 20px 0 rgb(10, 179, 10);
+        transition: 0.5s;
     }
 
 /*-------------- Sign Up --------------*/
