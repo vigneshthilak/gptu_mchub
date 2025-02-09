@@ -4,7 +4,13 @@ from django.http import HttpResponse
 
 # Create your views here.
 
+
+#To render the index.html file
 def index(request):
+    return render(request, 'home/index.html')
+
+#To render the login.html file
+def login(request):
     if request.method=='POST':
         username=request.POST.get('username')
         password=request.POST.get('password')
@@ -19,13 +25,4 @@ def index(request):
         else:
             return redirect('sorry')
 
-    return render(request, 'home/index.html')
-
-def thank_you(request):
-    return render(request, 'home/thankyou.html')
-
-def sorry(request):
-    return render(request, 'home/sorry.html')
-
-def signup(request):
-    return render(request, 'home/signup.html')
+    return render(request, 'home/login.html')

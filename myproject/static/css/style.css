@@ -5,42 +5,184 @@
     font-family: 'Poppins', sans-serif;
 }
 
-/*---------- Navigation Bar (Menu Bar) ----------*/
+/*---------- Scroll Bar ----------*/
 
-    /*---------- Custom Navbar Background Color ----------*/
+  ::-webkit-scrollbar{
+    width: 10px;
+  }
 
-        .custom-navbar {
-            background-color: rgb(10, 179, 10) !important;
-          }
+  ::-webkit-scrollbar-thumb{
+    border-radius: 6px;
+    border: 2px solid white;
+    background: rgb(10, 179, 10);
+  }
 
-    /*---------- Custom Navbar Background Color ----------*/
-      
-    /*---------- Navbar Links Color ----------*/
-
-      .navbar-dark .navbar-nav .nav-link {
-        color: white !important;
-      }
-
-    /*---------- Navbar Links Color ----------*/
-      
-    /*---------- Navbar Toggler Icon Color ----------*/
-
-      .navbar-dark .navbar-toggler {
-        border-color: none !important;
-      }
-      
-      .navbar-dark .navbar-toggler-icon {
-        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
-      }
-  
-      .navbar-brand img {
-        width: 200px;
-      }
-  
-      .nav-item {
-        margin-right: 20px;
-      }
-
-    /*---------- Navbar Toggler Icon Color ----------*/
+/*---------- Scroll Bar ----------*/
 
 /*---------- Navigation Bar (Menu Bar) ----------*/
+
+  /*---------- Custom Navbar Background Color ----------*/
+
+    .custom-navbar {
+      background-color: rgb(10, 179, 10) !important;
+    }
+
+  /*---------- Custom Navbar Background Color ----------*/
+      
+  /*---------- Navbar Links Color ----------*/
+
+    .navbar-dark .navbar-nav .nav-link {
+      color: white !important;
+    }
+
+  /*---------- Navbar Links Color ----------*/
+    
+  /*---------- Navbar Toggler Icon Color ----------*/
+
+    .navbar-dark .navbar-toggler {
+      border-color: none !important;
+    }
+    
+    .navbar-dark .navbar-toggler-icon {
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+    }
+
+    .navbar-brand img {
+      width: 200px;
+    }
+
+    .nav-item {
+      margin-right: 20px;
+    }
+
+  /*---------- Navbar Toggler Icon Color ----------*/
+
+/*---------- Navigation Bar (Menu Bar) ----------*/
+
+/*---------- Home Page content ----------*/
+
+  .gptu_mchub-home-index-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 90vh;
+    background-position: center;
+    background-size: cover;
+    background-image: linear-gradient(rgba(4, 9, 30, 0.7), rgba(4, 9, 30, 0.7)), url(../images/bg.jpg);
+    color: white;
+  }
+
+  .home-content {
+    color: white;
+    text-align: center;
+  }
+
+  .home-content h1,
+  .home-content h5 {
+    font-weight: bolder;
+  }
+
+  .home-content p {
+    margin-bottom: 45px;
+  }
+
+  .home-btn1 {
+    color: white;
+    font-weight: 600;
+    text-decoration: none;
+    padding: 10px 60px;
+    border: 1px solid white;
+    border-radius: 20px;
+  }
+
+  .home-btn1:hover {
+    color: white;
+    text-decoration: none;
+    background: rgb(10, 179, 10);
+    transition: 0.5s;
+    border: rgb(10, 179, 10);
+    box-shadow: 0 0 20px 0 rgb(10, 179, 10);
+  }
+
+/*---------- Home Page content ----------*/
+
+.gptu_mchub-home-login {
+  background-color: rgb(219, 255, 210);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.gptu_mchub-home-login h1{
+  color: rgb(10, 179, 10);
+  font-weight: 600;
+}
+
+.login-container {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 25px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  width: 100%;
+}
+
+.close-icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 20px;
+  cursor: pointer;
+  color: #6c757d;
+  transition: color 0.3s ease;
+}
+
+.close-icon:hover {
+  color: #dc3545;
+}
+
+.form-control {
+  border-radius: 40px;
+  padding: 15px;
+  color: rgb(10, 179, 10);
+}
+
+.form-control:focus {
+  box-shadow: none;
+  border: 1px solid rgb(10, 179, 10);
+}
+
+.form-control::placeholder {
+  color: rgb(10, 179, 10);
+  font-size: small;
+}
+
+.btn-primary {
+  width: 100%;
+  background-color: rgb(10, 179, 10) !important;
+  border: none;
+  padding: 15px;
+  border-radius: 40px;
+  font-weight: 600;
+}
+
+.btn-primary:hover {
+  box-shadow: 0 0 10px 0 rgb(10, 179, 10);
+  transition: 0.5s;
+}
+
+.form-check-input:checked {
+  accent-color: rgb(10, 179, 10);
+}
+
+.signup-link {
+  text-decoration: none;
+  color: rgb(10, 179, 10);
+}
+
+.signup-link:hover {
+  text-decoration: underline;
+  cursor: pointer;
+  color: rgb(10, 179, 10);
+}
