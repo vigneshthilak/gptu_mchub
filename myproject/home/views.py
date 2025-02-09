@@ -20,9 +20,16 @@ def login(request):
             user=cursor.fetchone()
         
         if user:
-            return redirect('thankyou')
+            return redirect('thanks')
         
         else:
             return redirect('sorry')
 
     return render(request, 'home/login.html')
+
+
+def thanks(request):
+    return render(request, 'home/thanks.html')
+
+def sorry(request):
+    return render(request, 'home/sorry.html')
