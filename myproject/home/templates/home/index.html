@@ -44,7 +44,7 @@
                 
                 <!-- Logo -->
                 
-                    <a class="navbar-brand" href="#"><img src="{% static 'images/logo.png' %}"></a>
+                    <a class="navbar-brand" href="{% url 'index' %}"><img src="{% static 'images/logo.png' %}"></a>
 
                 <!-- Logo -->
 
@@ -61,7 +61,7 @@
                     <div class="collapse navbar-collapse" id="navbarNav">
                         <ul class="navbar-nav ms-auto">
                           <li class="nav-item">
-                            <a class="nav-link" href="#">Home</a>
+                            <a class="nav-link" href="{% url 'index' %}">Home</a>
                           </li>
                           <li class="nav-item">
                             <a class="nav-link" href="#">About Us</a>
@@ -70,7 +70,7 @@
                             <a class="nav-link" href="#">Contact Us</a>
                           </li>
                           <li class="nav-item">
-                            <a class="nav-link" href="#">Log In</a>
+                            <a class="nav-link" href="{% url 'login' %}">Log In</a>
                           </li>
                         </ul>
                     </div>
@@ -82,7 +82,25 @@
   
     <!-- Navigation Bar (Menu Bar) -->
 
-    
+    <!-- Home Page content -->
+
+        <section class="gptu_mchub-home-index-header">
+            <div class="container">
+                <div class="home-content">
+                    <h5>WELCOME TO</h5>
+                    <h1>GPTU Mentor & Counselling Hub</h1>
+                    <p>
+                        Our website is designed to simplify the process of managing student data efficiently and securely. 
+                        With an intuitive interface and powerful backend functionality, this platform offers features such as 
+                        storing student data, retrieving information, and managing data.<br><br>
+                        <b>“Education is the powerful weapon with which you can change the world”</b>
+                    </p>
+                    <a href="{% url 'login' %}" class="home-btn1">Log In</a>
+                </div>
+            </div>
+        </section>
+
+    <!-- Home Page content -->
 
 
     <!-- The Link for the Bootstrap bundle Script -->
