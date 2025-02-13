@@ -3,10 +3,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GPTU MC Hub-Sign Up</title>
 
+    <!-- The link for the Bootstrap -->
+
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <!-- The link for the Bootstrap -->
+    
     <!-- The link for the CSS Stylesheet -->
     
         <link rel="stylesheet" href="{% static 'css/style.css' %}">
@@ -30,75 +37,82 @@
 </head>
 <body>
 
-    <!-- Sign Up page -->
-    
-        <div class="signup-header">
-            <div class="container">
-                <div class="signup">
-                    <form action="">
-                        <div class="signup-row">
-                            <div class="signup-col1">
-                                <img src="{% static 'images/signup_img.png' %}">
-                            </div>
-                            <div class="signup-col1">
-                                <h1>Create your Account</h1>
+    <section class="gptu_mchub-home-signup">
 
-                                <div class="signup-row">
-                                    <div class="signup-col2">
-                                        <input type="text" placeholder="First name" required>
-                                    </div>
-                                    <div class="signup-col2">
-                                        <input type="text" placeholder="Last name" required>
-                                    </div>
-                                </div>
-
-                                <div class="signup-row">
-                                    <div class="signup-col2">
-                                        <input type="email" placeholder="example@mail.com" required>
-                                    </div>
-                                    <div class="signup-col2">
-                                        <input type="text" placeholder="User ID" required>
-                                    </div>
-                                </div>
-
-                                <div class="signup-row">
-                                    <div class="signup-col2">
-                                        <input type="text" placeholder="Username" required>
-                                    </div>
-                                    <div class="signup-col2">
-                                        <input type="password" placeholder="Password" required>
-                                    </div>
-                                </div>
-
-                                <div class="signup-row">
-                                    <div class="signup-col2">
-                                        <select name="Department" id="">
-                                            <option value="" disabled selected hidden>Department</option>
-                                            <option value="">DMECH</option>
-                                            <option value="">DCIVIL</option>
-                                            <option value="">DEEE</option>
-                                            <option value="">DECE</option>
-                                            <option value="">DCSE</option>
-                                            <option value="">DMX</option>
-                                            <option value="">DMT</option>
-                                        </select>
-                                    </div>
-                                    <div class="signup-col2">
-                                        <input type="text" value="Faculty">
-                                    </div>
-                                </div>
-
-                                <div class="signup-row">
-                                    <button type="submit" class="signup-btn">Create Account</button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
+        <div class="signup-container">
+            <span class="close-icon" data-url="{% url 'login' %}" onclick="redirectToPage()">&times;</span>
+            <h1 class="text-center mb-4">Signup</h1>
+            <form action="" method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <div class="row mb-3">
+                    <div class="col">
+                        <input type="text" class="form-control" id="firstName" placeholder="Enter your first name" required>
+                    </div>
+                    <div class="col">
+                        <input type="text" class="form-control" id="lastName" placeholder="Enter your last name" required>
+                    </div>
                 </div>
-            </div>
+        
+                <div class="mb-3">
+                    <input type="email" class="form-control" id="email" placeholder="Enter your email" required>
+                </div>
+        
+                <div class="row mb-3">
+                    <div class="col">
+                        <input type="text" class="form-control" id="userId" placeholder="Enter your user ID" required>
+                    </div>
+                    <div class="col">
+                        <input type="text" class="form-control" id="username" placeholder="Choose a username" required>
+                    </div>
+                </div>
+        
+                <div class="row mb-3">
+                    <div class="col">
+                        <input type="password" class="form-control" id="password" placeholder="Create a password" required>
+                    </div>
+                    <div class="col">
+                        <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm your password" required>
+                    </div>
+                </div>
+        
+                <div class="row mb-3">
+                    <div class="col">
+                        <select id="department" class="form-select" required>
+                            <option value="" selected disabled>Select Department</option>
+                            <option value="dcivil">DCIVIL</option>
+                            <option value="dmech">DMECH</option>
+                            <option value="deee">DEEE</option>
+                            <option value="dece">DECE</option>
+                            <option value="dcse">DCSE</option>
+                            <option value="dmx">DMX</option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <select class="form-select" id="userCategory" required>
+                            <option value="" selected disabled>Select category</option>
+                            <option value="teacher">Teacher</option>
+                        </select>
+                    </div>
+                </div>
+        
+                <button type="submit" class="btn btn-primary">Sign Up</button>
+            </form>
         </div>
 
-    <!-- Sign Up page -->
+    </section>
+
+    <!-- The Link for the Bootstrap bundle Script -->
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+    <!-- The Link for the Bootstrap bundle Script -->
+
+    <!-- The Link for the Java Script file -->
+
+        <script src="{% static 'js/script.js' %}"></script>
+
+    <!-- The Link for the Java Script file -->
 
 </body>
 </html>

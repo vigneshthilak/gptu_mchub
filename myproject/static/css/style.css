@@ -92,7 +92,7 @@
     text-decoration: none;
     padding: 10px 60px;
     border: 1px solid white;
-    border-radius: 20px;
+    border-radius: 40px;
   }
 
   .home-btn1:hover {
@@ -106,84 +106,180 @@
 
 /*---------- Home Page content ----------*/
 
-.gptu_mchub-home-login {
-  background-color: rgb(219, 255, 210);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
+/*---------- Web access styles (SignIn & SignUp) ----------*/
 
-.gptu_mchub-home-login h1{
-  color: rgb(10, 179, 10);
-  font-weight: 600;
-}
+  /*---------- Web access general styles ----------*/
 
-.login-container {
-  background-color: white;
-  padding: 2rem;
-  border-radius: 25px;
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
-  max-width: 400px;
-  width: 100%;
-}
+    .gptu_mchub-home-login,
+    .gptu_mchub-home-signup {
+      background-color: whitesmoke;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
 
-.close-icon {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  font-size: 20px;
-  cursor: pointer;
-  color: #6c757d;
-  transition: color 0.3s ease;
-}
+    .gptu_mchub-home-login h1,
+    .gptu_mchub-home-signup h1 {
+      color: rgb(10, 179, 10);
+      font-weight: 600;
+    }
 
-.close-icon:hover {
-  color: #dc3545;
-}
+    .btn-primary {
+      width: 100%;
+      background-color: rgb(10, 179, 10) !important;
+      border: none;
+      padding: 15px;
+      border-radius: 40px;
+      font-weight: 600;
+    }
 
-.form-control {
-  border-radius: 40px;
-  padding: 15px;
-  color: rgb(10, 179, 10);
-}
+    .btn-primary:hover {
+      box-shadow: 0 0 10px 0 rgb(10, 179, 10);
+      transition: 0.5s;
+    }
 
-.form-control:focus,
-.form-control:active {
-  box-shadow: none;
-  border: 1px solid rgb(10, 179, 10);
-}
+    .close-icon {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      font-size: 30px;
+      cursor: pointer;
+      color: rgb(10, 179, 10);
+      transition: color 0.3s ease;
+      border: 1px solid rgb(10, 179, 10);
+      padding: 0 13px;
+      border-radius: 40px;
+    }
 
-.form-control::placeholder {
-  color: rgb(10, 179, 10);
-  font-size: small;
-}
+    .close-icon:hover {
+      color: white;
+      background-color: rgb(10, 179, 10);
+      transition: 0.5s;
+      border: 1px solid rgb(10, 179, 10);
+    }
 
-.btn-primary {
-  width: 100%;
-  background-color: rgb(10, 179, 10) !important;
-  border: none;
-  padding: 15px;
-  border-radius: 40px;
-  font-weight: 600;
-}
+  /*---------- Web access general styles ----------*/
 
-.btn-primary:hover {
-  box-shadow: 0 0 10px 0 rgb(10, 179, 10);
-  transition: 0.5s;
-}
+  /*---------- Log In Page content ----------*/
 
-.form-check-input:checked {
-  accent-color: rgb(10, 179, 10);
-}
+    .login-container {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 25px;
+      box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      width: 100%;
+    }
 
-.signup-link {
-  text-decoration: none;
-  color: rgb(10, 179, 10);
-}
+    .login-container .form-control {
+      border-radius: 40px;
+      padding: 17px;
+      font-size: small;
+      color: rgb(10, 179, 10) !important;
+    }
 
-.signup-link:hover {
-  text-decoration: underline;
-  cursor: pointer;
-  color: rgb(10, 179, 10);
-}
+    .login-container .form-control:focus,
+    .login-container .form-control:active {
+      box-shadow: none;
+      border: 1px solid rgb(10, 179, 10);
+    }
+
+    .login-container .form-control::placeholder {
+      color: rgb(10, 179, 10);
+      font-size: small;
+    }
+
+    .error-message {
+      color: red;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    .error {
+      color: red;
+      font-size: 13px;
+      margin-top: 4px;
+    }
+
+    .forgot-password {
+      margin-bottom: 15px;
+    }
+
+    .forgot-password a {
+      color: rgb(10, 179, 10);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .forgot-password a:hover {
+      color: rgb(10, 179, 10);
+      text-decoration: underline;
+    }
+
+    .signup-link {
+      text-decoration: none;
+      color: rgb(10, 179, 10);
+    }
+
+    .signup-link:hover {
+      text-decoration: underline;
+      cursor: pointer;
+      color: rgb(10, 179, 10);
+    }
+
+  /*---------- Log In Page content ----------*/
+
+  /*---------- Sign Up Page content ----------*/
+
+    .signup-container {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 25px;
+      box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+      max-width: 600px;
+      width: 100%;
+    }
+
+    .signup-container .form-control:focus,
+    .signup-container .form-control:active {
+      box-shadow: none;
+      border: 1px solid rgb(10, 179, 10);
+    }
+
+    .signup-container .form-control::placeholder {
+      color: rgb(10, 179, 10);
+      font-size: small;
+    }
+
+    .signup-container .form-control,
+    .signup-container select {
+      border-radius: 40px;
+      padding: 15px;
+      font-size: small;
+      color: rgb(10, 179, 10) !important;
+    }
+
+    .signup-container .form-control:not(#email) {
+      width: 250px;
+    }
+
+    @media (max-width: 576px) {
+      .signup-container .form-control,
+      .signup-container select {
+        width: 100% !important;  /* Full width for small screens */
+        margin-bottom: 10px;     /* Add spacing between stacked fields */
+      }
+    
+      .signup-container .row {
+        display: block;          /* Stack the columns vertically */
+      }
+    
+      .signup-container .col {
+        width: 100%;             /* Full width for each column */
+      }
+    }
+
+  /*---------- Sign Up Page content ----------*/
+
+/*---------- Web access styles (SignIn & SignUp) ----------*/
