@@ -1,31 +1,3 @@
-#This is for Kali Linux only
-(
-
-    # Always activate your virtual environment before start your work
-        >source "venv_name"/bin/activate
-
-    # Always Deactivate your virtual environment after finishing your work
-        >deactivate
-
-)
-
-#Unnessary CSS style
-(x
-
-    # (Reminder: After creating the style.css the below given styles should be add in the style sheet to change the font)
-
-        // <uniquifier>: Use a unique and descriptive class name
-        // <weight>: Use a value from 100 to 900
-
-        .montserrat-<uniquifier> {
-          font-family: "Montserrat", serif;
-          font-optical-sizing: auto;
-          font-weight: <weight>;
-          font-style: normal;
-        }
-
-x)
-
 #To install the Virtual Environment in Windows
 (
 
@@ -74,6 +46,22 @@ x)
     If the project has any changes use this command to import the changes from the GitHub
         >git pull
 
+)
+
+#To make the remote Branch to local Branch
+(
+
+    Fetch the remote branch
+        >git fetch origin
+
+    List all the remote branches
+        >git branch -r
+
+    Create and Checkout the Remote Branch Locally
+        >git checkout -b <local-branch-name> origin/<remote-branch-name>
+
+    Verify the Local Branch
+        >git branch
 )
 
 
