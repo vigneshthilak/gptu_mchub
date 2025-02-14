@@ -44,41 +44,41 @@
             <h1 class="text-center mb-4">Signup</h1>
             <form action="" method="POST">
                 {% csrf_token %}
-                {{ form.as_p }}
+                
                 <div class="row mb-3">
                     <div class="col">
-                        <input type="text" class="form-control" id="firstName" placeholder="Enter your first name" required>
+                        <input type="text" class="form-control" name="firstName" placeholder="Enter your first name" required>
                     </div>
                     <div class="col">
-                        <input type="text" class="form-control" id="lastName" placeholder="Enter your last name" required>
+                        <input type="text" class="form-control" name="lastName" placeholder="Enter your last name" required>
                     </div>
                 </div>
-        
+            
                 <div class="mb-3">
-                    <input type="email" class="form-control" id="email" placeholder="Enter your email" required>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
                 </div>
-        
+            
                 <div class="row mb-3">
                     <div class="col">
-                        <input type="text" class="form-control" id="userId" placeholder="Enter your user ID" required>
+                        <input type="text" class="form-control" name="userId" placeholder="Enter your user ID" required>
                     </div>
                     <div class="col">
-                        <input type="text" class="form-control" id="username" placeholder="Choose a username" required>
-                    </div>
-                </div>
-        
-                <div class="row mb-3">
-                    <div class="col">
-                        <input type="password" class="form-control" id="password" placeholder="Create a password" required>
-                    </div>
-                    <div class="col">
-                        <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm your password" required>
+                        <input type="text" class="form-control" name="username" placeholder="Choose a username" required>
                     </div>
                 </div>
-        
+            
                 <div class="row mb-3">
                     <div class="col">
-                        <select id="department" class="form-select" required>
+                        <input type="password" class="form-control" name="password" placeholder="Create a password" required>
+                    </div>
+                    <div class="col">
+                        <input type="password" class="form-control" name="confirmPassword" placeholder="Confirm your password" required>
+                    </div>
+                </div>
+            
+                <div class="row mb-3">
+                    <div class="col">
+                        <select name="department" class="form-select" required>
                             <option value="" selected disabled>Select Department</option>
                             <option value="dcivil">DCIVIL</option>
                             <option value="dmech">DMECH</option>
@@ -89,15 +89,16 @@
                         </select>
                     </div>
                     <div class="col">
-                        <select class="form-select" id="userCategory" required>
+                        <select name="userCategory" class="form-select" required>
                             <option value="" selected disabled>Select category</option>
                             <option value="teacher">Teacher</option>
                         </select>
                     </div>
                 </div>
-        
+            
                 <button type="submit" class="btn btn-primary">Sign Up</button>
             </form>
+            
         </div>
 
     </section>
