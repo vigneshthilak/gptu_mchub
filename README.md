@@ -1,5 +1,5 @@
-The name of the repository is gptu_mchub.
+GPTU Mentor & Counselling Hub
 
-A Web application for my college (Student database management system)
+A web application for my college (Student Database Management System).
 
-Our website is designed to simplify the process of managing student data efficiently and securely. With an intuitive interface and powerful backend functionality, this platform offers features such as storing student data, retrieving information, and managing data.
+Our website is designed to streamline student data management efficiently and securely. With an intuitive interface and a powerful backend, the platform offers features such as student data storage, easy retrieval of information, and efficient record management.
