@@ -47,23 +47,43 @@
                 
                 <div class="row mb-3">
                     <div class="col">
-                        <input type="text" class="form-control" name="firstName" placeholder="Enter your first name" required>
+                        <input type="text" class="form-control" name="firstName" value="{{first_name}}" placeholder="Enter your first name" required>
                     </div>
                     <div class="col">
-                        <input type="text" class="form-control" name="lastName" placeholder="Enter your last name" required>
+                        <input type="text" class="form-control" name="lastName" value="{{last_name}}" placeholder="Enter your last name" required>
                     </div>
                 </div>
             
                 <div class="mb-3">
-                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
+                    <input type="email" class="form-control" id="email" name="email" value="{{email}}" placeholder="Enter your email" required>
                 </div>
             
                 <div class="row mb-3">
                     <div class="col">
-                        <input type="text" class="form-control" name="userId" placeholder="Enter your user ID" required>
+                        <input type="text" class="form-control" name="userId" value="{{user_id}}" placeholder="Enter your user ID" required>
                     </div>
                     <div class="col">
-                        <input type="text" class="form-control" name="username" placeholder="Choose a username" required>
+                        <input type="text" class="form-control" name="username" value="{{username}}" placeholder="Choose a username" required>
+                    </div>
+                </div>
+            
+                <div class="row mb-3">
+                    <div class="col">
+                        <select name="department" class="form-select" required>
+                            <option value="" selected disabled>Select Department</option>
+                            <option value="dcivil" {% if department == "dcivil" %}selected{% endif %}>DCIVIL</option>
+                            <option value="dmech" {% if department == "dmech" %}selected{% endif %}>DMECH</option>
+                            <option value="deee" {% if department == "deee" %}selected{% endif %}>DEEE</option>
+                            <option value="dece" {% if department == "dece" %}selected{% endif %}>DECE</option>
+                            <option value="dcse" {% if department == "dcse" %}selected{% endif %}>DCSE</option>
+                            <option value="dmx" {% if department == "dmx" %}selected{% endif %}>DMX</option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <select name="userCategory" class="form-select" required>
+                            <option value="" selected disabled>Select category</option>
+                            <option value="teacher" {% if user_category == "teacher" %}selected{% endif %}>Teacher</option>
+                        </select>
                     </div>
                 </div>
             
@@ -75,26 +95,16 @@
                         <input type="password" class="form-control" name="confirmPassword" placeholder="Confirm your password" required>
                     </div>
                 </div>
-            
-                <div class="row mb-3">
-                    <div class="col">
-                        <select name="department" class="form-select" required>
-                            <option value="" selected disabled>Select Department</option>
-                            <option value="dcivil">DCIVIL</option>
-                            <option value="dmech">DMECH</option>
-                            <option value="deee">DEEE</option>
-                            <option value="dece">DECE</option>
-                            <option value="dcse">DCSE</option>
-                            <option value="dmx">DMX</option>
-                        </select>
-                    </div>
-                    <div class="col">
-                        <select name="userCategory" class="form-select" required>
-                            <option value="" selected disabled>Select category</option>
-                            <option value="teacher">Teacher</option>
-                        </select>
-                    </div>
-                </div>
+
+                <!-- To Display the Error Message -->
+
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="error-message">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+
+                <!-- To Display the Error Message -->
             
                 <button type="submit" class="btn btn-primary">Sign Up</button>
             </form>

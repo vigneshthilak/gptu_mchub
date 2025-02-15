@@ -43,3 +43,24 @@
     });*/
 
 /*---------- Log In page (Username and Password Validation) ----------*/
+
+/*function validatePassword() {
+    let password = document.getElementById("password").value;
+    let confirmPassword = document.getElementById("confirm_password").value;
+    let errorSpan = document.getElementById("password_error");
+    let submitButton = document.getElementById("submit_button");
+
+    if (confirmPassword === "") {
+        errorSpan.innerText = "";
+        submitButton.disabled = true;
+        return;
+    }
+
+    if (password !== confirmPassword) {
+        errorSpan.innerText = "Passwords do not match!";
+        submitButton.disabled = true;
+    } else {
+        errorSpan.innerText = "";
+        submitButton.disabled = false;
+    }
+}*/

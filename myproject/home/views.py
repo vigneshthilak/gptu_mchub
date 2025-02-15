@@ -3,6 +3,7 @@ from django.db import connection
 from django.http import HttpResponse
 from django.contrib import messages
 from .models import UserProfile
+import string
 
 # Create your views here.
 
@@ -40,12 +41,12 @@ def login(request):
     return render(request, 'home/login.html')
 
 def thanks(request):
-    return render(request, 'home/thanks.html')
+    return HttpResponse('<h1>Hello, World!</h1>')
 
 
 #To render the signup.html file
 
-def signup_view(request):
+def signup(request):
     if request.method == "POST":
         # Print all form data for debugging
         print("Received POST Data:", request.POST)
@@ -71,7 +72,41 @@ def signup_view(request):
 
         # Check if passwords match
         if password != confirm_password:
-            return HttpResponse("Passwords do not match!", status=400)
+            messages.error(request, 'Password do not match!')
+            return render(request, 'home/signup.html', {
+                'first_name': first_name,
+                'last_name': last_name, 
+                'email': email,
+                'user_id': user_id,
+                'username': username,
+                'department': department,
+                'user_category': user_category,
+            })
+        
+        if len(password) < 8:
+            messages.error(request, 'Password length must be at least 8 characters!')
+            return render(request, 'home/signup.html', {
+                'first_name': first_name,
+                'last_name': last_name, 
+                'email': email,
+                'user_id': user_id,
+                'username': username,
+                'department': department,
+                'user_category': user_category,
+            })
+        
+        special_chars = set(string.punctuation)
+        if not any(char in special_chars for char in password):
+            messages.error(request, 'Password must contain at least one special character!')
+            return render(request, 'home/signup.html', {
+                'first_name': first_name,
+                'last_name': last_name, 
+                'email': email,
+                'user_id': user_id,
+                'username': username,
+                'department': department,
+                'user_category': user_category,
+            })
 
         # Save user to the database
         UserProfile.objects.create(
