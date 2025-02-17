@@ -1,4 +1,4 @@
-from django import forms
+"""from django import forms
 from .models import UserProfile
 
 # To Create a users for Gptu
@@ -18,4 +18,4 @@ class SignupForm(forms.ModelForm):
 
         if password != confirm_password:
             raise forms.ValidationError("Passwords do not match!")
-        return cleaned_data
+        return cleaned_data"""
