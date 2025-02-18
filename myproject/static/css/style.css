@@ -106,7 +106,7 @@
 
 /*---------- Home Page content ----------*/
 
-/*---------- Web access styles (SignIn & SignUp) ----------*/
+/*---------- Web access styles ----------*/
 
   /*---------- Web access general styles ----------*/
 
@@ -230,6 +230,73 @@
 
   /*---------- Log In Page content ----------*/
 
+  .gptu_mchub-home-fp,
+  .gptu_mchub-home-rp {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f8f9fa;
+    flex-direction: column;
+  }
+  
+  .form-title {
+    text-align: left;
+    margin-bottom: 20px;
+    font-weight: 600;
+    color: rgb(10, 179, 10);
+  }
+
+  .gptu_mchub-home-fp .form-control,
+  .gptu_mchub-home-rp .form-control {
+    border-radius: 40px;
+    padding: 17px;
+    font-size: small;
+    color: rgb(10, 179, 10) !important;
+  }
+
+  .gptu_mchub-home-fp .form-control:focus,
+  .gptu_mchub-home-fp .form-control:active,
+  .gptu_mchub-home-rp .form-control:focus,
+  .gptu_mchub-home-rp .form-control:active {
+    box-shadow: none;
+    border: 1px solid rgb(10, 179, 10);
+  }
+
+  .gptu_mchub-home-fp .form-control::placeholder,
+  .gptu_mchub-home-rp .form-control::placeholder {
+    color: rgb(10, 179, 10);
+    font-size: small;
+  }
+
+  .gptu_mchub-home-fp .error-message,
+  .gptu_mchub-home-rp .error-message {
+    text-align: left;
+  }
+
+  .gptu_mchub-home-fp .col-md-6,
+  .gptu_mchub-home-rp .col-md-6 {
+    color: gray;
+  }
+
+  @media (max-width: 576px) {
+    .form-container .row {
+        flex-direction: column;
+    }
+    .form-container .col-8, 
+    .form-container .col-4 {
+        width: 100%;
+        margin: 8px 0;
+    }
+    .gptu_mchub-home-fp .col-md-6,
+    .gptu_mchub-home-rp .col-md-6 {
+      margin-top: 15px;
+    }
+    .form-title {
+      text-align: center;
+    }
+  }
+
   /*---------- Sign Up Page content ----------*/
 
     .signup-container {
@@ -239,6 +306,7 @@
       box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
       max-width: 600px;
       width: 100%;
+      margin: 60px 0 0 0;
     }
 
     .signup-container .form-control:focus,
@@ -282,4 +350,25 @@
 
   /*---------- Sign Up Page content ----------*/
 
-/*---------- Web access styles (SignIn & SignUp) ----------*/
+/*---------- Web access styles ----------*/
+
+/*---------- Footer of the webpage ----------*/
+
+    .gptu_mchub-footer {
+      background-color: rgb(10, 179, 10);
+      min-height: 50vh;
+      padding: 25px 0;
+    }
+
+    .gptu_mchub-footer h1 {
+      color: white;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .gptu_mchub-footer-dev{
+      color: white;
+      text-align: center;
+    }
+
+/*---------- Footer of the webpage ----------*/
