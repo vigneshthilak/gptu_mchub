@@ -1,4 +1,5 @@
 from django.db import models
+import uuid
 
 # Models for user Profile
 
@@ -27,3 +28,15 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return self.username
+
+
+#Models for Password reset token
+
+
+class PasswordResetToken(models.Model):
+    user = models.ForeignKey('home.UserProfile', on_delete=models.CASCADE)
+    token = models.CharField(max_length=100, unique=True, default=uuid.uuid4)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.token}"

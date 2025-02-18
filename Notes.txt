@@ -81,3 +81,8 @@
     set sql_safe_updates=0;
 
 )
+
+harigaran@2004
+
+
+grbg txnr oeuk ghav

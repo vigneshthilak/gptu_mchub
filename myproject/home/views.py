@@ -3,6 +3,13 @@ from django.db import connection
 from django.http import HttpResponse
 from django.contrib import messages
 from .models import UserProfile
+from django.core.mail import send_mail
+from home.models import UserProfile, PasswordResetToken
+from django.contrib.auth.hashers import check_password
+from django.contrib.auth.hashers import make_password
+from django.utils.timezone import now, timedelta
+from home.models import PasswordResetToken
+import uuid
 import string
 
 # Create your views here.
@@ -24,24 +31,106 @@ def login(request):
 
         # Check if the input is numeric (user_id) or alphanumeric (username)
         if user_input.isdigit():
-            query = "SELECT * FROM home_userprofile WHERE user_id = %s AND password = %s"
+            query = "SELECT * FROM home_userprofile WHERE user_id = %s"
         else:
-            query = "SELECT * FROM home_userprofile WHERE username = %s AND password = %s"
+            query = "SELECT * FROM home_userprofile WHERE username = %s"
 
         with connection.cursor() as cursor:
-            cursor.execute(query, [user_input, password])
+            cursor.execute(query, [user_input])
             user = cursor.fetchone()
 
         if user:
-            return redirect('thanks')
+            # User found, check if password matches
+            stored_password = user[6]  # Assuming password is stored in index 6
+            if check_password(password, stored_password):  # Use check_password to verify hashed password
+                return redirect('thanks')
+            else:
+                messages.error(request, 'Invalid password.')
         else:
-            messages.error(request, 'Invalid username/user ID or password.')
-            return redirect('login')
+            messages.error(request, 'Invalid username/user ID.')
+
+        return redirect('login')
 
     return render(request, 'home/login.html')
 
 def thanks(request):
     return HttpResponse('<h1>Hello, World!</h1>')
+
+#To render the forgot_password.html file
+
+def forgot_password(request):
+    if request.method == "POST":
+        email = request.POST.get('email').strip()
+
+        try:
+            user = UserProfile.objects.get(email=email)
+            token = str(uuid.uuid4())  # Generate unique token
+            
+            # Save reset token in database
+            PasswordResetToken.objects.create(user=user, token=token)
+
+            # Send email with reset link
+            reset_link = f"http://192.168.241.240:8000/reset-password/{token}/"
+            send_mail(
+                "Password Reset Request",
+                f"Click the link to reset your password: {reset_link}",
+                "your-email@example.com",
+                [email],
+                fail_silently=False,
+            )
+
+            messages.success(request, "Password reset link sent to your email.")
+            return redirect('forgot_password')
+        except UserProfile.DoesNotExist:
+            messages.error(request, "Email not found.")
+            return redirect('forgot_password')
+
+    return render(request, 'home/forgot_password.html')
+
+#To render the reset_password.html file
+
+def reset_password(request, token):
+    try:
+        reset_token = PasswordResetToken.objects.get(token=token)
+        
+        # Check if token is expired (valid for 15 minutes)
+        if now() - reset_token.created_at > timedelta(minutes=15):
+            messages.error(request, "Password reset link expired.")
+            return redirect('forgot_password')
+
+        if request.method == "POST":
+            new_password = request.POST.get('password')
+            confirm_password = request.POST.get('confirm_password')
+
+            if new_password != confirm_password:
+                messages.error(request, "Passwords do not match.")
+                return render(request, 'home/reset_password.html', {"token": token})
+
+            if len(new_password) < 8:
+                messages.error(request, "Password must be at least 8 characters.")
+                return render(request, 'home/reset_password.html', {"token": token})
+            
+            special_chars = set(string.punctuation)
+            if not any(char in special_chars for char in new_password):
+                messages.error(request, 'Password must contain at least one special character!')
+                return render(request, 'home/reset_password.html', {"token": token})
+
+            # Update user password
+            user = reset_token.user
+            user.password = make_password(new_password)
+            user.save()
+
+            # Delete token after successful reset
+            reset_token.delete()
+
+            messages.success(request, "Password reset successfully. You can now log in.")
+            return redirect('login')
+
+    except PasswordResetToken.DoesNotExist:
+        messages.error(request, "Invalid or expired reset link.")
+        return redirect('forgot_password')
+
+    return render(request, 'home/reset_password.html', {"token": token})
 
 
 #To render the signup.html file
@@ -107,6 +196,9 @@ def signup(request):
                 'department': department,
                 'user_category': user_category,
             })
+        
+        # Hash the password before saving it
+        hashed_password = make_password(password)
 
         # Save user to the database
         UserProfile.objects.create(
@@ -115,7 +207,7 @@ def signup(request):
             email=email,
             user_id=user_id,
             username=username,
-            password=password,  # Hash password
+            password=hashed_password,  # Hash password
             department=department,
             user_category=user_category
         )
