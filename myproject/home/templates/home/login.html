@@ -57,13 +57,15 @@
                 </div>
                 
                 <!-- To Display the Error Message -->
-
+            
                     {% if messages %}
                         {% for message in messages %}
-                            <div class="error-message">{{ message }}</div>
+                            <div class="custom-message {% if message.tags == 'error' %}error-message{% elif message.tags == 'success' %}success-message{% endif %}">
+                                {{ message }}
+                            </div>
                         {% endfor %}
                     {% endif %}
-
+            
                 <!-- To Display the Error Message -->
 
                 <button type="submit" class="btn btn-primary">Login</button>
