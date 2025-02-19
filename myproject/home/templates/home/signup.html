@@ -95,15 +95,16 @@
                         <input type="password" class="form-control" name="confirmPassword" placeholder="Confirm your password" required>
                     </div>
                 </div>
-
                 <!-- To Display the Error Message -->
-
-                {% if messages %}
-                    {% for message in messages %}
-                        <div class="error-message">{{ message }}</div>
-                    {% endfor %}
-                {% endif %}
-
+            
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="custom-message {% if message.tags == 'error' %}error-message{% elif message.tags == 'success' %}success-message{% endif %}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+            
                 <!-- To Display the Error Message -->
             
                 <button type="submit" class="btn btn-primary">Sign Up</button>

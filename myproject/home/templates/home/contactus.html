@@ -33,6 +33,8 @@
         <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,400;0,600;0,700;1,200&display=swap" rel="stylesheet">
 
     <!-- The link for the font (Google Fonts) used in the web page-->
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 </head>
 <body>
@@ -82,25 +84,64 @@
   
     <!-- Navigation Bar (Menu Bar) -->
 
-    <!-- Home Page content -->
+    <!-- Contact Us content -->
 
-        <section class="gptu_mchub-home-index-header">
-            <div class="container">
-                <div class="home-content">
-                    <h5>WELCOME TO</h5>
-                    <h1>GPTU Mentor & Counselling Hub</h1>
-                    <p>
-                        Our website is designed to streamline student data management efficiently and securely. With an intuitive 
-                        interface and a powerful backend, the platform offers features such as student data storage, easy retrieval 
-                        of information, and efficient record management.<br><br>
-                        <b>“Education is the powerful weapon with which you can change the world”</b>
-                    </p>
-                    <a href="{% url 'login' %}" class="home-btn1">Log In</a>
+        <section class="container mt-5 contact-container">
+            <h1>Govt. Polytechnic College Uthangarai</h1>
+            <div class="row iframe-container">
+                <div class="col-12">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15593.78096710946!2d78.5401521!3d12.2857744!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bac5c69cc44ef7d%3A0x717add0fe6936e37!2sGovernment%20Polytechnic%20College%2C%20Uthangarai%20(139)!5e0!3m2!1sen!2sin!4v1706273299753!5m2!1sen!2sin" 
+                        style="width: 100%; height: 450px; border: 0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 contact-info">
+                    <div class="mb-3 d-flex align-items-center">
+                        <i class="fa fa-address-card-o"></i>
+                        <div>
+                            <h5>(139) Govt. Polytechnic College</h5>
+                            <p>Appinayakanpatti, Uthangarai, Krishnagiri-635207, Tamilnadu, INDIA</p>
+                        </div>
+                    </div>
+                    <div class="mb-3 d-flex align-items-center">
+                        <i class="fa fa-phone"></i>
+                        <div>
+                            <h5>+91 4341-291959</h5>
+                            <p>Monday to Friday, 10AM to 4PM</p>
+                        </div>
+                    </div>
+                    <div class="mb-3 d-flex align-items-center">
+                        <i class="fa fa-envelope-o"></i>
+                        <div>
+                            <h5>gptuthangarai@gmail.com</h5>
+                            <p>Email us your query</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <h3 class="form-title">Students Feedback</h3>
+                    <form action="{% url 'contactus' %}" method="POST">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <input type="text" name="name" class="form-control" placeholder="Enter your name" required>
+                        </div>
+                        <div class="mb-3">
+                            <input type="email" name="email" class="form-control" placeholder="Enter email address" required>
+                        </div>
+                        <div class="mb-3">
+                            <input type="text" name="subject" class="form-control" placeholder="Enter your subject" required>
+                        </div>
+                        <div class="mb-3">
+                            <textarea rows="7" name="message" class="form-control" placeholder="Your feedback" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Send Feedback</button>
+                    </form>
                 </div>
             </div>
         </section>
 
-    <!-- Home Page content -->
+    <!-- Contact Us content -->
 
     <!-- Footer of the webpage -->
 

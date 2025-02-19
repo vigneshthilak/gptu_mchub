@@ -9,8 +9,10 @@ from django.contrib.auth.hashers import check_password
 from django.contrib.auth.hashers import make_password
 from django.utils.timezone import now, timedelta
 from home.models import PasswordResetToken
+from django.core.mail import EmailMessage
 import uuid
 import string
+import environ
 
 # Create your views here.
 
@@ -74,7 +76,7 @@ def forgot_password(request):
             send_mail(
                 "Password Reset Request",
                 f"Click the link to reset your password: {reset_link}",
-                "your-email@example.com",
+                "GPTU MC HUB <your-email@example.com>",
                 [email],
                 fail_silently=False,
             )
@@ -215,3 +217,39 @@ def signup(request):
         return redirect('login')  # Redirect after successful signup
 
     return render(request, 'home/signup.html')
+
+
+def contactus(request):
+    if request.method == "POST":
+        # Get user input and strip spaces
+        name = request.POST.get("name", "").strip()
+        email = request.POST.get("email", "").strip()
+        subject = request.POST.get("subject", "No Subject").strip()
+        message = request.POST.get("message", "").strip()
+
+        # Set default values if name and email are empty
+        if not name:
+            name = "Anonymous"
+        if not email:
+            email = "anonymous@example.com"  # Set a default anonymous email
+
+        # Email content
+        email_body = f"""
+        Name: {name}
+        Email: {email}
+        Subject: {subject}
+
+        Message:
+        {message}
+        """
+
+        # Sending Email
+        email_send = EmailMessage(
+            subject=f"Feedback from {name}",  # Email subject
+            body=email_body,  # Email body
+            from_email=f'GPTU MC HUB <{email}>',  # Use user's email if provided, else anonymous
+            to=['vigneshthilagaraj00@gmail.com'],  # Target email address
+        )
+
+        return redirect("contactus")  # Redirect after sending email
+    return render(request, 'home/contactus.html')
