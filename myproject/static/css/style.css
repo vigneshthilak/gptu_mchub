@@ -59,7 +59,7 @@
 
 /*---------- Navigation Bar (Menu Bar) ----------*/
 
-/*---------- Home Page content ----------*/
+/*---------- Home ----------*/
 
   .gptu_mchub-home-index-header {
     display: flex;
@@ -104,7 +104,7 @@
     box-shadow: 0 0 20px 0 rgb(10, 179, 10);
   }
 
-/*---------- Home Page content ----------*/
+/*---------- Home ----------*/
 
 /*---------- Web access styles ----------*/
 
@@ -161,7 +161,7 @@
 
   /*---------- Web access general styles ----------*/
 
-  /*---------- Log In Page content ----------*/
+  /*---------- Log In ----------*/
 
     .login-container {
       background-color: white;
@@ -231,9 +231,9 @@
       color: rgb(10, 179, 10);
     }
 
-  /*---------- Log In Page content ----------*/
+  /*---------- Log In ----------*/
 
-  /*---------- Account password reseting styles ----------*/
+  /*---------- Account password reseting ----------*/
 
     .gptu_mchub-home-fp,
     .gptu_mchub-home-rp {
@@ -302,9 +302,9 @@
       }
     }
 
-  /*---------- Account password reseting styles ----------*/
+  /*---------- Account password reseting ----------*/
 
-  /*---------- Sign Up Page content ----------*/
+  /*---------- Sign Up ----------*/
 
     .signup-container {
       background-color: white;
@@ -355,80 +355,108 @@
       }
     }
 
-  /*---------- Sign Up Page content ----------*/
+  /*---------- Sign Up ----------*/
 
 /*---------- Web access styles ----------*/
 
-.contact-container {
-  background: #fff;
-  padding: 0 30px 30px 30px;
-  border-radius: 10px;
-}
+/*---------- About Us ----------*/
 
-.contact-container h1 {
-  color: rgb(10, 179, 10);
-  font-weight: 600;
-  text-align: center;
-}
+  .gptu_mchub-home-aboutus {
+    padding: 30px 0;
+  }
 
-.contact-container .form-control {
-  border-radius: 0;
-  padding: 15px;
-  font-size: small;
-  color: rgb(10, 179, 10);
-}
+  .gptu_mchub-home-aboutus h1 {
+    font-weight: 600;
+    text-align: center;
+  }
 
-.contact-container .form-control:focus,
-.contact-container .form-control:active {
-  box-shadow: none;
-  border: 1px solid rgb(10, 179, 10);
-}
+  .gptu_mchub-home-aboutus p {
+    margin-top: 20px;
+    text-align: justify;
+  }
 
-.contact-container .form-control::placeholder {
-  color: rgb(10, 179, 10);
-}
+  .gptu_mchub-home-aboutus .home-btn1 {
+    border: 1px solid rgb(10, 179, 10);
+    color: white;
+    background-color: rgb(10, 179, 10);
+    text-align: center;
+    align-items: center;
+  }
 
-.contact-container .btn-primary {
-  width: 250px;
-  color: rgb(10, 179, 10);
-  border: 1px solid #ced4da;
-  border-radius: 0;
-  font-weight: 600;
-  background-color: white !important;
-}
+/*---------- About Us ----------*/
 
-.contact-container .btn-primary:hover {
-  background-color: rgb(10, 179, 10) !important;
-  transition: 0.5s;
-  border: 1px solid rgb(10, 179, 10);
-  color: white;
-}
+/*---------- Contact Us ----------*/
 
-.contact-info i {
-  margin-right: 15px;
-  font-size: 28px;
-  color: rgb(10, 179, 10) !important;
-}
+  .contact-container {
+    background: #fff;
+    padding: 0 30px 30px 30px;
+    border-radius: 10px;
+  }
 
-.contact-info h5 {
-  color: rgb(10, 179, 10);
-  font-weight: 600;
-}
+  .contact-container h1 {
+    color: rgb(10, 179, 10);
+    font-weight: 600;
+    text-align: center;
+  }
 
-.contact-info p {
-  color: gray;
-}
+  .contact-container .form-control {
+    border-radius: 0;
+    padding: 15px;
+    font-size: small;
+    color: rgb(10, 179, 10);
+  }
 
-.iframe-container {
-  padding: 40px 0 80px 0;
-}
+  .contact-container .form-control:focus,
+  .contact-container .form-control:active {
+    box-shadow: none;
+    border: 1px solid rgb(10, 179, 10);
+  }
 
+  .contact-container .form-control::placeholder {
+    color: rgb(10, 179, 10);
+  }
 
-/*---------- Footer of the webpage ----------*/
+  .contact-container .btn-primary {
+    width: 250px;
+    color: rgb(10, 179, 10);
+    border: 1px solid #ced4da;
+    border-radius: 0;
+    font-weight: 600;
+    background-color: white !important;
+  }
+
+  .contact-container .btn-primary:hover {
+    background-color: rgb(10, 179, 10) !important;
+    transition: 0.5s;
+    border: 1px solid rgb(10, 179, 10);
+    color: white;
+  }
+
+  .contact-info i {
+    margin-right: 15px;
+    font-size: 28px;
+    color: rgb(10, 179, 10) !important;
+  }
+
+  .contact-info h5 {
+    color: rgb(10, 179, 10);
+    font-weight: 600;
+  }
+
+  .contact-info p {
+    color: gray;
+  }
+
+  .iframe-container {
+    padding: 40px 0 80px 0;
+  }
+
+/*---------- Contact Us ----------*/
+
+/*---------- Footer ----------*/
 
     .gptu_mchub-footer {
       background-color: rgb(10, 179, 10);
-      min-height: 50vh;
       padding: 25px 0;
     }
 
@@ -443,4 +471,4 @@
       text-align: center;
     }
 
-/*---------- Footer of the webpage ----------*/
+/*---------- Footer ----------*/

@@ -12,7 +12,6 @@ from home.models import PasswordResetToken
 from django.core.mail import EmailMessage
 import uuid
 import string
-import environ
 
 # Create your views here.
 
@@ -58,6 +57,7 @@ def login(request):
 def thanks(request):
     return HttpResponse('<h1>Hello, World!</h1>')
 
+
 #To render the forgot_password.html file
 
 def forgot_password(request):
@@ -88,6 +88,7 @@ def forgot_password(request):
             return redirect('forgot_password')
 
     return render(request, 'home/forgot_password.html')
+
 
 #To render the reset_password.html file
 
@@ -159,7 +160,8 @@ def signup(request):
 
         # Check if any field is empty
         if not all([first_name, last_name, email, user_id, username, password, confirm_password, department, user_category]):
-            return HttpResponse("All fields are required! Please fill in all fields.", status=400)
+            messages.error(request, 'All fields are required! Please fill in all fields.')
+            return render(request, 'home/signup.html')
 
         # Check if passwords match
         if password != confirm_password:
@@ -219,6 +221,8 @@ def signup(request):
     return render(request, 'home/signup.html')
 
 
+#To render the contactus.html file
+
 def contactus(request):
     if request.method == "POST":
         # Get user input and strip spaces
@@ -253,3 +257,6 @@ def contactus(request):
 
         return redirect("contactus")  # Redirect after sending email
     return render(request, 'home/contactus.html')
+
+def aboutus(request):
+    return render(request, 'home/aboutus.html')
