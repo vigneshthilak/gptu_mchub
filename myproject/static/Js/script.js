@@ -9,6 +9,30 @@
 
 /*---------- Function for close icon to go to the home page ----------*/
 
+/*---------- To disable the Resend OTP button for 30 seconds ----------*/
+
+    document.addEventListener("DOMContentLoaded", function () {
+        let resendButton = document.getElementById("resendBtn");
+        let resendTime = parseInt("{{ request.session.resend_disabled_until|default:0 }}") * 1000;
+        let currentTime = new Date().getTime();
+        
+        if (resendTime > currentTime) {
+            let remainingTime = Math.ceil((resendTime - currentTime) / 1000);
+            resendButton.disabled = true;
+            let countdown = setInterval(function () {
+                remainingTime -= 1;
+                resendButton.innerText = "Resend OTP (" + remainingTime + "s)";
+                if (remainingTime <= 0) {
+                    clearInterval(countdown);
+                    resendButton.disabled = false;
+                    resendButton.innerText = "Resend OTP";
+                }
+            }, 1000);
+        }
+    });
+
+/*---------- To disable the Resend OTP button for 30 seconds ----------*/
+
 /*---------- Log In page (Username and Password Validation) ----------*/
 
     // Client-side form validation

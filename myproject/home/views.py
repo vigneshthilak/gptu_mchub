@@ -2,16 +2,17 @@ from django.shortcuts import render, redirect
 from django.db import connection
 from django.http import HttpResponse
 from django.contrib import messages
-from .models import UserProfile
+from .models import UserProfile, AuthUser, PasswordResetToken
 from django.core.mail import send_mail
 from home.models import UserProfile, PasswordResetToken
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth.hashers import make_password
 from django.utils.timezone import now, timedelta
-from home.models import PasswordResetToken
 from django.core.mail import EmailMessage
+from django.conf import settings
 import uuid
 import string
+import random
 
 # Create your views here.
 
@@ -135,6 +136,14 @@ def reset_password(request, token):
 
     return render(request, 'home/reset_password.html', {"token": token})
 
+def send_otp(email):
+    otp = ''.join(random.choices(string.digits, k=6))  # Generate 6-digit OTP
+    subject = "Your OTP for Account Verification"
+    message = f"Your OTP is: {otp}. Do not share this with anyone."
+
+    send_mail(subject, message, settings.EMAIL_HOST_USER, [email])  # Send email
+    return otp
+
 
 #To render the signup.html file
 
@@ -204,21 +213,63 @@ def signup(request):
         # Hash the password before saving it
         hashed_password = make_password(password)
 
-        # Save user to the database
-        UserProfile.objects.create(
-            first_name=first_name,
-            last_name=last_name,
-            email=email,
-            user_id=user_id,
-            username=username,
-            password=hashed_password,  # Hash password
-            department=department,
-            user_category=user_category
-        )
+        # Validate user_id and email against auth_users
+        if AuthUser.objects.filter(user_id=user_id, email=email).exists():
+            otp = send_otp(email)  # Send OTP to email
+            request.session['otp'] = otp  # Store OTP in session
+            request.session['user_data'] = {
+                'first_name': first_name,
+                'last_name': last_name,
+                'email': email,
+                'user_id': user_id,
+                'username': username,
+                'department': department,
+                'user_category': user_category,
+                'password': hashed_password,
+            }
 
-        return redirect('login')  # Redirect after successful signup
+            return redirect('verify_otp')  # Redirect to OTP verification page
+        else:
+            messages.error(request, "You're not eligible to create an account!")
+            return render(request, 'home/signup.html')
 
     return render(request, 'home/signup.html')
+
+#To verify the otp
+
+def verify_otp(request):
+    if request.method == "POST":
+        entered_otp = request.POST.get("otp", "").strip()
+        stored_otp = request.session.get("otp")
+        
+        if entered_otp == stored_otp:
+            user_data = request.session.get("user_data")
+
+            if user_data:
+                # Save user data in home_userprofile
+                UserProfile.objects.create(
+                    first_name=user_data['first_name'],
+                    last_name=user_data['last_name'],
+                    email=user_data['email'],
+                    user_id=user_data['user_id'],  # Changed from regno to user_id
+                    username=user_data['username'],
+                    department=user_data['department'],
+                    user_category=user_data['user_category'],
+                    password=user_data['password'],  # Password is hashed in model
+                )
+
+                # Clear session data
+                del request.session["otp"]
+                del request.session["user_data"]
+
+                messages.success(request, "Account created successfully! You can now log in.")
+                return redirect("login")
+        
+        messages.error(request, "Invalid OTP! Please try again.")
+        return render(request, 'home/verify_otp.html')
+
+    return render(request, 'home/verify_otp.html')
+
 
 
 #To render the contactus.html file

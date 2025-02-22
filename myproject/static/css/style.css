@@ -14,7 +14,7 @@
   ::-webkit-scrollbar-thumb{
     border-radius: 6px;
     border: 2px solid white;
-    background: rgb(10, 179, 10);
+    background: rgb(223, 151, 255);
   }
 
 /*---------- Scroll Bar ----------*/
@@ -24,7 +24,7 @@
   /*---------- Custom Navbar Background Color ----------*/
 
     .custom-navbar {
-      background-color: rgb(10, 179, 10) !important;
+      background-color: rgb(223, 151, 255) !important;
     }
 
   /*---------- Custom Navbar Background Color ----------*/
@@ -68,7 +68,7 @@
     min-height: 90vh;
     background-position: center;
     background-size: cover;
-    background-image: linear-gradient(rgba(4, 9, 30, 0.7), rgba(4, 9, 30, 0.7)), url(../images/bg.jpg);
+    background-image: linear-gradient(rgba(4, 9, 30, 0.7), rgba(4, 9, 30, 0.7)), url(../images/bg2.jpg);
     color: white;
   }
 
@@ -98,10 +98,10 @@
   .home-btn1:hover {
     color: white;
     text-decoration: none;
-    background: rgb(10, 179, 10);
+    background: rgb(223, 151, 255);
     transition: 0.5s;
-    border: rgb(10, 179, 10);
-    box-shadow: 0 0 20px 0 rgb(10, 179, 10);
+    border: rgb(223, 151, 255);
+    box-shadow: 0 0 20px 0 rgb(223, 151, 255);
   }
 
 /*---------- Home ----------*/
@@ -111,7 +111,8 @@
   /*---------- Web access general styles ----------*/
 
     .gptu_mchub-home-login,
-    .gptu_mchub-home-signup {
+    .gptu_mchub-home-signup,
+    .gptu_mchub-home-verify-otp {
       background-color: whitesmoke;
       display: flex;
       justify-content: center;
@@ -121,21 +122,52 @@
 
     .gptu_mchub-home-login h1,
     .gptu_mchub-home-signup h1 {
-      color: rgb(10, 179, 10);
+      color: rgb(223, 151, 255);
       font-weight: 600;
     }
 
-    .btn-primary {
+    .login-container .form-control,
+    .gptu_mchub-home-fp .form-control,
+    .gptu_mchub-home-rp .form-control {
+      border-radius: 40px;
+      padding: 17px;
+      font-size: small;
+      color: rgb(223, 151, 255) !important;
+    }
+
+    .login-container .form-control:focus,
+    .login-container .form-control:active,
+    .signup-container .form-control:focus,
+    .signup-container .form-control:active,
+    .gptu_mchub-home-fp .form-control:focus,
+    .gptu_mchub-home-fp .form-control:active,
+    .gptu_mchub-home-rp .form-control:focus,
+    .gptu_mchub-home-rp .form-control:active {
+      box-shadow: none;
+      border: 1px solid rgb(223, 151, 255);
+    }
+
+    .login-container .form-control::placeholder,
+    .signup-container .form-control::placeholder,
+    .gptu_mchub-home-fp .form-control::placeholder,
+    .gptu_mchub-home-rp .form-control::placeholder {
+      color: rgb(223, 151, 255);
+      font-size: small;
+    }
+
+    .btn-primary,
+    .verify-btn {
       width: 100%;
-      background-color: rgb(10, 179, 10) !important;
+      background-color: rgb(223, 151, 255) !important;
       border: none;
       padding: 15px;
       border-radius: 40px;
       font-weight: 600;
     }
 
-    .btn-primary:hover {
-      box-shadow: 0 0 10px 0 rgb(10, 179, 10);
+    .btn-primary:hover,
+    .verify-btn:hover {
+      box-shadow: 0 0 10px 0 rgb(223, 151, 255);
       transition: 0.5s;
     }
 
@@ -145,18 +177,18 @@
       right: 20px;
       font-size: 30px;
       cursor: pointer;
-      color: rgb(10, 179, 10);
+      color: rgb(223, 151, 255);
       transition: color 0.3s ease;
-      border: 1px solid rgb(10, 179, 10);
+      border: 1px solid rgb(223, 151, 255);
       padding: 0 13px;
       border-radius: 40px;
     }
 
     .close-icon:hover {
       color: white;
-      background-color: rgb(10, 179, 10);
+      background-color: rgb(223, 151, 255);
       transition: 0.5s;
-      border: 1px solid rgb(10, 179, 10);
+      border: 1px solid rgb(223, 151, 255);
     }
 
   /*---------- Web access general styles ----------*/
@@ -172,32 +204,14 @@
       width: 100%;
     }
 
-    .login-container .form-control {
-      border-radius: 40px;
-      padding: 17px;
-      font-size: small;
-      color: rgb(10, 179, 10) !important;
-    }
-
-    .login-container .form-control:focus,
-    .login-container .form-control:active {
-      box-shadow: none;
-      border: 1px solid rgb(10, 179, 10);
-    }
-
-    .login-container .form-control::placeholder {
-      color: rgb(10, 179, 10);
-      font-size: small;
+    .custom-message {
+      font-size: large;
+      margin: 15px 0;
     }
 
     .error-message {
       color: red;
       text-align: center;
-    }
-
-    .custom-message {
-      font-size: large;
-      margin: 15px 0;
     }
 
     .success-message {
@@ -210,25 +224,25 @@
     }
 
     .forgot-password a {
-      color: rgb(10, 179, 10);
+      color: rgb(223, 151, 255);
       text-decoration: none;
       transition: color 0.3s;
     }
 
     .forgot-password a:hover {
-      color: rgb(10, 179, 10);
+      color: rgb(223, 151, 255);
       text-decoration: underline;
     }
 
     .signup-link {
       text-decoration: none;
-      color: rgb(10, 179, 10);
+      color: rgb(223, 151, 255);
     }
 
     .signup-link:hover {
       text-decoration: underline;
       cursor: pointer;
-      color: rgb(10, 179, 10);
+      color: rgb(223, 151, 255);
     }
 
   /*---------- Log In ----------*/
@@ -249,33 +263,11 @@
       text-align: left;
       margin-bottom: 20px;
       font-weight: 600;
-      color: rgb(10, 179, 10);
+      color: rgb(223, 151, 255);
     }
   
-    .gptu_mchub-home-fp .form-control,
-    .gptu_mchub-home-rp .form-control {
-      border-radius: 40px;
-      padding: 17px;
-      font-size: small;
-      color: rgb(10, 179, 10) !important;
-    }
-  
-    .gptu_mchub-home-fp .form-control:focus,
-    .gptu_mchub-home-fp .form-control:active,
-    .gptu_mchub-home-rp .form-control:focus,
-    .gptu_mchub-home-rp .form-control:active {
-      box-shadow: none;
-      border: 1px solid rgb(10, 179, 10);
-    }
-  
-    .gptu_mchub-home-fp .form-control::placeholder,
-    .gptu_mchub-home-rp .form-control::placeholder {
-      color: rgb(10, 179, 10);
-      font-size: small;
-    }
-  
-    .gptu_mchub-home-fp .error-message,
-    .gptu_mchub-home-rp .error-message {
+    .gptu_mchub-home-fp .custom-message,
+    .gptu_mchub-home-rp .custom-message {
       text-align: left;
     }
   
@@ -316,23 +308,12 @@
       margin: 60px 0 0 0;
     }
 
-    .signup-container .form-control:focus,
-    .signup-container .form-control:active {
-      box-shadow: none;
-      border: 1px solid rgb(10, 179, 10);
-    }
-
-    .signup-container .form-control::placeholder {
-      color: rgb(10, 179, 10);
-      font-size: small;
-    }
-
     .signup-container .form-control,
     .signup-container select {
       border-radius: 40px;
       padding: 15px;
       font-size: small;
-      color: rgb(10, 179, 10) !important;
+      color: rgb(223, 151, 255) !important;
     }
 
     .signup-container .form-control:not(#email) {
@@ -357,6 +338,36 @@
 
   /*---------- Sign Up ----------*/
 
+  /*---------- OTP Verification ----------*/
+
+.otp-container {
+    background: white;
+    padding: 20px;
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    width: 320px;
+}
+
+.resend-btn {
+    background-color: #6c757d;
+    color: white;
+    cursor: not-allowed;
+}
+
+.resend-btn:enabled {
+    background-color: white;
+    cursor: pointer;
+    color: black;
+    font-weight: 600;
+}
+
+#timer {
+    margin-top: 10px;
+    color: #555;
+    font-size: 14px;
+}
+
 /*---------- Web access styles ----------*/
 
 /*---------- About Us ----------*/
@@ -375,12 +386,28 @@
     text-align: justify;
   }
 
-  .gptu_mchub-home-aboutus .home-btn1 {
-    border: 1px solid rgb(10, 179, 10);
-    color: white;
-    background-color: rgb(10, 179, 10);
-    text-align: center;
+  .gptu_mchub-home-aboutus-btn {
+    margin: 30px 0 0 0;
+    display: flex;
+    justify-content: center;
     align-items: center;
+  }
+
+  .home-btn2 {
+    border: 1px solid rgb(223, 151, 255);
+    color: rgb(223, 151, 255);
+    background-color: white;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 15px 40px;
+    border-radius: 40px;
+  }
+
+  .home-btn2:hover {
+    color: white;
+    box-shadow: 0 0 20px 0 rgb(223, 151, 255);
+    transition: 0.5s;
+    background: rgb(223, 151, 255);
   }
 
 /*---------- About Us ----------*/
@@ -394,7 +421,7 @@
   }
 
   .contact-container h1 {
-    color: rgb(10, 179, 10);
+    color: rgb(223, 151, 255);
     font-weight: 600;
     text-align: center;
   }
@@ -403,22 +430,22 @@
     border-radius: 0;
     padding: 15px;
     font-size: small;
-    color: rgb(10, 179, 10);
+    color: rgb(223, 151, 255);
   }
 
   .contact-container .form-control:focus,
   .contact-container .form-control:active {
     box-shadow: none;
-    border: 1px solid rgb(10, 179, 10);
+    border: 1px solid rgb(223, 151, 255);
   }
 
   .contact-container .form-control::placeholder {
-    color: rgb(10, 179, 10);
+    color: rgb(223, 151, 255);
   }
 
   .contact-container .btn-primary {
     width: 250px;
-    color: rgb(10, 179, 10);
+    color: rgb(223, 151, 255);
     border: 1px solid #ced4da;
     border-radius: 0;
     font-weight: 600;
@@ -426,20 +453,20 @@
   }
 
   .contact-container .btn-primary:hover {
-    background-color: rgb(10, 179, 10) !important;
+    background-color: rgb(223, 151, 255) !important;
     transition: 0.5s;
-    border: 1px solid rgb(10, 179, 10);
+    border: 1px solid rgb(223, 151, 255);
     color: white;
   }
 
   .contact-info i {
     margin-right: 15px;
     font-size: 28px;
-    color: rgb(10, 179, 10) !important;
+    color: rgb(223, 151, 255) !important;
   }
 
   .contact-info h5 {
-    color: rgb(10, 179, 10);
+    color: rgb(223, 151, 255);
     font-weight: 600;
   }
 
@@ -456,7 +483,7 @@
 /*---------- Footer ----------*/
 
     .gptu_mchub-footer {
-      background-color: rgb(10, 179, 10);
+      background-color: rgb(223, 151, 255);
       padding: 25px 0;
     }
 
