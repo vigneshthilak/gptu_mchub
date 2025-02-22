@@ -72,7 +72,7 @@ def forgot_password(request):
             PasswordResetToken.objects.create(user=user, token=token)
 
             # Send email with reset link
-            reset_link = f"http://192.168.241.240:8000/reset-password/{token}/"
+            reset_link = f"http://192.168.54.17:8000/reset-password/{token}/"
             send_mail(
                 "Password Reset Request",
                 f"Click the link to reset your password: {reset_link}",
