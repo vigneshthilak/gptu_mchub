@@ -29,9 +29,17 @@ class UserProfile(models.Model):
     def __str__(self):
         return self.username
 
+#Model for Authorised user Verification
+
+class AuthUser(models.Model):
+    user_id = models.CharField(max_length=20, unique=True)  # Changed from regno to user_id
+    email = models.EmailField(unique=True)
+
+    def __str__(self):
+        return f"{self.user_id} - {self.email}"
+
 
 #Models for Password reset token
-
 
 class PasswordResetToken(models.Model):
     user = models.ForeignKey('home.UserProfile', on_delete=models.CASCADE)
