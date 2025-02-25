@@ -407,13 +407,21 @@
     text-align: center;
   }
 
+  .gptu_mchub-home-aboutus h4 {
+    font-weight: 600;
+  }
+
   .gptu_mchub-home-aboutus p {
     margin-top: 20px;
     text-align: justify;
   }
 
+  .gptu_mchub-home-aboutus ul {
+    margin-top: 20px;
+  }
+
   .gptu_mchub-home-aboutus-btn {
-    margin: 30px 0 0 0;
+    margin: 30px 0;
     display: flex;
     justify-content: center;
     align-items: center;
