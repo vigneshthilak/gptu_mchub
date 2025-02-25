@@ -14,7 +14,7 @@
   ::-webkit-scrollbar-thumb{
     border-radius: 6px;
     border: 2px solid white;
-    background: rgb(10, 179, 10);
+    background: black;
   }
 
 /*---------- Scroll Bar ----------*/
@@ -24,7 +24,7 @@
   /*---------- Custom Navbar Background Color ----------*/
 
     .custom-navbar {
-      background-color: rgb(10, 179, 10) !important;
+      background-color: black !important;
     }
 
   /*---------- Custom Navbar Background Color ----------*/
@@ -59,7 +59,7 @@
 
 /*---------- Navigation Bar (Menu Bar) ----------*/
 
-/*---------- Home Page content ----------*/
+/*---------- Home ----------*/
 
   .gptu_mchub-home-index-header {
     display: flex;
@@ -96,22 +96,23 @@
   }
 
   .home-btn1:hover {
-    color: white;
+    color: black;
     text-decoration: none;
-    background: rgb(10, 179, 10);
+    background: white;
     transition: 0.5s;
-    border: rgb(10, 179, 10);
-    box-shadow: 0 0 20px 0 rgb(10, 179, 10);
+    border: white;
+    box-shadow: 0 0 20px 0 white;
   }
 
-/*---------- Home Page content ----------*/
+/*---------- Home ----------*/
 
 /*---------- Web access styles ----------*/
 
   /*---------- Web access general styles ----------*/
 
     .gptu_mchub-home-login,
-    .gptu_mchub-home-signup {
+    .gptu_mchub-home-signup,
+    .gptu_mchub-home-verify-otp {
       background-color: whitesmoke;
       display: flex;
       justify-content: center;
@@ -120,22 +121,57 @@
     }
 
     .gptu_mchub-home-login h1,
-    .gptu_mchub-home-signup h1 {
-      color: rgb(10, 179, 10);
+    .gptu_mchub-home-signup h1,
+    .otp-container h1 {
+      color: black;
       font-weight: 600;
+    }
+
+    .login-container .form-control,
+    .gptu_mchub-home-fp .form-control,
+    .gptu_mchub-home-rp .form-control,
+    .otp-container .form-control {
+      border-radius: 40px;
+      padding: 17px;
+      font-size: small;
+      color: black !important;
+    }
+
+    .login-container .form-control:focus,
+    .login-container .form-control:active,
+    .signup-container .form-control:focus,
+    .signup-container .form-control:active,
+    .otp-container .form-control:focus,
+    .otp-container .form-control:active,
+    .gptu_mchub-home-fp .form-control:focus,
+    .gptu_mchub-home-fp .form-control:active,
+    .gptu_mchub-home-rp .form-control:focus,
+    .gptu_mchub-home-rp .form-control:active {
+      box-shadow: none;
+      border: 1px solid black;
+    }
+
+    .login-container .form-control::placeholder,
+    .signup-container .form-control::placeholder,
+    .gptu_mchub-home-fp .form-control::placeholder,
+    .gptu_mchub-home-rp .form-control::placeholder,
+    .otp-container .form-control::placeholder {
+      color: black;
+      font-size: small;
     }
 
     .btn-primary {
       width: 100%;
-      background-color: rgb(10, 179, 10) !important;
+      background-color: black !important;
       border: none;
       padding: 15px;
       border-radius: 40px;
       font-weight: 600;
     }
 
-    .btn-primary:hover {
-      box-shadow: 0 0 10px 0 rgb(10, 179, 10);
+    .btn-primary:hover,
+    .verify-btn:hover {
+      box-shadow: 0 0 10px 0 black;
       transition: 0.5s;
     }
 
@@ -145,23 +181,23 @@
       right: 20px;
       font-size: 30px;
       cursor: pointer;
-      color: rgb(10, 179, 10);
+      color: black;
       transition: color 0.3s ease;
-      border: 1px solid rgb(10, 179, 10);
+      border: 1px solid black;
       padding: 0 13px;
       border-radius: 40px;
     }
 
     .close-icon:hover {
       color: white;
-      background-color: rgb(10, 179, 10);
+      background-color: black;
       transition: 0.5s;
-      border: 1px solid rgb(10, 179, 10);
+      border: 1px solid black;
     }
 
   /*---------- Web access general styles ----------*/
 
-  /*---------- Log In Page content ----------*/
+  /*---------- Log In ----------*/
 
     .login-container {
       background-color: white;
@@ -172,32 +208,14 @@
       width: 100%;
     }
 
-    .login-container .form-control {
-      border-radius: 40px;
-      padding: 17px;
-      font-size: small;
-      color: rgb(10, 179, 10) !important;
-    }
-
-    .login-container .form-control:focus,
-    .login-container .form-control:active {
-      box-shadow: none;
-      border: 1px solid rgb(10, 179, 10);
-    }
-
-    .login-container .form-control::placeholder {
-      color: rgb(10, 179, 10);
-      font-size: small;
+    .custom-message {
+      font-size: large;
+      margin: 15px 0;
     }
 
     .error-message {
       color: red;
       text-align: center;
-    }
-
-    .custom-message {
-      font-size: large;
-      margin: 15px 0;
     }
 
     .success-message {
@@ -210,30 +228,30 @@
     }
 
     .forgot-password a {
-      color: rgb(10, 179, 10);
+      color: black;
       text-decoration: none;
       transition: color 0.3s;
     }
 
     .forgot-password a:hover {
-      color: rgb(10, 179, 10);
+      color: black;
       text-decoration: underline;
     }
 
     .signup-link {
       text-decoration: none;
-      color: rgb(10, 179, 10);
+      color: black;
     }
 
     .signup-link:hover {
       text-decoration: underline;
       cursor: pointer;
-      color: rgb(10, 179, 10);
+      color: black;
     }
 
-  /*---------- Log In Page content ----------*/
+  /*---------- Log In ----------*/
 
-  /*---------- Account password reseting styles ----------*/
+  /*---------- Account password reseting ----------*/
 
     .gptu_mchub-home-fp,
     .gptu_mchub-home-rp {
@@ -249,33 +267,11 @@
       text-align: left;
       margin-bottom: 20px;
       font-weight: 600;
-      color: rgb(10, 179, 10);
+      color: black;
     }
   
-    .gptu_mchub-home-fp .form-control,
-    .gptu_mchub-home-rp .form-control {
-      border-radius: 40px;
-      padding: 17px;
-      font-size: small;
-      color: rgb(10, 179, 10) !important;
-    }
-  
-    .gptu_mchub-home-fp .form-control:focus,
-    .gptu_mchub-home-fp .form-control:active,
-    .gptu_mchub-home-rp .form-control:focus,
-    .gptu_mchub-home-rp .form-control:active {
-      box-shadow: none;
-      border: 1px solid rgb(10, 179, 10);
-    }
-  
-    .gptu_mchub-home-fp .form-control::placeholder,
-    .gptu_mchub-home-rp .form-control::placeholder {
-      color: rgb(10, 179, 10);
-      font-size: small;
-    }
-  
-    .gptu_mchub-home-fp .error-message,
-    .gptu_mchub-home-rp .error-message {
+    .gptu_mchub-home-fp .custom-message,
+    .gptu_mchub-home-rp .custom-message {
       text-align: left;
     }
   
@@ -302,9 +298,9 @@
       }
     }
 
-  /*---------- Account password reseting styles ----------*/
+  /*---------- Account password reseting ----------*/
 
-  /*---------- Sign Up Page content ----------*/
+  /*---------- Sign Up ----------*/
 
     .signup-container {
       background-color: white;
@@ -316,23 +312,12 @@
       margin: 60px 0 0 0;
     }
 
-    .signup-container .form-control:focus,
-    .signup-container .form-control:active {
-      box-shadow: none;
-      border: 1px solid rgb(10, 179, 10);
-    }
-
-    .signup-container .form-control::placeholder {
-      color: rgb(10, 179, 10);
-      font-size: small;
-    }
-
     .signup-container .form-control,
     .signup-container select {
       border-radius: 40px;
       padding: 15px;
       font-size: small;
-      color: rgb(10, 179, 10) !important;
+      color: black !important;
     }
 
     .signup-container .form-control:not(#email) {
@@ -355,80 +340,176 @@
       }
     }
 
-  /*---------- Sign Up Page content ----------*/
+  /*---------- Sign Up ----------*/
 
-/*---------- Web access styles ----------*/
+  /*---------- OTP Verification ----------*/
 
-.contact-container {
-  background: #fff;
-  padding: 0 30px 30px 30px;
-  border-radius: 10px;
+.otp-container {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 25px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  width: 100%;
 }
 
-.contact-container h1 {
-  color: rgb(10, 179, 10);
-  font-weight: 600;
+.otp-container p {
   text-align: center;
-}
-
-.contact-container .form-control {
-  border-radius: 0;
-  padding: 15px;
-  font-size: small;
-  color: rgb(10, 179, 10);
-}
-
-.contact-container .form-control:focus,
-.contact-container .form-control:active {
-  box-shadow: none;
-  border: 1px solid rgb(10, 179, 10);
-}
-
-.contact-container .form-control::placeholder {
-  color: rgb(10, 179, 10);
-}
-
-.contact-container .btn-primary {
-  width: 250px;
-  color: rgb(10, 179, 10);
-  border: 1px solid #ced4da;
-  border-radius: 0;
   font-weight: 600;
-  background-color: white !important;
 }
 
-.contact-container .btn-primary:hover {
-  background-color: rgb(10, 179, 10) !important;
-  transition: 0.5s;
-  border: 1px solid rgb(10, 179, 10);
+.verify-btn {
+  width: 100%;
+  background-color: black !important;
+  border: none;
+  padding: 15px;
+  border-radius: 40px;
+  font-weight: 600;
   color: white;
 }
 
-.contact-info i {
-  margin-right: 15px;
-  font-size: 28px;
-  color: rgb(10, 179, 10) !important;
-}
-
-.contact-info h5 {
-  color: rgb(10, 179, 10);
+.resend-btn {
+  background-color: gray;
+  color: none;
+  cursor: not-allowed;
+  width: 100%;
+  border: none;
+  padding: 15px;
+  border-radius: 40px;
   font-weight: 600;
+  margin-top: 16px;
 }
 
-.contact-info p {
-  color: gray;
+.resend-btn:enabled {
+  background-color: white;
+  cursor: pointer;
+  color: black;
+  font-weight: 600;
+  border: 1px solid black;
 }
 
-.iframe-container {
-  padding: 40px 0 80px 0;
+#timer {
+    margin-top: 10px;
+    color: #555;
+    font-size: 14px;
 }
 
+/*---------- Web access styles ----------*/
 
-/*---------- Footer of the webpage ----------*/
+/*---------- About Us ----------*/
+
+  .gptu_mchub-home-aboutus {
+    padding: 30px 0;
+  }
+
+  .gptu_mchub-home-aboutus h1 {
+    font-weight: 600;
+    text-align: center;
+  }
+
+  .gptu_mchub-home-aboutus p {
+    margin-top: 20px;
+    text-align: justify;
+  }
+
+  .gptu_mchub-home-aboutus-btn {
+    margin: 30px 0 0 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .home-btn2 {
+    border: 1px solid black;
+    color: black;
+    background-color: white;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 15px 40px;
+    border-radius: 40px;
+  }
+
+  .home-btn2:hover {
+    color: white;
+    box-shadow: 0 0 20px 0 black;
+    transition: 0.5s;
+    background: black;
+  }
+
+/*---------- About Us ----------*/
+
+/*---------- Contact Us ----------*/
+
+  .contact-container {
+    background: #fff;
+    padding: 0 30px 30px 30px;
+    border-radius: 10px;
+  }
+
+  .contact-container h1 {
+    color: black;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  .contact-container .form-control {
+    border-radius: 0;
+    padding: 15px;
+    font-size: small;
+    color: black;
+  }
+
+  .contact-container .form-control:focus,
+  .contact-container .form-control:active {
+    box-shadow: none;
+    border: 1px solid black;
+  }
+
+  .contact-container .form-control::placeholder {
+    color: black;
+  }
+
+  .contact-container .btn-primary {
+    width: 250px;
+    color: black;
+    border: 1px solid #ced4da;
+    border-radius: 0;
+    font-weight: 600;
+    background-color: white !important;
+  }
+
+  .contact-container .btn-primary:hover {
+    background-color: black !important;
+    transition: 0.5s;
+    border: 1px solid black;
+    color: white;
+  }
+
+  .contact-info i {
+    margin-right: 15px;
+    font-size: 28px;
+    color: black !important;
+  }
+
+  .contact-info h5 {
+    color: black;
+    font-weight: 600;
+  }
+
+  .contact-info p {
+    color: gray;
+  }
+
+  .iframe-container {
+    padding: 40px 0 80px 0;
+  }
+
+/*---------- Contact Us ----------*/
+
+/*---------- Footer ----------*/
 
     .gptu_mchub-footer {
-      background-color: rgb(10, 179, 10);
-      min-height: 50vh;
+      background-color: black;
       padding: 25px 0;
     }
 
@@ -443,4 +524,4 @@
       text-align: center;
     }
 
-/*---------- Footer of the webpage ----------*/
+/*---------- Footer ----------*/

@@ -6,7 +6,7 @@
     
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GPTU MC Hub-Log In</title>
+    <title>GPTU MC Hub-OTP Verification</title>
 
     <!-- The link for the Bootstrap -->
 
@@ -43,45 +43,38 @@
 </head>
 <body>
 
-    <section class="gptu_mchub-home-login">
-
-        <div class="login-container">
-            <span class="close-icon" data-url="{% url 'index' %}" onclick="redirectToPage()">&times;</span>
-            <h1 class="text-center mb-4">Login</h1>
-            <form action="{% url 'login' %}" method="post">
+    <section class="gptu_mchub-home-verify-otp">
+        <div class="otp-container">
+            <span class="close-icon" data-url="{% url 'login' %}" onclick="redirectToPage()">&times;</span>
+            <h1 class="text-center mb-4">OTP Verification</h1>
+            <p>Enter the OTP sent to your email</p>
+            <form action="{% url 'verify_otp' %}" method="post">
                 {% csrf_token %}
                 <div class="mb-3">
-                    <input type="text" name="username" class="form-control" id="email" placeholder="Enter your Username/User ID" required>
-                    <div class="error" id="usernameError"></div>
+                    <input type="text" id="otpInput" class="form-control" name="otp" placeholder="Enter OTP" maxlength="6">
                 </div>
-                <div class="mb-3">
-                    <input type="password" name="password" class="form-control" id="password" placeholder="Enter your password" required>
-                    <div class="error" id="passwordError"></div>
-                </div>
-                <div class="forgot-password">
-                    <a href="{% url 'forgot_password' %}">Forgot Password?</a>
-                </div>
-                
-                <!-- To Display the Error Message -->
-            
-                    {% if messages %}
-                        {% for message in messages %}
-                            <div class="custom-message {% if message.tags == 'error' %}error-message{% elif message.tags == 'success' %}success-message{% endif %}">
-                                {{ message }}
-                            </div>
-                        {% endfor %}
-                    {% endif %}
-            
-                <!-- To Display the Error Message -->
-
-                <button type="submit" class="btn btn-primary">Login</button>
+                <button id="verifyOtpButton" class="verify-btn">Verify OTP</button>
             </form>
-            <p class="mt-3 text-center">
-                Don't have an account? <a href="{% url 'signup' %}" class="signup-link">Sign up</a>
-            </p>
-        </div>
+            <form action="{% url 'resend_otp' %}" method="post">
+                {% csrf_token %}
+                <button id="resendOtpButton" class="resend-btn">Resend OTP</button>
+                <p id="timer">You can resend OTP in <span id="countdown">30</span>s</p>
+            </form>
 
+            <!-- To Display the Error Message -->
+        
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="custom-message {% if message.tags == 'error' %}error-message{% elif message.tags == 'success' %}success-message{% endif %}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+        
+            <!-- To Display the Error Message -->
+        </div>
     </section>
+
 
     <!-- The Link for the Bootstrap bundle Script -->
 
@@ -94,6 +87,5 @@
         <script src="{% static 'js/script.js' %}"></script>
 
     <!-- The Link for the Java Script file -->
-
 </body>
 </html>
