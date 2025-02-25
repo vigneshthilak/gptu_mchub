@@ -129,10 +129,10 @@
                     <form action="{% url 'contactus' %}" method="POST">
                         {% csrf_token %}
                         <div class="mb-3">
-                            <input type="text" name="name" class="form-control" placeholder="Enter your name" required>
+                            <input type="text" name="name" class="form-control" placeholder="Enter your name">
                         </div>
                         <div class="mb-3">
-                            <input type="email" name="email" class="form-control" placeholder="Enter email address" required>
+                            <input type="email" name="email" class="form-control" placeholder="Enter email address">
                         </div>
                         <div class="mb-3">
                             <input type="text" name="subject" class="form-control" placeholder="Enter your subject" required>

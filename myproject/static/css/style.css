@@ -68,7 +68,7 @@
     min-height: 90vh;
     background-position: center;
     background-size: cover;
-    background-image: linear-gradient(rgba(4, 9, 30, 0.7), rgba(4, 9, 30, 0.7)), url(../images/bg2.jpg);
+    background-image: linear-gradient(rgba(4, 9, 30, 0.7), rgba(4, 9, 30, 0.7)), url(../images/bg.jpg);
     color: white;
   }
 
@@ -96,12 +96,12 @@
   }
 
   .home-btn1:hover {
-    color: white;
+    color: black;
     text-decoration: none;
-    background: black;
+    background: white;
     transition: 0.5s;
-    border: black;
-    box-shadow: 0 0 20px 0 black;
+    border: white;
+    box-shadow: 0 0 20px 0 white;
   }
 
 /*---------- Home ----------*/
@@ -121,14 +121,16 @@
     }
 
     .gptu_mchub-home-login h1,
-    .gptu_mchub-home-signup h1 {
+    .gptu_mchub-home-signup h1,
+    .otp-container h1 {
       color: black;
       font-weight: 600;
     }
 
     .login-container .form-control,
     .gptu_mchub-home-fp .form-control,
-    .gptu_mchub-home-rp .form-control {
+    .gptu_mchub-home-rp .form-control,
+    .otp-container .form-control {
       border-radius: 40px;
       padding: 17px;
       font-size: small;
@@ -139,6 +141,8 @@
     .login-container .form-control:active,
     .signup-container .form-control:focus,
     .signup-container .form-control:active,
+    .otp-container .form-control:focus,
+    .otp-container .form-control:active,
     .gptu_mchub-home-fp .form-control:focus,
     .gptu_mchub-home-fp .form-control:active,
     .gptu_mchub-home-rp .form-control:focus,
@@ -150,13 +154,13 @@
     .login-container .form-control::placeholder,
     .signup-container .form-control::placeholder,
     .gptu_mchub-home-fp .form-control::placeholder,
-    .gptu_mchub-home-rp .form-control::placeholder {
+    .gptu_mchub-home-rp .form-control::placeholder,
+    .otp-container .form-control::placeholder {
       color: black;
       font-size: small;
     }
 
-    .btn-primary,
-    .verify-btn {
+    .btn-primary {
       width: 100%;
       background-color: black !important;
       border: none;
@@ -341,25 +345,47 @@
   /*---------- OTP Verification ----------*/
 
 .otp-container {
-    background: white;
-    padding: 20px;
-    text-align: center;
-    border-radius: 10px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    width: 320px;
+  background-color: white;
+  padding: 2rem;
+  border-radius: 25px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  width: 100%;
+}
+
+.otp-container p {
+  text-align: center;
+  font-weight: 600;
+}
+
+.verify-btn {
+  width: 100%;
+  background-color: black !important;
+  border: none;
+  padding: 15px;
+  border-radius: 40px;
+  font-weight: 600;
+  color: white;
 }
 
 .resend-btn {
-    background-color: #6c757d;
-    color: white;
-    cursor: not-allowed;
+  background-color: gray;
+  color: none;
+  cursor: not-allowed;
+  width: 100%;
+  border: none;
+  padding: 15px;
+  border-radius: 40px;
+  font-weight: 600;
+  margin-top: 16px;
 }
 
 .resend-btn:enabled {
-    background-color: white;
-    cursor: pointer;
-    color: black;
-    font-weight: 600;
+  background-color: white;
+  cursor: pointer;
+  color: black;
+  font-weight: 600;
+  border: 1px solid black;
 }
 
 #timer {

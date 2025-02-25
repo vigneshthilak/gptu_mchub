@@ -11,5 +11,5 @@ urlpatterns = [
     path("contact-us/", views.contactus, name='contactus'),
     path("about-us/", views.aboutus, name='aboutus'),
     path("verify-otp/", views.verify_otp, name='verify_otp'),
-    #path('resend-otp/', views.resend_otp, name='resend_otp'),
+    path('resend-otp/', views.resend_otp, name='resend_otp'),
 ]
