@@ -51,7 +51,7 @@
                 
                 <!-- Logo -->
                 
-                    <a class="navbar-brand" href="{% url 'index' %}"><img src="{% static 'images/logo.png' %}"></a>
+                    <a class="navbar-brand" href="{% url 'home:index' %}"><img src="{% static 'images/logo.png' %}"></a>
 
                 <!-- Logo -->
 
@@ -68,16 +68,16 @@
                     <div class="collapse navbar-collapse" id="navbarNav">
                         <ul class="navbar-nav ms-auto">
                           <li class="nav-item">
-                            <a class="nav-link" href="{% url 'index' %}">Home</a>
+                            <a class="nav-link" href="{% url 'home:index' %}">Home</a>
                           </li>
                           <li class="nav-item">
-                            <a class="nav-link" href="{% url 'aboutus' %}">About Us</a>
+                            <a class="nav-link" href="{% url 'home:aboutus' %}">About Us</a>
                           </li>
                           <li class="nav-item">
-                            <a class="nav-link" href="{% url 'contactus' %}">Contact Us</a>
+                            <a class="nav-link" href="{% url 'home:contactus' %}">Contact Us</a>
                           </li>
                           <li class="nav-item">
-                            <a class="nav-link" href="{% url 'login' %}">Log In</a>
+                            <a class="nav-link" href="{% url 'home:login' %}">Log In</a>
                           </li>
                         </ul>
                     </div>
@@ -126,7 +126,7 @@
                 </div>
                 <div class="col-lg-6">
                     <h3 class="form-title">Students Feedback</h3>
-                    <form action="{% url 'contactus' %}" method="POST">
+                    <form action="{% url 'home:contactus' %}" method="POST">
                         {% csrf_token %}
                         <div class="mb-3">
                             <input type="text" name="name" class="form-control" placeholder="Enter your name">

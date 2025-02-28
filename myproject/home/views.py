@@ -30,7 +30,7 @@ def login(request):
         # Server-side validation
         if not user_input or not password:
             messages.error(request, 'Both username/user ID and password are required.')
-            return redirect('login')
+            return redirect('home:login')
 
         # Check if the input is numeric (user_id) or alphanumeric (username)
         if user_input.isdigit():
@@ -46,19 +46,18 @@ def login(request):
             # User found, check if password matches
             stored_password = user[6]  # Assuming password is stored in index 6
             if check_password(password, stored_password):  # Use check_password to verify hashed password
-                return redirect('thanks')
+                request.session['user_id'] = user[4]
+                request.session['username'] = user[5]
+                request.session['department'] = user[7]
+                return redirect('users:dashboard')
             else:
                 messages.error(request, 'Invalid password.')
         else:
             messages.error(request, 'Invalid username/user ID.')
 
-        return redirect('login')
+        return redirect('home:login')
 
     return render(request, 'home/login.html')
-
-def thanks(request):
-    return HttpResponse('<h1>Hello, World!</h1>')
-
 
 #To render the forgot_password.html file
 
@@ -74,7 +73,7 @@ def forgot_password(request):
             PasswordResetToken.objects.create(user=user, token=token)
 
             # Send email with reset link
-            reset_link = f"http://192.168.241.240:8000/reset-password/{token}/"
+            reset_link = f"http://{settings.LOCAL_IP}:8000/reset-password/{token}/"
             send_mail(
                 "Password Reset Request",
                 f"Click the link to reset your password: {reset_link}",
@@ -84,10 +83,10 @@ def forgot_password(request):
             )
 
             messages.success(request, "Password reset link sent to your email.")
-            return redirect('forgot_password')
+            return redirect('home:forgot_password')
         except UserProfile.DoesNotExist:
             messages.error(request, "Email not found.")
-            return redirect('forgot_password')
+            return redirect('home:forgot_password')
 
     return render(request, 'home/forgot_password.html')
 
@@ -101,7 +100,7 @@ def reset_password(request, token):
         # Check if token is expired (valid for 15 minutes)
         if now() - reset_token.created_at > timedelta(minutes=15):
             messages.error(request, "Password reset link expired.")
-            return redirect('forgot_password')
+            return redirect('home:forgot_password')
 
         if request.method == "POST":
             new_password = request.POST.get('password')
@@ -129,11 +128,11 @@ def reset_password(request, token):
             reset_token.delete()
 
             messages.success(request, "Password reset successfully.")
-            return redirect('login')
+            return redirect('home:login')
 
     except PasswordResetToken.DoesNotExist:
         messages.error(request, "Invalid or expired reset link.")
-        return redirect('forgot_password')
+        return redirect('home:forgot_password')
 
     return render(request, 'home/reset_password.html', {"token": token})
 
@@ -233,7 +232,7 @@ def signup(request):
                 'password': hashed_password,
             }
 
-            return redirect('verify_otp')  # Redirect to OTP verification page
+            return redirect('home:verify_otp')  # Redirect to OTP verification page
         else:
             messages.error(request, "You're not eligible to create an account!")
             return render(request, 'home/signup.html')
@@ -257,7 +256,7 @@ def verify_otp(request):
         # Validate OTP existence and expiration
         if not stored_otp or not otp_expiry or now().timestamp() > otp_expiry:
             messages.error(request, "OTP has expired! Please request a new one.")
-            return redirect("verify_otp")
+            return redirect("home:verify_otp")
 
         # Validate OTP match
         if entered_otp == stored_otp:
@@ -283,11 +282,11 @@ def verify_otp(request):
                     request.session.pop("otp_expiry", None)
 
                     messages.success(request, "Account created successfully!")
-                    return redirect("login")
+                    return redirect("home:login")
                 
                 except Exception as e:
                     messages.error(request, f"Error creating account: {e}")
-                    return redirect("verify_otp")
+                    return redirect("home:verify_otp")
         else:
             messages.error(request, "Invalid OTP! Please try again.")
             return render(request, 'home/verify_otp.html')
@@ -304,7 +303,7 @@ def resend_otp(request):
 
         if not user_email:
             messages.error(request, "User email not found. Please sign up again.")
-            return redirect("verify_otp")
+            return redirect("home:verify_otp")
 
         # 🔍 Debugging: Print Old OTP Before Replacing
         old_otp = request.session.get("otp")
@@ -337,9 +336,9 @@ def resend_otp(request):
         except Exception as e:
             messages.error(request, f"Error sending email: {e}")
 
-        return redirect("verify_otp")
+        return redirect("home:verify_otp")
 
-    return redirect("verify_otp")
+    return redirect("home:verify_otp")
 
 #To render the contactus.html file
 
@@ -374,7 +373,7 @@ def contactus(request):
 
         try:
             email_send.send()
-            return redirect("contactus")  # Redirect after sending email
+            return redirect("home:contactus")  # Redirect after sending email
         except Exception as e:
             print("Email sending failed:", e)  # Debugging info
 

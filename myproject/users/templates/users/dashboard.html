@@ -1,3 +1,17 @@
+<!--
+    <h2>Welcome, {{ first_name }} {{ last_name }}!</h2>
+    <p>Your Department: {{ department }}</p>
+    <p>Your Category: {{ user_category }}</p>
+
+    {% if department == "CSE" %}
+        <p>Showing CSE-related content...</p>
+    {% elif department == "ECE" %}
+        <p>Showing ECE-related content...</p>
+    {% else %}
+        <p>General content for all users.</p>
+    {% endif %}
+-->
+
 {% load static %}
 
 <!DOCTYPE html>
@@ -50,7 +64,7 @@
                 
                 <!-- Logo -->
                 
-                    <a class="navbar-brand" href="{% url 'home:index' %}"><img src="{% static 'images/logo.png' %}"></a>
+                    <a class="navbar-brand" href="{% url 'users:dashboard' %}"><img src="{% static 'images/logo.png' %}"></a>
 
                 <!-- Logo -->
 
@@ -67,16 +81,16 @@
                     <div class="collapse navbar-collapse" id="navbarNav">
                         <ul class="navbar-nav ms-auto">
                           <li class="nav-item">
-                            <a class="nav-link" href="{% url 'home:index' %}">Home</a>
+                            <a class="nav-link" href="{% url 'users:dashboard' %}">Home</a>
                           </li>
                           <li class="nav-item">
-                            <a class="nav-link" href="{% url 'home:aboutus' %}">About Us</a>
+                            <a class="nav-link" href="">About Us</a>
                           </li>
                           <li class="nav-item">
-                            <a class="nav-link" href="{% url 'home:contactus' %}">Contact Us</a>
+                            <a class="nav-link" href="">Contact Us</a>
                           </li>
                           <li class="nav-item">
-                            <a class="nav-link" href="{% url 'home:login' %}">Log In</a>
+                            <a class="nav-link" href="{% url 'users:logout' %}">Log out</a>
                           </li>
                         </ul>
                     </div>
@@ -90,18 +104,20 @@
 
     <!-- Home Page content -->
 
-        <section class="gptu_mchub-home-index-header">
+        <section class="gptu_mchub-users-dashboard-header">
             <div class="container">
-                <div class="home-content">
-                    <h5>WELCOME TO</h5>
-                    <h1>GPTU Mentor & Counselling Hub</h1>
-                    <p>
-                        Our website is designed to streamline student data management efficiently and securely. With an intuitive 
-                        interface and a powerful backend, the platform offers features such as student data storage, easy retrieval 
-                        of information, and efficient record management.<br><br>
-                        <b>“Education is the powerful weapon with which you can change the world”</b>
-                    </p>
-                    <a href="{% url 'home:login' %}" class="home-btn1">Log In</a>
+                <div class="dashboard-content">
+                    <h5>WELCOME</h5>
+                    <h1>{{ first_name }} {{ last_name }}</h1>
+                    <!-- Search Bar -->
+                    <form method="GET" action="" class="mt-3">
+                        <div class="input-group">
+                            <input type="text" name="q" class="form-control" placeholder="Search for a student..." required>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fa fa-search"></i> <!-- Font Awesome search icon -->
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </section>

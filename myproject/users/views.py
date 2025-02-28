@@ -1,24 +1,35 @@
-from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
-from .models import UserProfile
+from django.shortcuts import render, redirect
+from home.models import UserProfile
+from django.contrib.auth.models import User
+from django.db import connection
 
-@login_required
 def dashboard(request):
-    user_profile = UserProfile.objects.get(user=request.user)
-    
-    # Define department-specific content
-    department_content = {
-        'CSE': "Welcome to the Computer Science Department! Here are some resources for programming, AI, and software development.",
-        'ECE': "Welcome to the Electronics and Communication Department! Explore circuits, embedded systems, and communication technologies.",
-        'MECH': "Welcome to Mechanical Engineering! Get insights into thermodynamics, manufacturing, and automation.",
-    }
+    user_id = request.session.get("user_id")  # Get logged-in user ID from session
 
-    # Get content based on user’s department
-    user_department = user_profile.department
-    content = department_content.get(user_department, "Welcome! Explore our resources.")
+    if not user_id:
+        return redirect("home:login")  # Redirect to login if not authenticated
 
-    return render(request, 'home/dashboard.html', {
-        'first_name': user_profile.first_name,
-        'last_name': user_profile.last_name,
-        'content': content
-    })
+    # Fetch user details from the database
+    query = "SELECT * FROM home_userprofile WHERE user_id = %s"
+
+    with connection.cursor() as cursor:
+        cursor.execute(query, [user_id])
+        user = cursor.fetchone()
+
+    if user:
+        context = {
+            "first_name": user[1],  # Assuming first_name is at index 0
+            "last_name": user[2],   # Assuming last_name is at index 1
+            "department": user[7],  # Assuming department is at index 2
+            "user_category": user[8],  # Assuming userCategory is at index 3
+        }
+        return render(request, "users/dashboard.html", context)
+    else:
+        # If user not found in DB (which shouldn't happen normally), clear session and redirect
+        request.session.flush()
+        return redirect("home:login")
+
+
+def logout(request):
+    request.session.flush()
+    return redirect('home:index')

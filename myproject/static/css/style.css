@@ -514,6 +514,21 @@
 
 /*---------- Contact Us ----------*/
 
+/*---------- Dashboard ----------*/
+
+  .gptu_mchub-users-dashboard-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 50vh;
+    background-position: center;
+    background-size: cover;
+    background-image: linear-gradient(rgba(4, 9, 30, 0.7), rgba(4, 9, 30, 0.7)), url(../images/bg.jpg);
+    color: white;
+  }
+
+/*---------- Dashboard ----------*/
+
 /*---------- Footer ----------*/
 
     .gptu_mchub-footer {

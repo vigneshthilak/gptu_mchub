@@ -10,8 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 from pathlib import Path
-import os
 import environ
+import socket
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,7 +27,16 @@ SECRET_KEY = 'django-insecure-k9+r6v7vskh)bphe^paha4*=2#snn5!_*u3n9-u*i3u6o9f7&2
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.179.240']
+# Get the current system IP automatically
+def get_local_ip():
+    try:
+        return socket.gethostbyname(socket.gethostname())
+    except:
+        return "127.0.0.1"  # Fallback to localhost if IP detection fails
+
+LOCAL_IP = get_local_ip()
+
+ALLOWED_HOSTS = [LOCAL_IP, "127.0.0.1", "localhost"]
 
 
 # Application definition
@@ -151,3 +161,4 @@ EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
+LOGIN_REDIRECT_URL = "/users/dashboard/"
