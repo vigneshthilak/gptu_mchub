@@ -164,15 +164,15 @@ def signup(request):
         password = request.POST.get('password', '').strip()
         confirm_password = request.POST.get('confirmPassword', '').strip()
         department = request.POST.get('department', '').strip()
-        user_category = request.POST.get('userCategory', '').strip()
+        gender = request.POST.get('gender', '').strip()
 
         # Debugging: Print each value
         print(f"first_name: {first_name}, last_name: {last_name}, email: {email}, user_id: {user_id}")
         print(f"username: {username}, password: {password}, confirm_password: {confirm_password}")
-        print(f"department: {department}, user_category: {user_category}")
+        print(f"department: {department}, gender: {gender}")
 
         # Check if any field is empty
-        if not all([first_name, last_name, email, user_id, username, password, confirm_password, department, user_category]):
+        if not all([first_name, last_name, email, user_id, username, password, confirm_password, department, gender]):
             messages.error(request, 'All fields are required! Please fill in all fields.')
             return render(request, 'home/signup.html')
 
@@ -186,7 +186,7 @@ def signup(request):
                 'user_id': user_id,
                 'username': username,
                 'department': department,
-                'user_category': user_category,
+                'gender': gender,
             })
         
         if len(password) < 8:
@@ -198,7 +198,7 @@ def signup(request):
                 'user_id': user_id,
                 'username': username,
                 'department': department,
-                'user_category': user_category,
+                'gender': gender,
             })
         
         special_chars = set(string.punctuation)
@@ -211,7 +211,7 @@ def signup(request):
                 'user_id': user_id,
                 'username': username,
                 'department': department,
-                'user_category': user_category,
+                'gender': gender,
             })
         
         # Hash the password before saving it
@@ -228,7 +228,7 @@ def signup(request):
                 'user_id': user_id,
                 'username': username,
                 'department': department,
-                'user_category': user_category,
+                'gender': gender,
                 'password': hashed_password,
             }
 
@@ -272,7 +272,7 @@ def verify_otp(request):
                         user_id=user_data.get('user_id', ''),  # Changed from regno to user_id
                         username=user_data.get('username', ''),
                         department=user_data.get('department', ''),
-                        user_category=user_data.get('user_category', ''),
+                        gender=user_data.get('gender', ''),
                         password=user_data.get('password', ''),  # Password is hashed in model
                     )
 
@@ -305,28 +305,28 @@ def resend_otp(request):
             messages.error(request, "User email not found. Please sign up again.")
             return redirect("home:verify_otp")
 
-        # 🔍 Debugging: Print Old OTP Before Replacing
+        # Debugging: Print Old OTP Before Replacing
         old_otp = request.session.get("otp")
         print(f"Old OTP before update: {old_otp}")
 
-        # ✅ Remove Old OTP from Session
+        # Remove Old OTP from Session
         request.session.pop("otp", None)
         request.session.pop("otp_expiry", None)
 
-        # ✅ Generate a New OTP
+        # Generate a New OTP
         new_otp = ''.join(random.choices(string.digits, k=6))
         expiry_time = now() + datetime.timedelta(minutes=1)
 
-        # ✅ Store the New OTP in Session
+        # Store the New OTP in Session
         request.session["otp"] = new_otp
         request.session["otp_expiry"] = expiry_time.timestamp()
         request.session.modified = True  # Ensures Django saves session changes
         request.session.save() #Ensure session is saved immediately.
 
-        # 🔍 Debugging: Print New OTP After Replacing
+        # Debugging: Print New OTP After Replacing
         print(f"New OTP after update: {request.session.get('otp')}, Expiry: {request.session.get('otp_expiry')}")
 
-        # ✅ Send OTP via Email
+        # Send OTP via Email
         subject = "Your New OTP for Account Verification"
         message = f"Your new OTP is: {new_otp}. It will expire in 1 minute. Do not share this with anyone."
 

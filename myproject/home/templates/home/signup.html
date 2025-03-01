@@ -86,9 +86,11 @@
                         </select>
                     </div>
                     <div class="col">
-                        <select name="userCategory" class="form-select" required>
-                            <option value="" selected disabled>Select category</option>
-                            <option value="teacher" {% if user_category == "teacher" %}selected{% endif %}>Teacher</option>
+                        <select name="gender" class="form-select" required>
+                            <option value="" selected disabled>Select Gender</option>
+                            <option value="female" {% if gender == "female" %}selected{% endif %}>Female</option>
+                            <option value="male" {% if gender == "male" %}selected{% endif %}>Male</option>
+                            <option value="others" {% if gender == "others" %}selected{% endif %}>Others</option>
                         </select>
                     </div>
                 </div>

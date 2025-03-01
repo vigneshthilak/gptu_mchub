@@ -14,8 +14,10 @@ class UserProfile(models.Model):
         ('dmx', 'DMX'),
     ]
 
-    CATEGORY_CHOICES = [
-        ('teacher', 'Teacher'),
+    GENDER_CHOICES = [
+        ('female', 'Female'),
+        ('male', 'Male'),
+        ('others', 'Others')
     ]
 
     first_name = models.CharField(max_length=50,null=True)
@@ -25,7 +27,7 @@ class UserProfile(models.Model):
     username = models.CharField(max_length=50, unique=True)
     password = models.CharField(max_length=100)  # Hashed password (use Django auth)
     department = models.CharField(max_length=10, choices=DEPARTMENT_CHOICES)
-    user_category = models.CharField(max_length=10, choices=CATEGORY_CHOICES)
+    gender = models.CharField(max_length=10, choices=GENDER_CHOICES, default='Female')
 
     def __str__(self):
         return self.username

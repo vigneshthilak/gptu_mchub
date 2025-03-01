@@ -106,21 +106,70 @@
 
         <section class="gptu_mchub-users-dashboard-header">
             <div class="container">
-                <div class="dashboard-content">
-                    <h5>WELCOME</h5>
+                <div class="dashboard-user">
+                    <h5>Welcome to GPTU MC HUB</h5>
                     <h1>{{ first_name }} {{ last_name }}</h1>
-                    <!-- Search Bar -->
-                    <form method="GET" action="" class="mt-3">
-                        <div class="input-group">
-                            <input type="text" name="q" class="form-control" placeholder="Search for a student..." required>
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fa fa-search"></i> <!-- Font Awesome search icon -->
-                            </button>
-                        </div>
-                    </form>
+                    {% if department == "dcivil" %}
+                        <p>(Civil Engineering)</p>
+                    {% elif department == "dmech" %}
+                        <p>(Mechanical Engineering)</p>
+                    {% elif department == "deee" %}
+                        <p>(Electrical & Electronicsx Engineering)</p>
+                    {% elif department == "dece" %}
+                        <p>(Electronics & Communication Engineering)</p>
+                    {% elif department == "dcse" %}
+                        <p>(Computer Engineering)</p>
+                    {% elif department == "dmx" %}
+                        <p>(Mechatronics Engineering)</p>
+                    {% else %}
+                        <p>(Admin)</p>
+                    {% endif %}
                 </div>
             </div>
         </section>
+        <div class="container">
+            <div class="search-container">
+                <form class="d-flex">
+                    <input class="form-control me-2" type="search" placeholder="Search..." aria-label="Search" required>
+                    <button class="btn btn-primary" type="submit"></button>
+                </form>
+            </div>
+            {% if department == 'dcivil' %}
+                <h1>Department of Civil Engineering</h1>
+                <p>
+                    "Civil Engineering is the art of directing the great source of power in nature for the use and convenience of man".
+                </p>
+                <p>
+                    To produce Civil Engineers of high caliber, technical skills and ethical values to serve the society and nation.
+                </p>
+                <p>
+                    To promote innovative and original thinking in the of budding engineers to face the challenges of the future.
+                </p>
+            {% elif department == 'dcse' %}
+                <h1>Department of Computer Engineering</h1>
+                <p>
+                    The Department of Computer Engineering was started in the year 2013 and offers 3 years diploma course in computer 
+                    Engineering to provide an excellent knowledge to the students in computer Engineering in order to meet the 
+                    challenges of the future , including employment skill in high technology workforce and the ability to pursue 
+                    higher studies. Train them as future technocrats with basic knowledge in both theory and practice in Computer 
+                    Engineering, including current emerging technologies and experimental learning.
+                </p>
+            {% elif department == 'dece' %}
+                <h1>Department of ECE</h1>
+                <p>
+                    The Department of Electronics and Communication Engineering has well qualified and highly motivated faculty and well 
+                    equipped laboratories. The equipments available in the laboratory are upgraded as an ongoing process so as to keep pace 
+                    with the latest developments in the field of Electronics & Communication Engineering.
+                </p>
+                <p>
+                    The Department is imparting the required Technical and Practical knowledge to the students. An effort is made to groom 
+                    these students not only to become successful Electronics & Communication Engineers but also as top notch professionals. 
+                    The amenities in the Department are also capable to meet the requirements of carrying out research work.
+                </p>
+            {% else %}
+                <h1>bye</h1>
+            {% endif %}
+        </div>
 
     <!-- Home Page content -->
 
