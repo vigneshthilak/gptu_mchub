@@ -46,9 +46,9 @@
     <section class="gptu_mchub-home-login">
 
         <div class="login-container">
-            <span class="close-icon" data-url="{% url 'index' %}" onclick="redirectToPage()">&times;</span>
+            <span class="close-icon" data-url="{% url 'home:index' %}" onclick="redirectToPage()">&times;</span>
             <h1 class="text-center mb-4">Login</h1>
-            <form action="{% url 'login' %}" method="post">
+            <form action="{% url 'home:login' %}" method="post">
                 {% csrf_token %}
                 <div class="mb-3">
                     <input type="text" name="username" class="form-control" id="email" placeholder="Enter your Username/User ID" required>
@@ -59,7 +59,7 @@
                     <div class="error" id="passwordError"></div>
                 </div>
                 <div class="forgot-password">
-                    <a href="{% url 'forgot_password' %}">Forgot Password?</a>
+                    <a href="{% url 'home:forgot_password' %}">Forgot Password?</a>
                 </div>
                 
                 <!-- To Display the Error Message -->
@@ -77,7 +77,7 @@
                 <button type="submit" class="btn btn-primary">Login</button>
             </form>
             <p class="mt-3 text-center">
-                Don't have an account? <a href="{% url 'signup' %}" class="signup-link">Sign up</a>
+                Don't have an account? <a href="{% url 'home:signup' %}" class="signup-link">Sign up</a>
             </p>
         </div>
 

@@ -407,13 +407,21 @@
     text-align: center;
   }
 
+  .gptu_mchub-home-aboutus h4 {
+    font-weight: 600;
+  }
+
   .gptu_mchub-home-aboutus p {
     margin-top: 20px;
     text-align: justify;
   }
 
+  .gptu_mchub-home-aboutus ul {
+    margin-top: 20px;
+  }
+
   .gptu_mchub-home-aboutus-btn {
-    margin: 30px 0 0 0;
+    margin: 30px 0;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -505,6 +513,52 @@
   }
 
 /*---------- Contact Us ----------*/
+
+/*---------- Dashboard ----------*/
+
+  .gptu_mchub-users-dashboard-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 50vh;
+    background-position: center;
+    background-size: cover;
+    background-image: linear-gradient(rgba(4, 9, 30, 0.7), rgba(4, 9, 30, 0.7)), url(../images/bg.jpg);
+    color: white;
+  }
+
+  .search-container {
+    display: flex;
+    justify-content: center;
+    margin: 20px;
+  }
+
+  .search-container .form-control {
+    border-radius: 20px;
+    padding-left: 20px;
+    width: 400px;
+    background: gainsboro;
+  }
+
+  .search-container .btn-primary {
+    display: none;
+  }
+
+  .search-container .form-control:focus,
+  .search-container .form-control:active {
+    box-shadow: none;
+    border: 1px solid black;
+    background: white;
+  }
+
+  @media (max-width: 576px) {
+    .gptu_mchub-users-dashboard-header {
+      text-align: center;
+    }
+  }
+
+
+/*---------- Dashboard ----------*/
 
 /*---------- Footer ----------*/
 

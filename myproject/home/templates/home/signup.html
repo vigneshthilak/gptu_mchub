@@ -46,9 +46,9 @@
     <section class="gptu_mchub-home-signup">
 
         <div class="signup-container">
-            <span class="close-icon" data-url="{% url 'login' %}" onclick="redirectToPage()">&times;</span>
+            <span class="close-icon" data-url="{% url 'home:login' %}" onclick="redirectToPage()">&times;</span>
             <h1 class="text-center mb-4">Signup</h1>
-            <form action="" method="POST">
+            <form action="{% url 'home:signup' %}" method="POST">
                 {% csrf_token %}
                 
                 <div class="row mb-3">
@@ -83,12 +83,16 @@
                             <option value="dece" {% if department == "dece" %}selected{% endif %}>DECE</option>
                             <option value="dcse" {% if department == "dcse" %}selected{% endif %}>DCSE</option>
                             <option value="dmx" {% if department == "dmx" %}selected{% endif %}>DMX</option>
+                            <option value="dmt" {% if department == "dmt" %}selected{% endif %}>DMT</option>
+                            <option value="others" {% if department == "others" %}selected{% endif %}>OTHERS</option>
                         </select>
                     </div>
                     <div class="col">
-                        <select name="userCategory" class="form-select" required>
-                            <option value="" selected disabled>Select category</option>
-                            <option value="teacher" {% if user_category == "teacher" %}selected{% endif %}>Teacher</option>
+                        <select name="gender" class="form-select" required>
+                            <option value="" selected disabled>Select Gender</option>
+                            <option value="female" {% if gender == "female" %}selected{% endif %}>Female</option>
+                            <option value="male" {% if gender == "male" %}selected{% endif %}>Male</option>
+                            <option value="others" {% if gender == "others" %}selected{% endif %}>Others</option>
                         </select>
                     </div>
                 </div>

@@ -1,19 +1,31 @@
 from django.shortcuts import render, redirect
-from django.db import connection
-from django.http import HttpResponse
 from django.contrib import messages
 from .models import UserProfile, AuthUser, PasswordResetToken
 from django.core.mail import send_mail
 from home.models import UserProfile, PasswordResetToken
-from django.contrib.auth.hashers import check_password
 from django.contrib.auth.hashers import make_password
 from django.utils.timezone import now, timedelta
 from django.core.mail import EmailMessage
 from django.conf import settings
+from django.contrib.auth import authenticate, login as auth_login
 import uuid
 import string
 import random
 import datetime
+
+"""
+Uneccessary import methods
+
+from django.db import connection
+from django.http import HttpResponse
+from django.contrib.auth.hashers import check_password
+from django.contrib.auth.models import User
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_decode
+
+"""
 
 # Create your views here.
 
@@ -30,35 +42,21 @@ def login(request):
         # Server-side validation
         if not user_input or not password:
             messages.error(request, 'Both username/user ID and password are required.')
-            return redirect('login')
-
-        # Check if the input is numeric (user_id) or alphanumeric (username)
-        if user_input.isdigit():
-            query = "SELECT * FROM home_userprofile WHERE user_id = %s"
-        else:
-            query = "SELECT * FROM home_userprofile WHERE username = %s"
-
-        with connection.cursor() as cursor:
-            cursor.execute(query, [user_input])
-            user = cursor.fetchone()
-
+            return redirect('home:login')
+        
+        # Try authenticating with user_id or username
+        user = authenticate(request, user_id=user_input, password=password) or \
+               authenticate(request, username=user_input, password=password)
+        
         if user:
-            # User found, check if password matches
-            stored_password = user[6]  # Assuming password is stored in index 6
-            if check_password(password, stored_password):  # Use check_password to verify hashed password
-                return redirect('thanks')
-            else:
-                messages.error(request, 'Invalid password.')
+            auth_login(request, user)  # Django manages session automatically
+            return redirect('users:dashboard')
         else:
-            messages.error(request, 'Invalid username/user ID.')
+            messages.error(request, 'Invalid username/user ID or password.')
 
-        return redirect('login')
+        return redirect('home:login')
 
     return render(request, 'home/login.html')
-
-def thanks(request):
-    return HttpResponse('<h1>Hello, World!</h1>')
-
 
 #To render the forgot_password.html file
 
@@ -74,7 +72,7 @@ def forgot_password(request):
             PasswordResetToken.objects.create(user=user, token=token)
 
             # Send email with reset link
-            reset_link = f"http://192.168.241.240:8000/reset-password/{token}/"
+            reset_link = f"http://{settings.LOCAL_IP}:8000/reset-password/{token}/"
             send_mail(
                 "Password Reset Request",
                 f"Click the link to reset your password: {reset_link}",
@@ -84,10 +82,10 @@ def forgot_password(request):
             )
 
             messages.success(request, "Password reset link sent to your email.")
-            return redirect('forgot_password')
+            return redirect('home:forgot_password')
         except UserProfile.DoesNotExist:
             messages.error(request, "Email not found.")
-            return redirect('forgot_password')
+            return redirect('home:forgot_password')
 
     return render(request, 'home/forgot_password.html')
 
@@ -101,7 +99,7 @@ def reset_password(request, token):
         # Check if token is expired (valid for 15 minutes)
         if now() - reset_token.created_at > timedelta(minutes=15):
             messages.error(request, "Password reset link expired.")
-            return redirect('forgot_password')
+            return redirect('home:forgot_password')
 
         if request.method == "POST":
             new_password = request.POST.get('password')
@@ -129,11 +127,11 @@ def reset_password(request, token):
             reset_token.delete()
 
             messages.success(request, "Password reset successfully.")
-            return redirect('login')
+            return redirect('home:login')
 
     except PasswordResetToken.DoesNotExist:
         messages.error(request, "Invalid or expired reset link.")
-        return redirect('forgot_password')
+        return redirect('home:forgot_password')
 
     return render(request, 'home/reset_password.html', {"token": token})
 
@@ -154,8 +152,6 @@ def send_otp(email, request):
 
 def signup(request):
     if request.method == "POST":
-        # Print all form data for debugging
-        print("Received POST Data:", request.POST)
 
         first_name = request.POST.get('firstName', '').strip()
         last_name = request.POST.get('lastName', '').strip()
@@ -165,17 +161,24 @@ def signup(request):
         password = request.POST.get('password', '').strip()
         confirm_password = request.POST.get('confirmPassword', '').strip()
         department = request.POST.get('department', '').strip()
-        user_category = request.POST.get('userCategory', '').strip()
-
-        # Debugging: Print each value
-        print(f"first_name: {first_name}, last_name: {last_name}, email: {email}, user_id: {user_id}")
-        print(f"username: {username}, password: {password}, confirm_password: {confirm_password}")
-        print(f"department: {department}, user_category: {user_category}")
+        gender = request.POST.get('gender', '').strip()
 
         # Check if any field is empty
-        if not all([first_name, last_name, email, user_id, username, password, confirm_password, department, user_category]):
+        if not all([first_name, last_name, email, user_id, username, password, confirm_password, department, gender]):
             messages.error(request, 'All fields are required! Please fill in all fields.')
             return render(request, 'home/signup.html')
+        
+        if username[0] != '@':
+            messages.error(request, "The Username must start with '@'")
+            return render(request, 'home/signup.html', {
+                'first_name': first_name,
+                'last_name': last_name, 
+                'email': email,
+                'user_id': user_id,
+                'department': department,
+                'gender': gender,
+            })
+
 
         # Check if passwords match
         if password != confirm_password:
@@ -187,7 +190,7 @@ def signup(request):
                 'user_id': user_id,
                 'username': username,
                 'department': department,
-                'user_category': user_category,
+                'gender': gender,
             })
         
         if len(password) < 8:
@@ -199,7 +202,7 @@ def signup(request):
                 'user_id': user_id,
                 'username': username,
                 'department': department,
-                'user_category': user_category,
+                'gender': gender,
             })
         
         special_chars = set(string.punctuation)
@@ -212,31 +215,37 @@ def signup(request):
                 'user_id': user_id,
                 'username': username,
                 'department': department,
-                'user_category': user_category,
+                'gender': gender,
             })
+
+        # Check if username already exists
+        if UserProfile.objects.filter(username=username).exists():
+            messages.error(request, "Username already taken. Please choose another one.")
+            return render(request, 'home/signup.html')
         
-        # Hash the password before saving it
-        hashed_password = make_password(password)
-
         # Validate user_id and email against auth_users
-        if AuthUser.objects.filter(user_id=user_id, email=email).exists():
-            otp = send_otp(email, request)  # Send OTP to email
-            request.session['otp'] = otp  # Store OTP in session
-            request.session['user_data'] = {
-                'first_name': first_name,
-                'last_name': last_name,
-                'email': email,
-                'user_id': user_id,
-                'username': username,
-                'department': department,
-                'user_category': user_category,
-                'password': hashed_password,
-            }
-
-            return redirect('verify_otp')  # Redirect to OTP verification page
-        else:
+        if not AuthUser.objects.filter(user_id=user_id, email=email).exists():
             messages.error(request, "You're not eligible to create an account!")
             return render(request, 'home/signup.html')
+
+        # Hash the password before saving it
+        #hashed_password = make_password(password)
+
+        # Send OTP for verification
+        otp = send_otp(email, request)  
+        request.session['otp'] = otp  
+        request.session['user_data'] = {
+            'first_name': first_name,
+            'last_name': last_name,
+            'email': email,
+            'user_id': user_id,
+            'username': username,
+            'department': department,
+            'gender': gender,
+            'password': password,  # Store plain password temporarily for user creation
+        }
+
+        return redirect('home:verify_otp')  # Redirect to OTP verification page
 
     return render(request, 'home/signup.html')
 
@@ -248,16 +257,10 @@ def verify_otp(request):
         stored_otp = request.session.get("otp")
         otp_expiry = request.session.get("otp_expiry")
 
-        # Debugging logs
-        print(f"Entered OTP: {entered_otp}")
-        print(f"Stored OTP: {stored_otp}")
-        print(f"Current Time: {now().timestamp()}")
-        print(f"OTP Expiry: {otp_expiry}")
-
         # Validate OTP existence and expiration
         if not stored_otp or not otp_expiry or now().timestamp() > otp_expiry:
             messages.error(request, "OTP has expired! Please request a new one.")
-            return redirect("verify_otp")
+            return redirect("home:verify_otp")
 
         # Validate OTP match
         if entered_otp == stored_otp:
@@ -265,16 +268,16 @@ def verify_otp(request):
 
             if user_data:
                 try:
-                    # Save user data in home_userprofile
-                    UserProfile.objects.create(
-                        first_name=user_data.get('first_name', ''),
-                        last_name=user_data.get('last_name', ''),
-                        email=user_data.get('email', ''),
-                        user_id=user_data.get('user_id', ''),  # Changed from regno to user_id
-                        username=user_data.get('username', ''),
-                        department=user_data.get('department', ''),
-                        user_category=user_data.get('user_category', ''),
-                        password=user_data.get('password', ''),  # Password is hashed in model
+                    # Create user in Django authentication system
+                    user = UserProfile.objects.create_user(
+                        username=user_data['username'],
+                        email=user_data['email'],
+                        password=user_data['password'],  # Django hashes password automatically
+                        first_name=user_data['first_name'],
+                        last_name=user_data['last_name'],
+                        user_id=user_data['user_id'],  
+                        department=user_data['department'],
+                        gender=user_data['gender'],
                     )
 
                     # Clear session data
@@ -283,11 +286,11 @@ def verify_otp(request):
                     request.session.pop("otp_expiry", None)
 
                     messages.success(request, "Account created successfully!")
-                    return redirect("login")
+                    return redirect("home:login")
                 
                 except Exception as e:
                     messages.error(request, f"Error creating account: {e}")
-                    return redirect("verify_otp")
+                    return redirect("home:verify_otp")
         else:
             messages.error(request, "Invalid OTP! Please try again.")
             return render(request, 'home/verify_otp.html')
@@ -304,30 +307,30 @@ def resend_otp(request):
 
         if not user_email:
             messages.error(request, "User email not found. Please sign up again.")
-            return redirect("verify_otp")
+            return redirect("home:verify_otp")
 
-        # 🔍 Debugging: Print Old OTP Before Replacing
+        # Debugging: Print Old OTP Before Replacing
         old_otp = request.session.get("otp")
         print(f"Old OTP before update: {old_otp}")
 
-        # ✅ Remove Old OTP from Session
+        # Remove Old OTP from Session
         request.session.pop("otp", None)
         request.session.pop("otp_expiry", None)
 
-        # ✅ Generate a New OTP
+        # Generate a New OTP
         new_otp = ''.join(random.choices(string.digits, k=6))
         expiry_time = now() + datetime.timedelta(minutes=1)
 
-        # ✅ Store the New OTP in Session
+        # Store the New OTP in Session
         request.session["otp"] = new_otp
         request.session["otp_expiry"] = expiry_time.timestamp()
         request.session.modified = True  # Ensures Django saves session changes
         request.session.save() #Ensure session is saved immediately.
 
-        # 🔍 Debugging: Print New OTP After Replacing
+        # Debugging: Print New OTP After Replacing
         print(f"New OTP after update: {request.session.get('otp')}, Expiry: {request.session.get('otp_expiry')}")
 
-        # ✅ Send OTP via Email
+        # Send OTP via Email
         subject = "Your New OTP for Account Verification"
         message = f"Your new OTP is: {new_otp}. It will expire in 1 minute. Do not share this with anyone."
 
@@ -337,9 +340,9 @@ def resend_otp(request):
         except Exception as e:
             messages.error(request, f"Error sending email: {e}")
 
-        return redirect("verify_otp")
+        return redirect("home:verify_otp")
 
-    return redirect("verify_otp")
+    return redirect("home:verify_otp")
 
 #To render the contactus.html file
 
@@ -374,7 +377,7 @@ def contactus(request):
 
         try:
             email_send.send()
-            return redirect("contactus")  # Redirect after sending email
+            return redirect("home:contactus")  # Redirect after sending email
         except Exception as e:
             print("Email sending failed:", e)  # Debugging info
 

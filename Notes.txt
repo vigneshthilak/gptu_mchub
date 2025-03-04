@@ -84,4 +84,5 @@
 
 harigaran@2004
 
-
+#To update the requirements.txt file
+    >pip freeze > requirements.txt
