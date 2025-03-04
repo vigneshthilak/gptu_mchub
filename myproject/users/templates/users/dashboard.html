@@ -1,17 +1,3 @@
-<!--
-    <h2>Welcome, {{ first_name }} {{ last_name }}!</h2>
-    <p>Your Department: {{ department }}</p>
-    <p>Your Category: {{ user_category }}</p>
-
-    {% if department == "CSE" %}
-        <p>Showing CSE-related content...</p>
-    {% elif department == "ECE" %}
-        <p>Showing ECE-related content...</p>
-    {% else %}
-        <p>General content for all users.</p>
-    {% endif %}
--->
-
 {% load static %}
 
 <!DOCTYPE html>
@@ -128,6 +114,8 @@
                         <p>(Computer Engineering)</p>
                     {% elif department == "dmx" %}
                         <p>(Mechatronics Engineering)</p>
+                    {% elif department == "dmt" %}
+                        <p>(Digital Manufacturing Technology)</p>
                     {% else %}
                         <p>(Admin)</p>
                     {% endif %}

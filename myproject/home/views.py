@@ -163,15 +163,22 @@ def signup(request):
         department = request.POST.get('department', '').strip()
         gender = request.POST.get('gender', '').strip()
 
-        # Debugging: Print each value
-        print(f"first_name: {first_name}, last_name: {last_name}, email: {email}, user_id: {user_id}")
-        print(f"username: {username}, password: {password}, confirm_password: {confirm_password}")
-        print(f"department: {department}, gender: {gender}")
-
         # Check if any field is empty
         if not all([first_name, last_name, email, user_id, username, password, confirm_password, department, gender]):
             messages.error(request, 'All fields are required! Please fill in all fields.')
             return render(request, 'home/signup.html')
+        
+        if username[0] != '@':
+            messages.error(request, "The Username must start with '@'")
+            return render(request, 'home/signup.html', {
+                'first_name': first_name,
+                'last_name': last_name, 
+                'email': email,
+                'user_id': user_id,
+                'department': department,
+                'gender': gender,
+            })
+
 
         # Check if passwords match
         if password != confirm_password:

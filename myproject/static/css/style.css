@@ -537,6 +537,7 @@
     border-radius: 20px;
     padding-left: 20px;
     width: 400px;
+    background: gainsboro;
   }
 
   .search-container .btn-primary {
@@ -547,6 +548,7 @@
   .search-container .form-control:active {
     box-shadow: none;
     border: 1px solid black;
+    background: white;
   }
 
   @media (max-width: 576px) {

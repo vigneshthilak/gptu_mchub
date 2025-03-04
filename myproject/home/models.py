@@ -21,6 +21,8 @@ class UserProfile(AbstractUser):
         ('dece', 'DECE'),
         ('dcse', 'DCSE'),
         ('dmx', 'DMX'),
+        ('dmt', 'DMT'),
+        ('others', 'Others'),
     ]
 
     GENDER_CHOICES = [
@@ -34,12 +36,12 @@ class UserProfile(AbstractUser):
     email = models.EmailField(unique=True)
     user_id = models.CharField(max_length=20, unique=True)
     username = models.CharField(max_length=50, unique=True)
-    password = models.CharField(max_length=100)  # Hashed password (use Django auth)
+    password = models.CharField(max_length=100)
     department = models.CharField(max_length=10, choices=DEPARTMENT_CHOICES)
     gender = models.CharField(max_length=10, choices=GENDER_CHOICES, default='Female')
 
-    USERNAME_FIELD = 'username'  # Authenticate using user_id instead of username
-    REQUIRED_FIELDS = ['user_id', 'email']  # Required for creating superusers
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['user_id', 'email']
 
     def __str__(self):
         return self.username
