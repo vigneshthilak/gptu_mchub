@@ -1,10 +1,19 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
+from django.conf import settings
 import uuid
+
+"""
+Uneccessary import methods
+
+from django.contrib.auth.models import User
+
+"""
+
 
 # Models for user Profile
 
-class UserProfile(models.Model):
+class UserProfile(AbstractUser):
     DEPARTMENT_CHOICES = [
         ('dcivil', 'DCIVIL'),
         ('dmech', 'DMECH'),
@@ -29,12 +38,16 @@ class UserProfile(models.Model):
     department = models.CharField(max_length=10, choices=DEPARTMENT_CHOICES)
     gender = models.CharField(max_length=10, choices=GENDER_CHOICES, default='Female')
 
+    USERNAME_FIELD = 'username'  # Authenticate using user_id instead of username
+    REQUIRED_FIELDS = ['user_id', 'email']  # Required for creating superusers
+
     def __str__(self):
         return self.username
 
 #Model for Authorised user Verification
 
 class AuthUser(models.Model):
+    id = models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')
     user_id = models.CharField(max_length=20, unique=True)  # Changed from regno to user_id
     email = models.EmailField(unique=True)
 
@@ -45,7 +58,7 @@ class AuthUser(models.Model):
 #Models for Password reset token
 
 class PasswordResetToken(models.Model):
-    user = models.ForeignKey('home.UserProfile', on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     token = models.CharField(max_length=100, unique=True, default=uuid.uuid4)
     created_at = models.DateTimeField(auto_now_add=True)
 

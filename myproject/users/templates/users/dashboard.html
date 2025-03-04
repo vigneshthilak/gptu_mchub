@@ -108,7 +108,14 @@
             <div class="container">
                 <div class="dashboard-user">
                     <h5>Welcome to GPTU MC HUB</h5>
-                    <h1>{{ first_name }} {{ last_name }}</h1>
+                    {% if gender == "female" %}
+                        <h1>Ms. {{ first_name }} {{ last_name }}</h1>
+                    {% elif gender == "male" %}
+                        <h1>Mr. {{ first_name }} {{ last_name }}</h1>
+                    {% else %}
+                        <h1>{{ first_name }} {{ last_name }}</h1>
+                    {% endif %}
+
                     {% if department == "dcivil" %}
                         <p>(Civil Engineering)</p>
                     {% elif department == "dmech" %}

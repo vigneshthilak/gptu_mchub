@@ -1,35 +1,31 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth import logout as django_logout 
+from django.contrib.auth.decorators import login_required
+
+"""
+Uneccessary import methods
+
 from home.models import UserProfile
 from django.contrib.auth.models import User
 from django.db import connection
 
+"""
+
+@login_required  # Ensures only logged-in users can access the dashboard
+
 def dashboard(request):
-    user_id = request.session.get("user_id")  # Get logged-in user ID from session
+    user = request.user  # Fetch authenticated user
 
-    if not user_id:
-        return redirect("home:login")  # Redirect to login if not authenticated
+    context = {
+        "first_name": user.first_name,
+        "last_name": user.last_name,
+        "department": user.department,
+        "gender": user.gender,
+    }
 
-    # Fetch user details from the database
-    query = "SELECT * FROM home_userprofile WHERE user_id = %s"
-
-    with connection.cursor() as cursor:
-        cursor.execute(query, [user_id])
-        user = cursor.fetchone()
-
-    if user:
-        context = {
-            "first_name": user[1],  # Assuming first_name is at index 0
-            "last_name": user[2],   # Assuming last_name is at index 1
-            "department": user[7],  # Assuming department is at index 2
-            "user_category": user[8],  # Assuming userCategory is at index 3
-        }
-        return render(request, "users/dashboard.html", context)
-    else:
-        # If user not found in DB (which shouldn't happen normally), clear session and redirect
-        request.session.flush()
-        return redirect("home:login")
+    return render(request, "users/dashboard.html", context)
 
 
 def logout(request):
-    request.session.flush()
+    django_logout(request)  # Django handles session clearing
     return redirect('home:index')

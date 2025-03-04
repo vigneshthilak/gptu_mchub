@@ -97,6 +97,8 @@ DATABASES = {
     }
 }
 
+AUTH_USER_MODEL = 'home.UserProfile'
+
 
 
 # Password validation
