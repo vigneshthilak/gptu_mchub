@@ -1,0 +1,347 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPTU MC Hub</title>
+
+    <!-- The link for the Bootstrap -->
+
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <!-- The link for the Bootstrap -->
+    
+    <!-- The link for the CSS Stylesheet -->
+    
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <!-- The link for the CSS Stylesheet -->
+
+    <!-- The link for the favicon -->
+
+        <link rel="shortcut icon" type="image/png" href="{% static 'images/GPTU Logo.png' %}">
+
+    <!-- The link for the favicon -->
+
+    <!-- The link for the font (Google Fonts) used in the web page -->
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,400;0,600;0,700;1,200&display=swap" rel="stylesheet">
+
+    <!-- The link for the font (Google Fonts) used in the web page-->
+
+    <!-- The link for the font awesome to import the icons -->
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- The link for the font awesome to import the icons -->
+
+</head>
+<body class="add_stu">
+
+    <!-- Navigation Bar (Menu Bar) -->
+   
+        <nav class="navbar navbar-expand-lg navbar-dark custom-navbar">
+            <div class="container-fluid">
+                
+                <!-- Logo -->
+                
+                    <a class="navbar-brand" href="{% url 'users:dashboard' %}"><img src="{% static 'images/logo.png' %}"></a>
+
+                <!-- Logo -->
+
+                <!-- Toggle Button for Mobile -->
+
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                <!-- Toggle Button for Mobile -->
+
+                <!-- Nav Links -->
+
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav ms-auto">
+                          <li class="nav-item">
+                            <a class="nav-link" href="{% url 'users:dashboard' %}">Home</a>
+                          </li>
+                          <li class="nav-item">
+                            <a class="nav-link" href="{% url 'users:add_stu' %}">Add Student</a>
+                          </li>
+                          <li class="nav-item">
+                            <a class="nav-link" href="{% url 'users:logout' %}">Log out</a>
+                          </li>
+                        </ul>
+                    </div>
+
+                <!-- Nav Links -->
+                
+            </div>
+        </nav>
+  
+    <!-- Navigation Bar (Menu Bar) -->
+
+    <!-- Add Student -->
+
+        <section class="gptu_mchub-users-add_stu">
+            <div class="container">
+                <h2 class="text-center mb-4">Add Student to GPTU MC HUB</h2>
+                <form action="{% url 'users:add_stu' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label">First Name*</label>
+                            <input type="text" name="first_name" class="form-control" placeholder="Enter first name">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Last Name</label>
+                            <input type="text" name="last_name" class="form-control" placeholder="Enter last name">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Register number</label>
+                            <input type="text" name="reg_no" class="form-control" placeholder="Enter Register number">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Program Name*</label>
+                            <select name="program_name" class="form-control">
+                                <option selected disabled>Select Program Name</option>
+                                <option value="DCIVIL">DCIVIL</option>
+                                <option vlaue="DMECH">DMECH</option>
+                                <option vlaue="DEEE">DEEE</option>
+                                <option vlaue="DECE">DECE</option>
+                                <option vlaue="DCSE">DCSE</option>
+                                <option vlaue="DMX">DMX</option>
+                                <option vlaue="DMT">DMT</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Program Type</label>
+                            <select name="program_type" class="form-control">
+                                <option selected disabled>Select Program Type</option>
+                                <option value="Regular">Regular</option>
+                                <option value="Lateral">Lateral</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Year of Joining</label>
+                            <input type="text" name="year_of_joining" class="form-control" placeholder="Enter the Year of Joining">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Name of the Mentor</label>
+                            <input type="text" name="mentor_name" class="form-control" value="{{ first_name }}">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Father Name</label>
+                            <input type="text" name="father_name" class="form-control" placeholder="Enter Father Name">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Mother Name</label>
+                            <input type="text" name="mother_name" class="form-control" placeholder="Enter Mother Name">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Date of Birth*</label>
+                            <input type="text" name="dob" class="form-control" placeholder="DD/MM/YYYY">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Gender*</label>
+                            <select name="gender" class="form-control">
+                                <option selected disabled>Select Gender</option>
+                                <option value="Female">Female</option>
+                                <option value="Male">Male</option>
+                                <option value="Others">Others</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Blood Group</label>
+                            <select name="blood_group" class="form-control">
+                                <option selected disabled>Select Blood Group</option>
+                                <option value="A+">A+</option>
+                                <option value="A-">A-</option>
+                                <option value="B+">B+</option>
+                                <option value="B-">B-</option>
+                                <option value="AB+">AB+</option>
+                                <option value="AB-">AB-</option>
+                                <option value="O+">O+</option>
+                                <option value="O-">O-</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Mother Tongue</label>
+                            <input type="text" name="mother_tongue" class="form-control" placeholder="Enter Mother Tongue">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Differently abled</label>
+                            <select name="differently_abled" class="form-control">
+                                <option selected disabled>Select "Yes/No"</option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Mobile Number - Father</label>
+                            <input type="text" name="mobile_father" class="form-control" maxlength="10" size="10" placeholder="Enter Mobile Number">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Mobile Number - Mother</label>
+                            <input type="text" name="mobile_mother" class="form-control" maxlength="10" size="10" placeholder="Enter Mobile Number">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Mobile Number - Sibling (Optional)</label>
+                            <input type="text" name="mobile_sibling" class="form-control" maxlength="10" size="10" placeholder="Enter Mobile Number">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Mobile Number - Guardian (Optional)</label>
+                            <input type="text" name="mobile_guardian" class="form-control" maxlength="10" size="10" placeholder="Enter Mobile Number">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">E-Mail ID</label>
+                            <input type="email" name="email" class="form-control" placeholder="Enter E-Mail ID">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Address</label>
+                            <input type="text" name="address" class="form-control" placeholder="Enter Address">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">District*</label>
+                            <input type="text" name="district" class="form-control" placeholder="Enter District">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">PIN Code*</label>
+                            <input type="text" name="pin_code" class="form-control" placeholder="Enter PIN Code">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Father Occupation</label>
+                            <input type="text" name="father_occupation" class="form-control" placeholder="Enter Father Occupation">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Aadhar Card Number*</label>
+                            <input type="text" name="aadhar_number" class="form-control" maxlength="12" size="12" placeholder="Enter Aadhar Card Number">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">EMIS Number</label>
+                            <input type="text" name="emis_number" class="form-control" placeholder="Enter EMIS Number">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">SSLC Mark*</label>
+                            <input type="text" name="sslc_mark" class="form-control" placeholder="Enter SSLC Mark">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">HSC/ITI Mark</label>
+                            <input type="text" name="hsc_iti_mark" class="form-control" placeholder="Enter HSC/ITI Mark">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Studied in Govt. School</label>
+                            <select name="govt_school" class="form-control">
+                                <option selected disabled>Select "Yes/No"</option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">First Graduate</label>
+                            <select name="first_graduate" class="form-control">
+                                <option selected disabled>Select "Yes/No"</option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Hosteller</label>
+                            <select name="hosteller" class="form-control">
+                                <option selected disabled>Select "Yes/No"</option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Single Parent</label>
+                            <select name="single_parent" class="form-control">
+                                <option selected disabled>Select "Yes/No"</option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Name of the Bank</label>
+                            <input type="text" name="bank_name" class="form-control" placeholder="Enter Name of the Bank">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Branch Name</label>
+                            <input type="text" name="branch_name" class="form-control" placeholder="Enter Branch Name">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Account Number</label>
+                            <input type="text" name="account_number" class="form-control" placeholder="Enter Account Number">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">IFSC Code</label>
+                            <input type="text" name="ifsc_code" class="form-control" placeholder="Enter IFSC Code">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Extra Curricular (Optional)</label>
+                            <input type="text" name="extra_curricular" class="form-control" placeholder="Enter Extra Curricular">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Any achievements (Optional)</label>
+                            <input type="text" name="achievements" class="form-control" placeholder="Enter Any achievements">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Religion</label>
+                            <select name="religion" class="form-control">
+                                <option selected disabled>Select Religion</option>
+                                <option value="Hindu">Hindu</option>
+                                <option value="Christian">Christian</option>
+                                <option value="Islam">Islam</option>
+                                <option value="Others">Others</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Community</label>
+                            <select name="community" class="form-control">
+                                <option selected disabled>Select Community</option>
+                                <option value="BC">BC</option>
+                                <option value="MBC">MBC</option>
+                                <option value="SC">SC</option>
+                                <option value="ST">ST</option>
+                                <option value="OC">OC</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end mt-4">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+    <!-- Add Student -->
+
+    <!-- Footer of the webpage -->
+
+        <div class="gptu_mchub-footer">
+            <div class="container">
+                <h1>Govt. Polytechnic College Uthangarai</h1>
+                <div class="gptu_mchub-footer-dev">
+                    <hr>
+                    <p>
+                        © Govt Polytechnic College, Uthangarai. All Rights Reserved<br>
+                        <small>Developed by GPT Uthangarai from the Department of Computer Engineering</small>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    <!-- Footer of the webpage -->
+
+
+    <!-- The Link for the Bootstrap bundle Script -->
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+    <!-- The Link for the Bootstrap bundle Script -->
+</body>
+</html>

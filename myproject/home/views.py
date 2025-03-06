@@ -179,6 +179,17 @@ def signup(request):
                 'gender': gender,
             })
 
+        if not username.islower():
+            messages.error(request, 'Username must contain only lowercase letters.')
+            return render(request, 'home/signup.html', {
+                'first_name': first_name,
+                'last_name': last_name, 
+                'email': email,
+                'user_id': user_id,
+                'department': department,
+                'gender': gender,
+            })
+
 
         # Check if passwords match
         if password != confirm_password:
