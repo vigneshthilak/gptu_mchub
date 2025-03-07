@@ -232,7 +232,25 @@ def signup(request):
         # Check if username already exists
         if UserProfile.objects.filter(username=username).exists():
             messages.error(request, "Username already taken. Please choose another one.")
-            return render(request, 'home/signup.html')
+            return render(request, 'home/signup.html', {
+                'first_name': first_name,
+                'last_name': last_name, 
+                'email': email,
+                'user_id': user_id,
+                'department': department,
+                'gender': gender,
+            })
+        
+        if UserProfile.objects.filter(user_id=user_id).exists():
+            messages.error(request, "User ID already exists.")
+            return render(request, 'home/signup.html', {
+                'first_name': first_name,
+                'last_name': last_name, 
+                'email': email,
+                'username': username,
+                'department': department,
+                'gender': gender,
+            })
         
         # Validate user_id and email against auth_users
         if not AuthUser.objects.filter(user_id=user_id, email=email).exists():

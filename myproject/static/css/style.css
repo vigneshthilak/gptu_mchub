@@ -590,6 +590,11 @@
     font-size: small;
   }
 
+  .gptu_mchub-users-add_stu .container .error-field {
+    color: red;
+    border: 1px solid red;
+  }
+
   .gptu_mchub-users-add_stu .container .form-control {
     background-color: whitesmoke;
   }
@@ -599,6 +604,7 @@
     box-shadow: none;
     border: 1px solid black;
     background-color: white;
+    color: black;
   }
 
   .gptu_mchub-users-add_stu .container .form-control::placeholder {
