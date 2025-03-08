@@ -8,6 +8,8 @@ from django.utils.timezone import now, timedelta
 from django.core.mail import EmailMessage
 from django.conf import settings
 from django.contrib.auth import authenticate, login as auth_login
+from django.views.decorators.cache import never_cache
+from django.utils.cache import add_never_cache_headers
 import uuid
 import string
 import random
@@ -34,6 +36,7 @@ def index(request):
     return render(request, 'home/index.html')
 
 #To render the login.html file
+@never_cache 
 def login(request):
     if request.method == 'POST':
         user_input = request.POST.get('username')  # Input can be user_id or username
@@ -56,7 +59,9 @@ def login(request):
 
         return redirect('home:login')
 
-    return render(request, 'home/login.html')
+    response = render(request, 'home/login.html')
+    add_never_cache_headers(response)  # Prevents browser from storing login page
+    return response
 
 #To render the forgot_password.html file
 

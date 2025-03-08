@@ -2,9 +2,11 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import logout as django_logout 
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.cache import cache_control
 from .models import Student
 from django.contrib.auth.models import AnonymousUser
 from django.utils.dateparse import parse_date
+
 
 """
 Uneccessary import methods
@@ -16,7 +18,7 @@ from django.db import connection
 """
 
 @login_required(login_url='/')  # Ensures only logged-in users can access the dashboard
-
+@cache_control(no_store=True, no_cache=True, must_revalidate=True)  # Prevents browser from storing dashboard page
 def dashboard(request):
     user = request.user  # Fetch authenticated user
 
