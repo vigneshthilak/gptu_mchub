@@ -73,6 +73,9 @@
                             <a class="nav-link" href="{% url 'users:add_stu' %}">Add Student</a>
                           </li>
                           <li class="nav-item">
+                            <a class="nav-link" href="{% url 'users:view_stu' %}">View Students</a>
+                          </li>
+                          <li class="nav-item">
                             <a class="nav-link" href="{% url 'users:logout' %}">Log out</a>
                           </li>
                         </ul>
@@ -85,33 +88,33 @@
   
     <!-- Navigation Bar (Menu Bar) -->
 
-    <!-- Home Page content -->
+    <!-- Dashboard Page content -->
 
         <section class="gptu_mchub-users-dashboard-header">
             <div class="container">
                 <div class="dashboard-user">
                     <h5>Welcome to GPTU MC HUB</h5>
-                    {% if gender == "female" %}
-                        <h1>Ms. {{ first_name }} {{ last_name }}</h1>
-                    {% elif gender == "male" %}
-                        <h1>Mr. {{ first_name }} {{ last_name }}</h1>
+                    {% if mentor_gender == "female" %}
+                        <h1>Ms. {{ mentor_first_name }} {{ mentor_last_name }}</h1>
+                    {% elif mentor_gender == "male" %}
+                        <h1>Mr. {{ mentor_first_name }} {{ mentor_last_name }}</h1>
                     {% else %}
-                        <h1>{{ first_name }} {{ last_name }}</h1>
+                        <h1>{{ mentor_first_name }} {{ mentor_last_name }}</h1>
                     {% endif %}
 
-                    {% if department == "dcivil" %}
+                    {% if mentor_department == "dcivil" %}
                         <p>(Civil Engineering)</p>
-                    {% elif department == "dmech" %}
+                    {% elif mentor_department == "dmech" %}
                         <p>(Mechanical Engineering)</p>
-                    {% elif department == "deee" %}
+                    {% elif mentor_department == "deee" %}
                         <p>(Electrical & Electronicsx Engineering)</p>
-                    {% elif department == "dece" %}
+                    {% elif mentor_department == "dece" %}
                         <p>(Electronics & Communication Engineering)</p>
-                    {% elif department == "dcse" %}
+                    {% elif mentor_department == "dcse" %}
                         <p>(Computer Engineering)</p>
-                    {% elif department == "dmx" %}
+                    {% elif mentor_department == "dmx" %}
                         <p>(Mechatronics Engineering)</p>
-                    {% elif department == "dmt" %}
+                    {% elif mentor_department == "dmt" %}
                         <p>(Digital Manufacturing Technology)</p>
                     {% else %}
                         <p>(Admin)</p>
@@ -120,50 +123,166 @@
             </div>
         </section>
         <div class="container">
-            <div class="search-container">
-                <form class="d-flex">
-                    <input class="form-control me-2" type="search" placeholder="Search..." aria-label="Search" required>
-                    <button class="btn btn-primary" type="submit"></button>
-                </form>
+            <div class="gptu_mchub-users-dashboard-content">
+                {% if mentor_department == 'dcivil' %}
+                    <h1>Department of Civil Engineering</h1>
+                    <p>
+                        "Civil Engineering is the art of directing the great source of power in nature for the use and convenience of man".
+                    </p>
+                    <p>
+                        To produce Civil Engineers of high caliber, technical skills and ethical values to serve the society and nation.
+                    </p>
+                    <p>
+                        To promote innovative and original thinking in the of budding engineers to face the challenges of the future.
+                    </p>
+                {% elif mentor_department == 'dmech' %}
+                    <h1>Department of Mechanical Engineering</h1>
+                    <p>
+                        The primary focus of our curriculum is to impart technical know-how to students, promote their problem solving 
+                        skills and innovation of new technologies.
+                    </p>
+                    <p>
+                        The laboratories under various domains are fully equipped with up to date experimental facilities and machinery 
+                        to train our students.
+                    </p>
+                    <p>
+                        Thermal laboratory is equipped with all facilities to do Research level projects.
+                    </p>
+                {% elif mentor_department == 'deee' %}
+                    <h1>Department of Electrical & Electronics Engineering</h1>
+                    <p>
+                        Electrical Engineering is a technical discipline concerned with the study, design and application of equipment, 
+                        devices and systems which use electricity, electronics, and electromagnetism.
+                    </p>
+                    <p>
+                        Trained electrical engineers design electric circuits and equipment. They work on large power plants as well in 
+                        small hardware companies which includes designing, manufacturing and operating power plants, industrial machinery, 
+                        electrical motors, computer chips and ignition systems for automobiles, aircrafts, space crafts and all kinds of 
+                        engines.
+                    </p>
+                {% elif mentor_department == 'dece' %}
+                    <h1>Department of Electronics & Communication Engineering</h1>
+                    <p>
+                        The Department of Electronics and Communication Engineering has well qualified and highly motivated faculty and well 
+                        equipped laboratories. The equipments available in the laboratory are upgraded as an ongoing process so as to keep pace 
+                        with the latest developments in the field of Electronics & Communication Engineering.
+                    </p>
+                    <p>
+                        The Department is imparting the required Technical and Practical knowledge to the students. An effort is made to groom 
+                        these students not only to become successful Electronics & Communication Engineers but also as top notch professionals. 
+                        The amenities in the Department are also capable to meet the requirements of carrying out research work.
+                    </p>
+                {% elif mentor_department == 'dcse' %}
+                    <h1>Department of Computer Engineering</h1>
+                    <p>
+                        The Department of Computer Engineering was started in the year 2013 and offers 3 years diploma course in computer 
+                        Engineering to provide an excellent knowledge to the students in computer Engineering in order to meet the 
+                        challenges of the future , including employment skill in high technology workforce and the ability to pursue 
+                        higher studies. Train them as future technocrats with basic knowledge in both theory and practice in Computer 
+                        Engineering, including current emerging technologies and experimental learning.
+                    </p>
+                    <h2>Our Mission</h2>
+                    <p>
+                        <b>The mission of the department is to</b><br>
+                        Impart technical education and knowledge through quality training, hands on experience in the field of computer engineering. <br>
+                        Effectively apply this education to solve real-world problems. <br>
+                        Groom students with social responsibility needed for career advancement and entrepreneurship.
+                    </p>
+                    <h2>Our Vision</h2>
+                    <p>
+                        The vision of Computer Engineering department is to achieve and evolve as a centre of academic excellence in the 
+                        frontier areas of computer engineering that responds swiftly to the challenges of the 21st century for the benefit 
+                        of society.
+                    </p>
+                    <h2>Lab Facilities</h2>
+                    <p>
+                        The Computer Engineering Department has well equipped systems with high configuration in all the labs. This 
+                        department has two fully equipped labs, Networking and Hardware Lab and Software and Web Development Lab. <br>
+                        In Networking and Hardware Lab, all the systems are well connected and virus free. This lab will be exclusively 
+                        used for the purpose of Network and Hardware Training. All the systems are connected in a secure LAN with Internet 
+                        facility. <br>
+                        In Software and Web Development Lab, the systems installed with high-end software for Software Development and 
+                        students are getting trained with good programming skill.
+                    </p>
+                    <h2>Value added courses offered by the Department</h2>
+                    <p>
+                        This Department offers value added courses for the benefit of students to enhance their skill in application 
+                        development in addition to the regular academic courses. These value courses are offered by the department 
+                        faculties along with the industry peoples. Most of the programs are 10 to 15 days training programs and the 
+                        following value added courses programs are
+                        <ol>
+                            <li>Advanced Python Training</li>
+                            <li>Basic C and C++ Programming Skill</li>
+                            <li>Hardware Training</li>
+                            <li>Network Troubleshooting</li>
+                        </ol>
+                    </p>
+                    <h2>Technical Concepts based on</h2>
+                    <p>
+                        <ol>
+                            <li>Data Structure and Algorithm</li>
+                            <li>Operating System</li>
+                            <li>Programming Languages(C,Java,.NET,Python)</li>
+                            <li>Computer Networking</li>
+                            <li>Computer Hardware and Network Servicing</li>
+                            <li>Database</li>
+                            <li>Web Programming</li>
+                            <li>Cloud computing</li>
+                            <li>Internet of Things</li>
+                            <li>Augmented Reality(AR) & Virtual Reality(VR)</li>
+                            <li>Digital Design</li>
+                            <li>Computer Architecture</li>
+                        </ol>
+                    </p>
+                {% elif mentor_department == 'dmx' %}
+                    <h1>Department of Mechatronics Engineering</h1>
+                    <p>
+                        Diploma in Mechatronics Engineering is a diploma certificate program having a duration of three years.It can be 
+                        pursued by students who have passed 10th or 12th in the science stream. Mechatronics Engineering which is a newer 
+                        branch of engineering in comparison to mechanical or electronics engineering has its origins from these branches 
+                        only.
+                    </p>
+                    <p>
+                        The curriculum of mechatronics engineering comprises of a lot of elements from Mechanical, Electronics,
+                        Computer Science and Control Engineering.A mechatronics engineer uses principles of electronics, computer science,
+                        mechanical to develop systems, machine and solutions that can be applied to improve productivity and efficiency 
+                        of process/production. Systems developed by them have wide applicability in industries.
+                    </p>
+                {% elif mentor_department == 'dmt' %}
+                    <h1>Department of Digital Manufacturing Technologies</h1>
+                    <p>
+                        Under the agreement, Tata Electronics Private Limited (TEPL), DoTE will develop a diploma course on “Digital 
+                        Manufacturing Technologies - Earn while Learn model”, an industry-ready curriculum, with the required approval 
+                        from AICTE and offer the same to students through polytechnics in the state.
+                    </p>
+                    <p>
+                        The programme outline will be based on three months of classroom sessions and nine months on the job at the TEPL 
+                        plant. TEPL will provide support for faculty training to upgrade their knowledge of digital and smart 
+                        manufacturing.
+                    </p>
+                    <p>
+                        DoTE will also develop or modify the existing diploma courses considering the skill development course at TEPL 
+                        for the 3rd year of the diploma programme.
+                    </p>
+                    <p>
+                        The modalities for modification of the curriculum incorporating one-year training at TEPL will jointly be 
+                        discussed and finalised by DoTE and TEPL for implementation with effect from the academic year 2024-25.
+                    </p>
+                    <p>
+                        As per reports, Guidance Tamil Nadu also facilitated an MoU between DoTE and Maxbyte.
+                    </p>
+                    <p>
+                        Maxbyte will set up four centres of excellence for Industry 4.0 which could also be used by the students and 
+                        faculty of Government College of Engineering, Tirunelveli, Government College of Engineering, Salem, Government 
+                        College of Engineering, Tiruchy, and Thanthai Periyar Government Institute of Technology, Vellore.
+                    </p>
+                {% else %}
+                    <h1>bye</h1>
+                {% endif %}
             </div>
-            {% if department == 'dcivil' %}
-                <h1>Department of Civil Engineering</h1>
-                <p>
-                    "Civil Engineering is the art of directing the great source of power in nature for the use and convenience of man".
-                </p>
-                <p>
-                    To produce Civil Engineers of high caliber, technical skills and ethical values to serve the society and nation.
-                </p>
-                <p>
-                    To promote innovative and original thinking in the of budding engineers to face the challenges of the future.
-                </p>
-            {% elif department == 'dcse' %}
-                <h1>Department of Computer Engineering</h1>
-                <p>
-                    The Department of Computer Engineering was started in the year 2013 and offers 3 years diploma course in computer 
-                    Engineering to provide an excellent knowledge to the students in computer Engineering in order to meet the 
-                    challenges of the future , including employment skill in high technology workforce and the ability to pursue 
-                    higher studies. Train them as future technocrats with basic knowledge in both theory and practice in Computer 
-                    Engineering, including current emerging technologies and experimental learning.
-                </p>
-            {% elif department == 'dece' %}
-                <h1>Department of ECE</h1>
-                <p>
-                    The Department of Electronics and Communication Engineering has well qualified and highly motivated faculty and well 
-                    equipped laboratories. The equipments available in the laboratory are upgraded as an ongoing process so as to keep pace 
-                    with the latest developments in the field of Electronics & Communication Engineering.
-                </p>
-                <p>
-                    The Department is imparting the required Technical and Practical knowledge to the students. An effort is made to groom 
-                    these students not only to become successful Electronics & Communication Engineers but also as top notch professionals. 
-                    The amenities in the Department are also capable to meet the requirements of carrying out research work.
-                </p>
-            {% else %}
-                <h1>bye</h1>
-            {% endif %}
         </div>
 
-    <!-- Home Page content -->
+    <!-- Dashboard Page content -->
 
     <!-- Footer of the webpage -->
 

@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import logout as django_logout 
 from django.contrib.auth.decorators import login_required
@@ -23,10 +23,10 @@ def dashboard(request):
     user = request.user  # Fetch authenticated user
 
     context = {
-        "first_name": user.first_name,
-        "last_name": user.last_name,
-        "department": user.department,
-        "gender": user.gender,
+        "mentor_first_name": user.first_name,
+        "mentor_last_name": user.last_name,
+        "mentor_department": user.department,
+        "mentor_gender": user.gender,
     }
 
     return render(request, "users/dashboard.html", context)
@@ -246,8 +246,6 @@ def add_stu(request):
                 **error_fields  # Pass error indicators
             })
         
-
-
         Student.objects.create(
             first_name = first_name if first_name else None,
             last_name = last_name if last_name else None,
@@ -295,6 +293,45 @@ def add_stu(request):
 
 
     return render(request, "users/add_stu.html", context)
+
+
+def view_stu(request):
+    query = request.GET.get('regno', '').strip()  # Get and clean input
+    logged_in_user = request.user  # Get the logged-in user
+
+    if query:
+        students = Student.objects.filter(reg_no=query)  # Search by reg_no
+        if not students.exists():  # Correct way to check if QuerySet is empty
+            return render(request, 'users/view_stu.html', {'students': None, 'search_made': True})
+    else:
+        students = Student.objects.filter(mentor_name=logged_in_user.first_name) # Show all students if no search is made
+
+    return render(request, 'users/view_stu.html', {'students': students, 'search_made': False})
+
+@login_required
+def view_student(request, reg_no):
+    """
+    View student details based on the given register number.
+    """
+    student = get_object_or_404(Student, reg_no=reg_no)
+    return render(request, 'users/student_detail.html', {'student': student})
+
+
+@login_required
+def delete_student(request, reg_no):
+    """
+    Deletes a student record if the logged-in user is the assigned mentor.
+    """
+    student = get_object_or_404(Student, reg_no=reg_no)
+
+    # Check if the logged-in user is the student's mentor
+    if student.mentor_name == request.user.first_name:
+        student.delete()
+        messages.success(request, "Student record deleted successfully.")
+    else:
+        messages.error(request, "You don't have permission to delete this student.")
+
+    return redirect('users:view_stu')  # Redirect to the student listing page
 
 
 def logout(request):

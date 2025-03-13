@@ -1,8 +1,28 @@
 *{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+html, body {
+  height: 100%; /* Ensure body takes full viewport height */
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+body::selection {
+  color: white;
+  background-color: black;
+}
+
+.gptu_mchub-footer h1::selection,
+.gptu_mchub-footer p::selection {
+  color: black;
+  background-color: white;
 }
 
 /*---------- Scroll Bar ----------*/
@@ -527,28 +547,10 @@
     color: white;
   }
 
-  .search-container {
-    display: flex;
-    justify-content: center;
-    margin: 20px;
-  }
-
-  .search-container .form-control {
-    border-radius: 20px;
-    padding-left: 20px;
-    width: 400px;
-    background-color: whitesmoke;
-  }
-
-  .search-container .btn-primary {
-    display: none;
-  }
-
-  .search-container .form-control:focus,
-  .search-container .form-control:active {
-    box-shadow: none;
-    border: 1px solid black;
-    background: white;
+  .gptu_mchub-users-dashboard-content {
+    margin-top: 25px;
+    margin-bottom: 25px;
+    text-align: justify;
   }
 
   @media (max-width: 576px) {
@@ -613,22 +615,70 @@
 
 /*---------- Add Student ----------*/
 
+/*---------- View Student ----------*/
+
+  .table-responsive::-webkit-scrollbar {
+    display: none;
+  }
+
+  .table-responsive th,
+  .table-responsive td {
+    min-width: 100px;
+    white-space: nowrap;
+  }
+
+  .custom-thead {
+    background-color: black;
+    color: white;
+  }
+
+  .search-container {
+    display: flex;
+    justify-content: center;
+    margin: 20px;
+  }
+
+  .search-container .form-control {
+    border-radius: 20px;
+    padding-left: 20px;
+    width: 400px;
+    background-color: whitesmoke;
+  }
+
+  .search-container .btn-primary {
+    display: none;
+  }
+
+  .search-container .form-control:focus,
+  .search-container .form-control:active {
+    box-shadow: none;
+    border: 1px solid black;
+    background: white;
+  }
+
+  .btn-outline-dark {
+    margin-right: 6px;
+  }
+
+/*---------- View Student ----------*/
+
 /*---------- Footer ----------*/
 
-    .gptu_mchub-footer {
-      background-color: black;
-      padding: 25px 0;
-    }
+  .gptu_mchub-footer {
+    margin-top: auto;
+    background-color: black;
+    padding: 25px 0;
+  }
 
-    .gptu_mchub-footer h1 {
-      color: white;
-      font-weight: 600;
-      text-align: center;
-    }
+  .gptu_mchub-footer h1 {
+    color: white;
+    font-weight: 600;
+    text-align: center;
+  }
 
-    .gptu_mchub-footer-dev{
-      color: white;
-      text-align: center;
-    }
+  .gptu_mchub-footer-dev{
+    color: white;
+    text-align: center;
+  }
 
 /*---------- Footer ----------*/
