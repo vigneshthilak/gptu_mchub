@@ -6,7 +6,7 @@
     
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GPTU MC Hub</title>
+    <title>GPTU MC Hub-View Student</title>
 
     <!-- The link for the Bootstrap -->
 
@@ -98,6 +98,18 @@
                         <button class="btn btn-primary" type="submit"></button>
                     </form>
                 </div>
+
+                <!-- To Display the Error Message -->
+            
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="custom-message {% if message.tags == 'error' %}error-message{% elif message.tags == 'success' %}success-message{% endif %}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+            
+                <!-- To Display the Error Message -->
 
                 <div class="table-responsive mt-3">
                     <table class="table table-bordered table-striped">
@@ -199,14 +211,18 @@
 
     <!-- The Link for the Java Script file -->
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-                return new bootstrap.Tooltip(tooltipTriggerEl);
+    <!-- The script for the tooltip (Messeges) -->
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+                var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                    return new bootstrap.Tooltip(tooltipTriggerEl);
+                });
             });
-        });
-    </script>
+        </script>
+
+    <!-- The script for the tooltip (Messeges) -->
     
 </body>
 </html>
