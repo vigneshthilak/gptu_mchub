@@ -221,11 +221,11 @@
                             <input type="text" name="address" value="{{ address }}" class="form-control" placeholder="Enter Address">
                         </div>
                         <div class="col-md-4">
-                            <label class="form-label">District*</label>
+                            <label class="form-label">District</label>
                             <input type="text" name="district" value="{{ district }}" class="form-control" placeholder="Enter District">
                         </div>
                         <div class="col-md-4">
-                            <label class="form-label">PIN Code*</label>
+                            <label class="form-label">PIN Code</label>
                             <input type="text" name="pin_code" value="{{ pin_code }}" class="form-control" placeholder="Enter PIN Code">
                         </div>
                         <div class="col-md-4">
@@ -233,7 +233,7 @@
                             <input type="text" name="father_occupation" value="{{ father_occupation }}" class="form-control" placeholder="Enter Father Occupation">
                         </div>
                         <div class="col-md-4">
-                            <label class="form-label">Aadhar Card Number*</label>
+                            <label class="form-label">Aadhar Card Number</label>
                             <input type="text" name="aadhar_number" value="{{ aadhar_number }}" class="form-control {% if email_error %}error-field{% endif %}" maxlength="12" size="12" placeholder="Enter Aadhar Card Number">
                         </div>
                         <div class="col-md-4">
@@ -241,8 +241,8 @@
                             <input type="text" name="emis_number" value="{{ emis_number }}" class="form-control {% if emis_number_error %}error-field{% endif %}" placeholder="Enter EMIS Number">
                         </div>
                         <div class="col-md-4">
-                            <label class="form-label">SSLC Mark*</label>
-                            <input type="text" name="sslc_mark" value="{{ sslc_mark }}" class="form-control" placeholder="Enter SSLC Mark">
+                            <label class="form-label">SSLC Mark</label>
+                            <input type="text" name="sslc_mark" value="{{ sslc_mark }}" class="form-control {% if sslc_error %}error-field{% endif %}" placeholder="Enter SSLC Mark">
                         </div>
                         <div class="col-md-4">
                             <label class="form-label">HSC/ITI Mark</label>

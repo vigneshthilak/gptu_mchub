@@ -82,18 +82,161 @@ def add_stu(request):
         achievements = request.POST.get("achievements") 
         religion = request.POST.get("religion") 
         community = request.POST.get("community") 
+
+        if not first_name:
+            messages.error(request, "Please Enter the Name of the student.")
+
+            return render(request, 'users/add_stu.html', {
+                'first_name': first_name,
+                'last_name': last_name,
+                'reg_no': reg_no,
+                'program_name': program_name,
+                'program_type': program_type,
+                'year_of_joining': year_of_joining,
+                'mentor_name': mentor_name,
+                'father_name': father_name,
+                'mother_name': mother_name,
+                'dob': dob,
+                'gender': gender,
+                'blood_group': blood_group,
+                'mother_tongue': mother_tongue,
+                'differently_abled': differently_abled,
+                'mobile_father': mobile_father,
+                'mobile_mother': mobile_mother,
+                'mobile_sibling': mobile_sibling,
+                'mobile_guardian': mobile_guardian,
+                'email': email,
+                'address': address,
+                'district': district,
+                'pin_code': pin_code,
+                'father_occupation': father_occupation,
+                'aadhar_number': aadhar_number,
+                'emis_number': emis_number,
+                'sslc_mark': sslc_mark,
+                'hsc_iti_mark': hsc_iti_mark,
+                'govt_school': govt_school,
+                'first_graduate': first_graduate,
+                'hosteller': hosteller,
+                'single_parent': single_parent,
+                'bank_name': bank_name,
+                'branch_name': branch_name,
+                'account_number': account_number,
+                'ifsc_code': ifsc_code,
+                'extra_curricular': extra_curricular,
+                'achievements': achievements,
+                'religion': religion,
+                'community': community,
+            })
         
-        if program_type == None or program_name == None:
-            program_type = False
-            program_name = False
-            print(f'{program_name}\n{program_type}')
+        if not last_name:
+            messages.error(request, "Please Enter the Lastname of the Student.")
+
+            return render(request, 'users/add_stu.html', {
+                'first_name': first_name,
+                'last_name': last_name,
+                'reg_no': reg_no,
+                'program_name': program_name,
+                'program_type': program_type,
+                'year_of_joining': year_of_joining,
+                'mentor_name': mentor_name,
+                'father_name': father_name,
+                'mother_name': mother_name,
+                'dob': dob,
+                'gender': gender,
+                'blood_group': blood_group,
+                'mother_tongue': mother_tongue,
+                'differently_abled': differently_abled,
+                'mobile_father': mobile_father,
+                'mobile_mother': mobile_mother,
+                'mobile_sibling': mobile_sibling,
+                'mobile_guardian': mobile_guardian,
+                'email': email,
+                'address': address,
+                'district': district,
+                'pin_code': pin_code,
+                'father_occupation': father_occupation,
+                'aadhar_number': aadhar_number,
+                'emis_number': emis_number,
+                'sslc_mark': sslc_mark,
+                'hsc_iti_mark': hsc_iti_mark,
+                'govt_school': govt_school,
+                'first_graduate': first_graduate,
+                'hosteller': hosteller,
+                'single_parent': single_parent,
+                'bank_name': bank_name,
+                'branch_name': branch_name,
+                'account_number': account_number,
+                'ifsc_code': ifsc_code,
+                'extra_curricular': extra_curricular,
+                'achievements': achievements,
+                'religion': religion,
+                'community': community,
+            })
+
+
+        reg_no_error = {}
+
+        if Student.objects.filter(reg_no=reg_no).exists():
+            reg_no_error["reg_no_error"] = True
+
+        if reg_no_error:
+            messages.error(request, "The Register Number is already exists.")
+
+            return render(request, 'users/add_stu.html', {
+                'first_name': first_name,
+                'last_name': last_name,
+                'reg_no': reg_no,
+                'program_name': program_name,
+                'program_type': program_type,
+                'year_of_joining': year_of_joining,
+                'mentor_name': mentor_name,
+                'father_name': father_name,
+                'mother_name': mother_name,
+                'dob': dob,
+                'gender': gender,
+                'blood_group': blood_group,
+                'mother_tongue': mother_tongue,
+                'differently_abled': differently_abled,
+                'mobile_father': mobile_father,
+                'mobile_mother': mobile_mother,
+                'mobile_sibling': mobile_sibling,
+                'mobile_guardian': mobile_guardian,
+                'email': email,
+                'address': address,
+                'district': district,
+                'pin_code': pin_code,
+                'father_occupation': father_occupation,
+                'aadhar_number': aadhar_number,
+                'emis_number': emis_number,
+                'sslc_mark': sslc_mark,
+                'hsc_iti_mark': hsc_iti_mark,
+                'govt_school': govt_school,
+                'first_graduate': first_graduate,
+                'hosteller': hosteller,
+                'single_parent': single_parent,
+                'bank_name': bank_name,
+                'branch_name': branch_name,
+                'account_number': account_number,
+                'ifsc_code': ifsc_code,
+                'extra_curricular': extra_curricular,
+                'achievements': achievements,
+                'religion': religion,
+                'community': community,
+                **reg_no_error,  # Pass error flags to template
+            })
+        
+        program_errors = {}
+
+        if not program_name:
+            program_errors["program_name_error"] = True
+
+        if not program_type:
+            program_errors["program_type_error"] = True
+
+        # If errors exist, re-render the form with error flags
+        if program_errors:
             messages.error(request, "Please select the Program Name & Program Type.")
 
-            error_fields = {
-                'program_name_error': program_name,
-                'program_type_error': program_type,
-            }
-
             return render(request, 'users/add_stu.html', {
                 'first_name': first_name,
                 'last_name': last_name,
@@ -134,16 +277,70 @@ def add_stu(request):
                 'achievements': achievements,
                 'religion': religion,
                 'community': community,
-                **error_fields  # Pass error indicators
+                **program_errors,  # Pass error flags to template
             })
         
+        gender_error = {}
+
         if not gender:
-            print(gender)
+            gender_error["gender_error"] = True
+        
+        if gender_error:
             messages.error(request, "Pleases select the Gender.")
 
-            error_fields = {
-                'gender_error': gender,
-            }
+            return render(request, 'users/add_stu.html', {
+                'first_name': first_name,
+                'last_name': last_name,
+                'reg_no': reg_no,
+                'program_name': program_name,
+                'program_type': program_type,
+                'year_of_joining': year_of_joining,
+                'mentor_name': mentor_name,
+                'father_name': father_name,
+                'mother_name': mother_name,
+                'dob': dob,
+                'gender': gender,
+                'blood_group': blood_group,
+                'mother_tongue': mother_tongue,
+                'differently_abled': differently_abled,
+                'mobile_father': mobile_father,
+                'mobile_mother': mobile_mother,
+                'mobile_sibling': mobile_sibling,
+                'mobile_guardian': mobile_guardian,
+                'email': email,
+                'address': address,
+                'district': district,
+                'pin_code': pin_code,
+                'father_occupation': father_occupation,
+                'aadhar_number': aadhar_number,
+                'emis_number': emis_number,
+                'sslc_mark': sslc_mark,
+                'hsc_iti_mark': hsc_iti_mark,
+                'govt_school': govt_school,
+                'first_graduate': first_graduate,
+                'hosteller': hosteller,
+                'single_parent': single_parent,
+                'bank_name': bank_name,
+                'branch_name': branch_name,
+                'account_number': account_number,
+                'ifsc_code': ifsc_code,
+                'extra_curricular': extra_curricular,
+                'achievements': achievements,
+                'religion': religion,
+                'community': community,
+                **gender_error  # Pass error indicators
+            })
+
+        if not differently_abled:
+            differently_abled = 'No'
+
+        email_error = {}
+
+        if Student.objects.filter(email=email).exists():
+            email_error["email_error"] = True
+
+        if email_error:
+            messages.error(request, "The E-Mail ID is already exists")
 
             return render(request, 'users/add_stu.html', {
                 'first_name': first_name,
@@ -185,23 +382,16 @@ def add_stu(request):
                 'achievements': achievements,
                 'religion': religion,
                 'community': community,
-                **error_fields  # Pass error indicators
+                **email_error  # Pass error indicators
             })
+        
+        aadhar_error = {}
 
-        reg_no_exists = Student.objects.filter(reg_no=reg_no).exists()
-        email_exists = Student.objects.filter(email=email).exists()
-        aadhar_number_exists = Student.objects.filter(aadhar_number=aadhar_number).exists()
-        emis_number_exists = Student.objects.filter(emis_number=emis_number).exists()
+        if Student.objects.filter(aadhar_number=aadhar_number).exists():
+            aadhar_error["aadhar_error"] = True
 
-        if reg_no_exists or email_exists or aadhar_number_exists or emis_number_exists:
-            messages.error(request, "Some data already exists.")
-
-            error_fields = {
-                'reg_no_error': reg_no_exists,
-                'email_error': email_exists,
-                'aadhar_error': aadhar_number_exists,
-                'emis_number_error': emis_number_exists,
-            }
+        if aadhar_error:
+            messages.error(request, "The Aadhar Card number is already exists.")
 
             return render(request, 'users/add_stu.html', {
                 'first_name': first_name,
@@ -243,8 +433,122 @@ def add_stu(request):
                 'achievements': achievements,
                 'religion': religion,
                 'community': community,
-                **error_fields  # Pass error indicators
+                **aadhar_error  # Pass error indicators
             })
+        
+        emis_error = {}
+
+        if Student.objects.filter(emis_number=emis_number).exists():
+            emis_error["emis_error"] = True
+
+        if emis_error:
+            messages.error(request, "The EMIS number is already exists.")
+
+            return render(request, 'users/add_stu.html', {
+                'first_name': first_name,
+                'last_name': last_name,
+                'reg_no': reg_no,
+                'program_name': program_name,
+                'program_type': program_type,
+                'year_of_joining': year_of_joining,
+                'mentor_name': mentor_name,
+                'father_name': father_name,
+                'mother_name': mother_name,
+                'dob': dob,
+                'gender': gender,
+                'blood_group': blood_group,
+                'mother_tongue': mother_tongue,
+                'differently_abled': differently_abled,
+                'mobile_father': mobile_father,
+                'mobile_mother': mobile_mother,
+                'mobile_sibling': mobile_sibling,
+                'mobile_guardian': mobile_guardian,
+                'email': email,
+                'address': address,
+                'district': district,
+                'pin_code': pin_code,
+                'father_occupation': father_occupation,
+                'aadhar_number': aadhar_number,
+                'emis_number': emis_number,
+                'sslc_mark': sslc_mark,
+                'hsc_iti_mark': hsc_iti_mark,
+                'govt_school': govt_school,
+                'first_graduate': first_graduate,
+                'hosteller': hosteller,
+                'single_parent': single_parent,
+                'bank_name': bank_name,
+                'branch_name': branch_name,
+                'account_number': account_number,
+                'ifsc_code': ifsc_code,
+                'extra_curricular': extra_curricular,
+                'achievements': achievements,
+                'religion': religion,
+                'community': community,
+                **emis_error  # Pass error indicators
+            })
+        
+        sslc_error = {}
+
+        if not sslc_mark:
+            sslc_error["sslc_error"] = True
+
+        if sslc_error:
+            messages.error(request, "Please Enter your SSLC Mark!")
+
+            return render(request, 'users/add_stu.html', {
+                'first_name': first_name,
+                'last_name': last_name,
+                'reg_no': reg_no,
+                'program_name': program_name,
+                'program_type': program_type,
+                'year_of_joining': year_of_joining,
+                'mentor_name': mentor_name,
+                'father_name': father_name,
+                'mother_name': mother_name,
+                'dob': dob,
+                'gender': gender,
+                'blood_group': blood_group,
+                'mother_tongue': mother_tongue,
+                'differently_abled': differently_abled,
+                'mobile_father': mobile_father,
+                'mobile_mother': mobile_mother,
+                'mobile_sibling': mobile_sibling,
+                'mobile_guardian': mobile_guardian,
+                'email': email,
+                'address': address,
+                'district': district,
+                'pin_code': pin_code,
+                'father_occupation': father_occupation,
+                'aadhar_number': aadhar_number,
+                'emis_number': emis_number,
+                'sslc_mark': sslc_mark,
+                'hsc_iti_mark': hsc_iti_mark,
+                'govt_school': govt_school,
+                'first_graduate': first_graduate,
+                'hosteller': hosteller,
+                'single_parent': single_parent,
+                'bank_name': bank_name,
+                'branch_name': branch_name,
+                'account_number': account_number,
+                'ifsc_code': ifsc_code,
+                'extra_curricular': extra_curricular,
+                'achievements': achievements,
+                'religion': religion,
+                'community': community,
+                **sslc_error  # Pass error indicators
+            })
+        
+        if not govt_school:
+            govt_school = 'No'
+
+        if not first_graduate:
+            first_graduate = 'No'
+
+        if not hosteller:
+            hosteller = 'No'
+
+        if not single_parent:
+            single_parent = 'No'
         
         Student.objects.create(
             first_name = first_name if first_name else None,
@@ -296,11 +600,22 @@ def add_stu(request):
 
 
 def view_stu(request):
-    query = request.GET.get('regno', '').strip()  # Get and clean input
+    user = request.user
+
+    # Redirect to home:index if the user is not authenticated
+    if isinstance(user, AnonymousUser) or not user.is_authenticated:
+        return redirect('home:index')
+    
+    query = request.GET.get('search', '').strip()  # Get and clean input
     logged_in_user = request.user  # Get the logged-in user
 
     if query:
-        students = Student.objects.filter(reg_no=query)  # Search by reg_no
+        if query.isdigit():
+            students = Student.objects.filter(reg_no=query)  # Search by reg_no
+
+        if isinstance(query, str):
+            students = Student.objects.filter(first_name=query) # Search by name
+
         if not students.exists():  # Correct way to check if QuerySet is empty
             return render(request, 'users/view_stu.html', {'students': None, 'search_made': True})
     else:
@@ -310,6 +625,12 @@ def view_stu(request):
 
 @login_required
 def view_student(request, reg_no):
+    user = request.user
+
+    # Redirect to home:index if the user is not authenticated
+    if isinstance(user, AnonymousUser) or not user.is_authenticated:
+        return redirect('home:index')
+    
     """
     View student details based on the given register number.
     """
@@ -318,11 +639,13 @@ def view_student(request, reg_no):
 
 
 @login_required
-def delete_student(request, reg_no):
-    """
-    Deletes a student record if the logged-in user is the assigned mentor.
-    """
-    student = get_object_or_404(Student, reg_no=reg_no)
+def delete_student(request, first_name):
+    # Try to find the student by reg_no first, otherwise use first_name
+    student = Student.objects.filter(first_name=first_name).first()
+
+    if not student:
+        messages.error(request, "Student record not found.")
+        return redirect('users:view_stu')  # Redirect if student doesn't exist
 
     # Check if the logged-in user is the student's mentor
     if student.mentor_name == request.user.first_name:

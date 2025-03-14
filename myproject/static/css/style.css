@@ -593,7 +593,6 @@ body::selection {
   }
 
   .gptu_mchub-users-add_stu .container .error-field {
-    color: red;
     border: 1px solid red;
   }
 
