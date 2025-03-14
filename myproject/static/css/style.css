@@ -662,6 +662,81 @@ body::selection {
 
 /*---------- View Student ----------*/
 
+/*---------- Student Details ----------*/
+
+  .student_detail {
+    background-color: whitesmoke;
+  }
+
+  .gptu_mchub-users-student_detail {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 30px 0;
+    padding: 10px;
+  }
+  
+  .gptu_mchub-users-student_detail .container {
+    width: 100%;
+    max-width: 210mm; /* A4 width */
+    height: auto;
+    max-height: 297mm; /* A4 height */
+    background: white;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 20px;
+  }
+
+  .gptu_mchub-users-student_detail .container img {
+    width: 100%; /* Full width of A4 container */
+    height: auto;
+  }
+
+  .student_content {
+    width: 100%;
+    padding: 10px;
+    text-align: left;
+  }
+  .details {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .details p {
+    display: flex;
+    justify-content: flex-start;
+  }
+  .details span {
+    display: inline-block;
+    min-width: 150px; /* Adjust as needed for even colons */
+    font-weight: bold;
+  }
+  @media (max-width: 768px) {
+    .container {
+      padding: 15px;
+    }
+    .student_content {
+      font-size: 14px;
+    }
+  }
+  @media (max-width: 480px) {
+    .container {
+      padding: 10px;
+    }
+    .content h3 {
+      font-size: 18px;
+    }
+    .content p {
+      font-size: 12px;
+    }
+  }
+
+/*---------- Student Details ----------*/
+
 /*---------- Footer ----------*/
 
   .gptu_mchub-footer {
