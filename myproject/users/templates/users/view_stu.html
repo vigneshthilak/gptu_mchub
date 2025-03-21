@@ -93,10 +93,7 @@
         <section class="gptu_mchub-users-viewstu-header">
             <div class="container">
                 <div class="search-container">
-                    <form class="d-flex" method="GET">
-                        <input class="form-control me-2" type="search" name="search" placeholder="Search..." aria-label="Search" required>
-                        <button class="btn btn-primary" type="submit"></button>
-                    </form>
+                    <input class="form-control me-2" type="search" name="search" id="studentSearch" placeholder="Search..." aria-label="Search" required>
                 </div>
 
                 <!-- To Display the Error Message -->
@@ -123,7 +120,7 @@
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="studentTableBody">
                             {% if students %}
                                 {% for student in students %}
                                 <tr>
@@ -135,13 +132,13 @@
                                     <td>
                                         <!-- View Button -->
                                         <span data-bs-toggle="tooltip" data-bs-placement="bottom" title="View Student">
-                                            <a href="{% url 'users:view_student' student.reg_no %}" class="btn btn-outline-dark btn-sm">
+                                            <a href="{% url 'users:student_detail' student.aadhar_number %}" class="btn btn-outline-dark btn-sm">
                                                 <i class="fa fa-eye"></i>
                                             </a>
                                         </span>
 
                                         <span data-bs-toggle="tooltip" data-bs-placement="bottom" title="Download PDF">
-                                            <a href="" class="btn btn-outline-dark btn-sm">
+                                            <a href="{% url 'users:download_student_pdf' student.aadhar_number %}" class="btn btn-outline-dark btn-sm">
                                                 <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
                                             </a>
                                         </span>
@@ -149,7 +146,7 @@
                                         <!-- Delete Button (Enabled only if mentor matches logged-in user) -->
                                         {% if student.mentor_name == request.user.first_name %}
                                         <span data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete Student">
-                                            <a href="{% url 'users:delete_student' student.first_name %}" class="btn btn-outline-dark btn-sm" onclick="return confirm('Are you sure you want to delete this student?');">
+                                            <a href="{% url 'users:delete_student' student.aadhar_number %}" class="btn btn-outline-dark btn-sm" onclick="return confirm('Are you sure you want to delete this student?');">
                                                 <i class="fa fa-trash"></i>
                                             </a>
                                         </span>
@@ -219,6 +216,18 @@
                 var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
                     return new bootstrap.Tooltip(tooltipTriggerEl);
                 });
+            });
+
+            const searchInput = document.getElementById('studentSearch');
+            const tableBody = document.getElementById('studentTableBody');
+
+            searchInput.addEventListener('input', () => {
+                const searchTerm = searchInput.value.trim();
+                fetch(`/users/view_stu_ajax/?search=${encodeURIComponent(searchTerm)}`)
+                    .then(response => response.text())
+                    .then(data => {
+                        tableBody.innerHTML = data;
+                    });
             });
         </script>
 

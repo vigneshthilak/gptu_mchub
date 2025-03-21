@@ -234,7 +234,7 @@
                         </div>
                         <div class="col-md-4">
                             <label class="form-label">Aadhar Card Number</label>
-                            <input type="text" name="aadhar_number" value="{{ aadhar_number }}" class="form-control {% if email_error %}error-field{% endif %}" maxlength="12" size="12" placeholder="Enter Aadhar Card Number">
+                            <input type="text" name="aadhar_number" value="{{ aadhar_number }}" class="form-control {% if aadhar_error or aadhar_not_error %}error-field{% endif %}" maxlength="12" size="12" placeholder="Enter Aadhar Card Number">
                         </div>
                         <div class="col-md-4">
                             <label class="form-label">EMIS Number</label>

@@ -6,6 +6,11 @@ from django.views.decorators.cache import cache_control
 from .models import Student
 from django.contrib.auth.models import AnonymousUser
 from django.utils.dateparse import parse_date
+from django.db.models import Q
+from django.http import HttpResponse
+from django.template.loader import render_to_string
+import os
+import pdfkit
 
 
 """
@@ -385,6 +390,58 @@ def add_stu(request):
                 **email_error  # Pass error indicators
             })
         
+        aadhar_not_error = {}
+        
+        if not aadhar_number:
+            aadhar_not_error["aadhar_not_error"] = True
+
+        if aadhar_not_error:
+            messages.error(request, "Please Enter the Aadhar Card Number.")
+
+            return render(request, 'users/add_stu.html', {
+                'first_name': first_name,
+                'last_name': last_name,
+                'reg_no': reg_no,
+                'program_name': program_name,
+                'program_type': program_type,
+                'year_of_joining': year_of_joining,
+                'mentor_name': mentor_name,
+                'father_name': father_name,
+                'mother_name': mother_name,
+                'dob': dob,
+                'gender': gender,
+                'blood_group': blood_group,
+                'mother_tongue': mother_tongue,
+                'differently_abled': differently_abled,
+                'mobile_father': mobile_father,
+                'mobile_mother': mobile_mother,
+                'mobile_sibling': mobile_sibling,
+                'mobile_guardian': mobile_guardian,
+                'email': email,
+                'address': address,
+                'district': district,
+                'pin_code': pin_code,
+                'father_occupation': father_occupation,
+                'aadhar_number': aadhar_number,
+                'emis_number': emis_number,
+                'sslc_mark': sslc_mark,
+                'hsc_iti_mark': hsc_iti_mark,
+                'govt_school': govt_school,
+                'first_graduate': first_graduate,
+                'hosteller': hosteller,
+                'single_parent': single_parent,
+                'bank_name': bank_name,
+                'branch_name': branch_name,
+                'account_number': account_number,
+                'ifsc_code': ifsc_code,
+                'extra_curricular': extra_curricular,
+                'achievements': achievements,
+                'religion': religion,
+                'community': community,
+                **aadhar_not_error  # Pass error indicators
+            })
+
+        
         aadhar_error = {}
 
         if Student.objects.filter(aadhar_number=aadhar_number).exists():
@@ -602,29 +659,43 @@ def add_stu(request):
 def view_stu(request):
     user = request.user
 
-    # Redirect to home:index if the user is not authenticated
     if isinstance(user, AnonymousUser) or not user.is_authenticated:
         return redirect('home:index')
-    
-    query = request.GET.get('search', '').strip()  # Get and clean input
-    logged_in_user = request.user  # Get the logged-in user
 
-    if query:
-        if query.isdigit():
-            students = Student.objects.filter(reg_no=query)  # Search by reg_no
-
-        if isinstance(query, str):
-            students = Student.objects.filter(first_name=query) # Search by name
-
-        if not students.exists():  # Correct way to check if QuerySet is empty
-            return render(request, 'users/view_stu.html', {'students': None, 'search_made': True})
-    else:
-        students = Student.objects.filter(mentor_name=logged_in_user.first_name) # Show all students if no search is made
+    logged_in_user = request.user
+    students = Student.objects.filter(mentor_name=logged_in_user.first_name)
 
     return render(request, 'users/view_stu.html', {'students': students, 'search_made': False})
 
+def view_stu_ajax(request):
+    user = request.user
+
+    if isinstance(user, AnonymousUser) or not user.is_authenticated:
+        return render(request, 'home/index.html')
+
+    search_term = request.GET.get('search', '').strip()
+    logged_in_user = request.user
+
+    if search_term:
+        if search_term.isdigit():
+            students = Student.objects.filter(reg_no=search_term)
+        else:
+            students = Student.objects.filter(
+                Q(first_name__icontains=search_term) |
+                Q(last_name__icontains=search_term) |
+                Q(reg_no__icontains=search_term) |
+                Q(email__icontains=search_term) |
+                Q(program_name__icontains=search_term) |
+                Q(mentor_name__icontains=search_term)
+            )
+
+    else:
+        students = Student.objects.filter(mentor_name=logged_in_user.first_name)
+
+    return render(request, 'users/student_table_rows.html', {'students': students})
+
 @login_required
-def view_student(request, reg_no):
+def student_detail(request, aadhar_number):
     user = request.user
 
     # Redirect to home:index if the user is not authenticated
@@ -634,14 +705,14 @@ def view_student(request, reg_no):
     """
     View student details based on the given register number.
     """
-    student = get_object_or_404(Student, reg_no=reg_no)
+    student = get_object_or_404(Student, aadhar_number=aadhar_number)
     return render(request, 'users/student_detail.html', {'student': student})
 
 
 @login_required
-def delete_student(request, first_name):
+def delete_student(request, aadhar_number):
     # Try to find the student by reg_no first, otherwise use first_name
-    student = Student.objects.filter(first_name=first_name).first()
+    student = Student.objects.filter(aadhar_number=aadhar_number).first()
 
     if not student:
         messages.error(request, "Student record not found.")
@@ -655,6 +726,37 @@ def delete_student(request, first_name):
         messages.error(request, "You don't have permission to delete this student.")
 
     return redirect('users:view_stu')  # Redirect to the student listing page
+
+
+def download_student_pdf(request, aadhar_number):
+    student = Student.objects.get(aadhar_number=aadhar_number)
+
+    # Render your student_detail.html content to HTML string
+    html_content = render_to_string('users/student_detail.html', {'student': student})
+
+    config = pdfkit.configuration(wkhtmltopdf=r'C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe')
+
+    # PDFKit options (for A4 size & quality)
+    options = {
+        'page-size': 'A4',
+        'margin-top': '10mm',
+        'margin-right': '10mm',
+        'margin-bottom': '10mm',
+        'margin-left': '10mm',
+        'encoding': 'UTF-8',
+        'enable-local-file-access': None,
+        'quiet': ''
+    }
+
+    # Path to your CSS file (give full absolute path)
+    css_path = r'C:\\Users\\Vignesh Thilagaraj\\OneDrive\\Desktop\\empty\\gptu_mchub\\myproject\\static\\css\\style.css'
+
+    # Generate PDF with HTML + CSS
+    pdf = pdfkit.from_string(html_content, False, options=options, configuration=config, css=css_path)
+
+    response = HttpResponse(pdf, content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="GPTUMCHUB Student.pdf"'
+    return response
 
 
 def logout(request):

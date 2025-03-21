@@ -46,13 +46,64 @@
     <!-- Student Details Content -->
         <section class="gptu_mchub-users-student_detail">
             <div class="container">
+                <span class="close-icon" onclick="goBack()">&times;</span>
                 <img src="{% static 'images/GPT_header_logo.png' %}" alt="">
                 <div class="student_content">
-                    <h3 class="text-center">GPTU Mentor & Counselling Hub</h3>
+                    <h3 class="text-center">Govt. Polytechnic College</h3>
+                    <h5 class="text-center">Uthangarai-635207</h5><br>
                     <div class="details">
-                        <p><span>Name:</span></p>
-                        <p><span>Register Number:</span></p>
-                        <p><span>Department:</span></p>
+                        <p><span>Name</span>: {{ student.first_name }} {{ student.last_name }}</p>
+                        <p><span>Register Number</span>: {{ student.reg_no }}</p>
+                        {% if student.program_name == 'DCIVIL' %}
+                            <p><span>Department</span>: Civil Engineering</p>
+                        {% elif student.program_name == 'DMECH' %}
+                            <p><span>Department</span>: Mechanical Engineering</p>
+                        {% elif student.program_name == 'DEEE' %}
+                            <p><span>Department</span>: Electrical & Electronics Engineering</p>
+                        {% elif student.program_name == 'DECE' %}
+                            <p><span>Department</span>: Electronics & Communication Engineering</p>
+                        {% elif student.program_name == 'DCSE' %}
+                            <p><span>Department</span>: Computer Engineering</p>
+                        {% elif student.program_name == 'DMX' %}
+                            <p><span>Department</span>: Mechatronics Engineering</p>
+                        {% else %}
+                            <p><span>Department</span>: Digital Manufacturing Technologies</p>
+                        {% endif %}
+                        <p><span>Program Type</span>: {{ student.program_type }}</p>
+                        <p><span>Year of Joining</span>: {{ student.year_of_joining }}</p>
+                        <p><span>Mentor</span>: {{ student.mentor_name }}</p>
+                        <p><span>Father Name</span>: {{ student.father_name }}</p>
+                        <p><span>Mother Name</span>: {{ student.mother_name }}</p>
+                        <p><span>Date of Birth</span>: {{ student.dob }}</p>
+                        <p><span>Gender</span>: {{ student.gender }}</p>
+                        <p><span>Blood Group</span>: {{ student.blood_group }}</p>
+                        <p><span>Mother Tongue</span>: {{ student.mother_tongue }}</p>
+                        <p><span>Differently abled</span>: {{ student.differently_abled }}</p>
+                        <p><span>Father Mobile Number</span>: {{ student.mobile_father }}</p>
+                        <p><span>Mother Mobile Number</span>: {{ student.mobile_mother }}</p>
+                        <p><span>Sibling Mobile Number</span>: {{ student.mobile_sibling }}</p>
+                        <p><span>Guardian Mobile Number</span>: {{ student.mobile_guardian }}</p>
+                        <p><span>E-Mail ID</span>: {{ student.email }}</p>
+                        <p><span>Address</span>: {{ student.address }}</p>
+                        <p><span>District</span>: {{ student.district }}</p>
+                        <p><span>Pin Code</span>: {{ student.pin_code }}</p>
+                        <p><span>Father Occupation</span>: {{ student.father_occupation }}</p>
+                        <p><span>Aadhar Number</span>: {{ student.aadhar_number }}</p>
+                        <p><span>EMIS Number</span>: {{ student.emis_number }}</p>
+                        <p><span>SSLC Mark</span>: {{ student.sslc_mark }}</p>
+                        <p><span>HSC/ITI Mark</span>: {{ student.hsc_iti_mark }}</p>
+                        <p><span>Studied in Govt. school</span>: {{ student.govt_school }}</p>
+                        <p><span>First Graduate</span>: {{ student.first_graduate }}</p>
+                        <p><span>Hosteller</span>: {{ student.hosteller }}</p>
+                        <p><span>Single Parent</span>: {{ student.single_parent }}</p>
+                        <p><span>Bank Name</span>: {{ student.bank_name }}</p>
+                        <p><span>Branch Name</span>: {{ student.branch_name }}</p>
+                        <p><span>Account Number</span>: {{ student.account_number }}</p>
+                        <p><span>IFSC Code</span>: {{ student.ifsc_code }}</p>
+                        <p><span>Extra Curricular</span>: {{ student.extra_curricular }}</p>
+                        <p><span>Any Achievements</span>: {{ student.achievements }}</p>
+                        <p><span>Religion</span>: {{ student.religion }}</p>
+                        <p><span>Community</span>: {{ student.community }}</p>
                     </div>
                 </div>
             </div>
@@ -71,6 +122,12 @@
         <script src="{% static 'js/script.js' %}"></script>
 
     <!-- The Link for the Java Script file -->
+
+    <script>
+        function goBack() {
+          window.history.back();
+        }
+    </script>
     
 </body>
 </html>

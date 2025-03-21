@@ -1,0 +1,46 @@
+{% if students %}
+    {% for student in students %}
+        <tr>
+            <td>{{ student.reg_no }}</td>
+            <td>{{ student.first_name }} {{ student.last_name }}</td>
+            <td>{{ student.email }}</td>
+            <td>{{ student.program_name }}</td>
+            <td>{{ student.mentor_name }}</td>
+            <td>
+                <span data-bs-toggle="tooltip" data-bs-placement="bottom" title="View Student">
+                    <a href="{% url 'users:student_detail' student.aadhar_number %}" class="btn btn-outline-dark btn-sm">
+                        <i class="fa fa-eye"></i>
+                    </a>
+                </span>
+
+                <span data-bs-toggle="tooltip" data-bs-placement="bottom" title="Download PDF">
+                    <a href="{% url 'users:download_student_pdf' student.aadhar_number %}" class="btn btn-outline-dark btn-sm">
+                        <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                    </a>
+                </span>
+                
+                {% if student.mentor_name == request.user.first_name %}
+                <span data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete Student">
+                    <a href="{% url 'users:delete_student' student.aadhar_number %}" class="btn btn-outline-dark btn-sm" onclick="return confirm('Are you sure you want to delete this student?');">
+                        <i class="fa fa-trash"></i>
+                    </a>
+                </span>
+                {% else %}
+                <span data-bs-toggle="tooltip" data-bs-placement="bottom" title="You don't have permission to delete this student.">
+                    <button class="btn btn-outline-dark btn-sm" disabled style="cursor: not-allowed;">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </span>
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+{% elif request.GET.search %}
+    <tr>
+        <td colspan="6" class="text-center">No such data are found.</td>
+    </tr>
+{% else %}
+    <tr>
+        <td colspan="6" class="text-center">The Table is empty.</td>
+    </tr>
+{% endif %}

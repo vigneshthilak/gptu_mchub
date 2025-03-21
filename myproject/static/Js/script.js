@@ -48,3 +48,9 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 /*---------- To disable the Resend OTP button for 30 seconds ----------*/
+
+/*---------- Script for the live filter from the search bar ----------*/
+
+
+
+/*---------- Script for the live filter from the search bar ----------*/
