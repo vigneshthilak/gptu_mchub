@@ -93,7 +93,7 @@
         <section class="gptu_mchub-users-viewstu-header">
             <div class="container">
                 <div class="search-container">
-                    <input class="form-control me-2" type="search" name="search" id="studentSearch" placeholder="Search..." aria-label="Search" required>
+                    <input class="form-control me-2" type="search" name="search" id="studentSearch" placeholder="Search by Name or Reg. No" aria-label="Search" required>
                 </div>
 
                 <!-- To Display the Error Message -->
@@ -123,52 +123,65 @@
                         <tbody id="studentTableBody">
                             {% if students %}
                                 {% for student in students %}
-                                <tr>
-                                    <td>{{ student.reg_no }}</td>
-                                    <td>{{ student.first_name }} {{ student.last_name }}</td>
-                                    <td>{{ student.email }}</td>
-                                    <td>{{ student.program_name }}</td>
-                                    <td>{{ student.mentor_name }}</td>
-                                    <td>
-                                        <!-- View Button -->
-                                        <span data-bs-toggle="tooltip" data-bs-placement="bottom" title="View Student">
-                                            <a href="{% url 'users:student_detail' student.aadhar_number %}" class="btn btn-outline-dark btn-sm">
-                                                <i class="fa fa-eye"></i>
-                                            </a>
-                                        </span>
+                                    <tr>
+                                        <td>{{ student.reg_no }}</td>
+                                        <td>{{ student.first_name }} {{ student.last_name }}</td>
+                                        <td>{{ student.email }}</td>
+                                        <td>{{ student.program_name }}</td>
+                                        <td>{{ student.mentor_name }}</td>
+                                        <td>
+                                            <!-- View Button -->
+                                            <span data-bs-toggle="tooltip" data-bs-placement="bottom" title="View Student">
+                                                <a href="{% url 'users:student_detail' student.aadhar_number %}" class="btn btn-outline-dark btn-sm">
+                                                    <i class="fa fa-eye"></i>
+                                                </a>
+                                            </span>
 
-                                        <span data-bs-toggle="tooltip" data-bs-placement="bottom" title="Download PDF">
-                                            <a href="{% url 'users:download_student_pdf' student.aadhar_number %}" class="btn btn-outline-dark btn-sm">
-                                                <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
-                                            </a>
-                                        </span>
-                                        
-                                        <!-- Delete Button (Enabled only if mentor matches logged-in user) -->
-                                        {% if student.mentor_name == request.user.first_name %}
-                                        <span data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete Student">
-                                            <a href="{% url 'users:delete_student' student.aadhar_number %}" class="btn btn-outline-dark btn-sm" onclick="return confirm('Are you sure you want to delete this student?');">
-                                                <i class="fa fa-trash"></i>
-                                            </a>
-                                        </span>
-                                        {% else %}
-                                        <!-- Delete Button (Disabled) -->
-                                        <span data-bs-toggle="tooltip" data-bs-placement="bottom" title="You don't have permission to delete this student.">
-                                            <button class="btn btn-outline-dark btn-sm" disabled style="cursor: not-allowed;">
-                                                <i class="fa fa-trash"></i>
-                                            </button>
-                                        </span>
-                                        {% endif %}
-                                    </td>                                    
-                                </tr>
+                                            <!-- Edit Button (Enabled only if mentor matches logged-in user) -->
+                                            {% if student.mentor_name == request.user.first_name %}
+                                                <span data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit Student">
+                                                    <a href="{% url 'users:delete_student' student.aadhar_number %}" class="btn btn-outline-dark btn-sm" onclick="return confirm('Are you sure you want to delete this student?');">
+                                                        <i class="fa fa-pencil-square-o"></i>
+                                                    </a>
+                                                </span>
+                                            {% else %}
+                                                <!-- Edit Button (Disabled) -->
+                                                <span data-bs-toggle="tooltip" data-bs-placement="bottom" title="You don't have permission to Edit this student.">
+                                                    <button class="btn btn-outline-dark btn-sm" disabled style="cursor: not-allowed;">
+                                                        <i class="fa fa-pencil-square-o"></i>
+                                                    </button>
+                                                </span>
+                                            {% endif %}
+
+                                            <!-- PDF Button -->
+                                            <span data-bs-toggle="tooltip" data-bs-placement="bottom" title="Download PDF">
+                                                <a href="{% url 'users:download_student_pdf' student.aadhar_number %}" class="btn btn-outline-dark btn-sm">
+                                                    <i class="fa fa-file-pdf-o"></i>
+                                                </a>
+                                            </span>
+
+                                            <!-- Delete Button (Enabled only if mentor matches logged-in user) -->
+                                            {% if student.mentor_name == request.user.first_name %}
+                                                <span data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete Student">
+                                                    <a href="{% url 'users:delete_student' student.aadhar_number %}" class="btn btn-outline-dark btn-sm" onclick="return confirm('Are you sure you want to delete this student?');">
+                                                        <i class="fa fa-trash"></i>
+                                                    </a>
+                                                </span>
+                                            {% else %}
+                                                <!-- Delete Button (Disabled) -->
+                                                <span data-bs-toggle="tooltip" data-bs-placement="bottom" title="You don't have permission to delete this student.">
+                                                    <button class="btn btn-outline-dark btn-sm" disabled style="cursor: not-allowed;">
+                                                        <i class="fa fa-trash"></i>
+                                                    </button>
+                                                </span>
+                                            {% endif %}
+                                        </td>                                    
+                                    </tr>
                                 {% endfor %}
-                            {% elif search_made %}
-                            <tr>
-                                <td colspan="6" class="text-center">No such data are found. <a href="{% url 'users:view_stu' %}">Click to reset.</a></td>
-                            </tr>
                             {% else %}
-                            <tr>
-                                <td colspan="6" class="text-center">The Table is empty.</td>
-                            </tr>
+                                <tr>
+                                    <td colspan="6" class="text-center">The Table is empty.</td>
+                                </tr>
                             {% endif %}
                         </tbody>
                     </table>
@@ -208,30 +221,36 @@
 
     <!-- The Link for the Java Script file -->
 
-    <!-- The script for the tooltip (Messeges) -->
-
         <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-                var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-                    return new bootstrap.Tooltip(tooltipTriggerEl);
-                });
-            });
 
-            const searchInput = document.getElementById('studentSearch');
-            const tableBody = document.getElementById('studentTableBody');
+            /* ---------- The script for the tooltip (Messeges) ----------*/
 
-            searchInput.addEventListener('input', () => {
-                const searchTerm = searchInput.value.trim();
-                fetch(`/users/view_stu_ajax/?search=${encodeURIComponent(searchTerm)}`)
-                    .then(response => response.text())
-                    .then(data => {
-                        tableBody.innerHTML = data;
+                document.addEventListener("DOMContentLoaded", function () {
+                    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+                    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                        return new bootstrap.Tooltip(tooltipTriggerEl);
                     });
-            });
-        </script>
+                });
 
-    <!-- The script for the tooltip (Messeges) -->
+            /* ---------- The script for the tooltip (Messeges) ----------*/
+
+            /* ---------- The script for Live Search ----------*/
+
+                const searchInput = document.getElementById('studentSearch');
+                const tableBody = document.getElementById('studentTableBody');
+
+                searchInput.addEventListener('input', () => {
+                    const searchTerm = searchInput.value.trim();
+                    fetch(`/users/view_stu_ajax/?search=${encodeURIComponent(searchTerm)}`)
+                        .then(response => response.text())
+                        .then(data => {
+                            tableBody.innerHTML = data;
+                        });
+                });
+
+            /* ---------- The script for Live Search ----------*/
+
+        </script>
     
 </body>
 </html>

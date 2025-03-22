@@ -1,46 +1,136 @@
-{% if students %}
-    {% for student in students %}
-        <tr>
-            <td>{{ student.reg_no }}</td>
-            <td>{{ student.first_name }} {{ student.last_name }}</td>
-            <td>{{ student.email }}</td>
-            <td>{{ student.program_name }}</td>
-            <td>{{ student.mentor_name }}</td>
-            <td>
-                <span data-bs-toggle="tooltip" data-bs-placement="bottom" title="View Student">
-                    <a href="{% url 'users:student_detail' student.aadhar_number %}" class="btn btn-outline-dark btn-sm">
-                        <i class="fa fa-eye"></i>
-                    </a>
-                </span>
+{% load static %}
 
-                <span data-bs-toggle="tooltip" data-bs-placement="bottom" title="Download PDF">
-                    <a href="{% url 'users:download_student_pdf' student.aadhar_number %}" class="btn btn-outline-dark btn-sm">
-                        <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
-                    </a>
-                </span>
-                
-                {% if student.mentor_name == request.user.first_name %}
-                <span data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete Student">
-                    <a href="{% url 'users:delete_student' student.aadhar_number %}" class="btn btn-outline-dark btn-sm" onclick="return confirm('Are you sure you want to delete this student?');">
-                        <i class="fa fa-trash"></i>
-                    </a>
-                </span>
-                {% else %}
-                <span data-bs-toggle="tooltip" data-bs-placement="bottom" title="You don't have permission to delete this student.">
-                    <button class="btn btn-outline-dark btn-sm" disabled style="cursor: not-allowed;">
-                        <i class="fa fa-trash"></i>
-                    </button>
-                </span>
-                {% endif %}
-            </td>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+
+    <!-- The link for the Bootstrap -->
+
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <!-- The link for the Bootstrap -->
+    
+    <!-- The link for the CSS Stylesheet -->
+    
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <!-- The link for the CSS Stylesheet -->    
+
+    <!-- The link for the favicon -->
+
+        <link rel="shortcut icon" type="image/png" href="{% static 'images/GPTU Logo.png' %}">
+
+    <!-- The link for the favicon -->
+
+    <!-- The link for the font (Google Fonts) used in the web page -->
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,400;0,600;0,700;1,200&display=swap" rel="stylesheet">
+
+    <!-- The link for the font (Google Fonts) used in the web page-->
+
+    <!-- The link for the font awesome to import the icons -->
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- The link for the font awesome to import the icons -->
+
+</head>
+<body>
+
+    {% if students %}
+        {% for student in students %}
+            <tr>
+                <td>{{ student.reg_no }}</td>
+                <td>{{ student.first_name }} {{ student.last_name }}</td>
+                <td>{{ student.email }}</td>
+                <td>{{ student.program_name }}</td>
+                <td>{{ student.mentor_name }}</td>
+                <td>
+                    <span data-bs-toggle="tooltip" data-bs-placement="bottom" title="View Student">
+                        <a href="{% url 'users:student_detail' student.aadhar_number %}" class="btn btn-outline-dark btn-sm">
+                            <i class="fa fa-eye"></i>
+                        </a>
+                    </span>
+
+                    <!-- Edit Button (Enabled only if mentor matches logged-in user) -->
+                    {% if student.mentor_name == request.user.first_name %}
+                        <span data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit Student">
+                            <a href="{% url 'users:delete_student' student.aadhar_number %}" class="btn btn-outline-dark btn-sm" onclick="return confirm('Are you sure you want to delete this student?');">
+                                <i class="fa fa-pencil-square-o"></i>
+                            </a>
+                        </span>
+                    {% else %}
+                        <!-- Edit Button (Disabled) -->
+                        <span data-bs-toggle="tooltip" data-bs-placement="bottom" title="You don't have permission to Edit this student.">
+                            <button class="btn btn-outline-dark btn-sm" disabled style="cursor: not-allowed;">
+                                <i class="fa fa-pencil-square-o"></i>
+                            </button>
+                        </span>
+                    {% endif %}
+
+                    <span data-bs-toggle="tooltip" data-bs-placement="bottom" title="Download PDF">
+                        <a href="{% url 'users:download_student_pdf' student.aadhar_number %}" class="btn btn-outline-dark btn-sm">
+                            <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                        </a>
+                    </span>
+
+                    {% if student.mentor_name == request.user.first_name %}
+                    <span data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete Student">
+                        <a href="{% url 'users:delete_student' student.aadhar_number %}" class="btn btn-outline-dark btn-sm" onclick="return confirm('Are you sure you want to delete this student?');">
+                            <i class="fa fa-trash"></i>
+                        </a>
+                    </span>
+                    {% else %}
+                    <span data-bs-toggle="tooltip" data-bs-placement="bottom" title="You don't have permission to delete this student.">
+                        <button class="btn btn-outline-dark btn-sm" disabled style="cursor: not-allowed;">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </span>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    {% elif request.GET.search %}
+        <tr>
+            <td colspan="6" class="text-center">No such data are found.</td>
         </tr>
-    {% endfor %}
-{% elif request.GET.search %}
-    <tr>
-        <td colspan="6" class="text-center">No such data are found.</td>
-    </tr>
-{% else %}
-    <tr>
-        <td colspan="6" class="text-center">The Table is empty.</td>
-    </tr>
-{% endif %}
+    {% else %}
+        <tr>
+            <td colspan="6" class="text-center">The Table is empty.</td>
+        </tr>
+    {% endif %}
+
+
+    <!-- The Link for the Bootstrap bundle Script -->
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+    <!-- The Link for the Bootstrap bundle Script -->
+
+    <!-- The Link for the Java Script file -->
+
+        <script src="{% static 'js/script.js' %}"></script>
+
+    <!-- The Link for the Java Script file -->
+
+    <!-- The script for the tooltip (Messeges) -->
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+                var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                    return new bootstrap.Tooltip(tooltipTriggerEl);
+                });
+            });
+        </script>
+
+    <!-- The script for the tooltip (Messeges) -->
+    
+</body>
+</html>

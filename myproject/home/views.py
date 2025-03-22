@@ -146,10 +146,11 @@ def send_otp(email, request):
     request.session['otp'] = otp
     request.session['otp_expiry'] = expiry_time.timestamp()
 
-    subject = "Your OTP for Account Verification"
+    subject = "Your One-Time Password (OTP) for Verification"
     message = f"Your OTP is: {otp}. It will expire in 1 minute. Do not share this with anyone."
 
-    send_mail(subject, message, settings.EMAIL_HOST_USER, [email])  # Send email
+    from_email = f"GPTU MC HUB <{settings.EMAIL_HOST_USER}>"
+    send_mail(subject, message, from_email, [email])  # Send email
     return otp
 
 

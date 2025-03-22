@@ -7,9 +7,12 @@ from .models import Student
 from django.contrib.auth.models import AnonymousUser
 from django.utils.dateparse import parse_date
 from django.db.models import Q
+import io
 from django.http import HttpResponse
+from django.conf import settings
+from django.template.loader import get_template
 from django.template.loader import render_to_string
-import os
+#from xhtml2pdf import pisa
 import pdfkit
 
 
@@ -19,6 +22,7 @@ Uneccessary import methods
 from home.models import UserProfile
 from django.contrib.auth.models import User
 from django.db import connection
+import os
 
 """
 
@@ -48,134 +52,157 @@ def add_stu(request):
     }
 
     if request.method == 'POST':
+        #Personal Details
         first_name = request.POST.get("first_name")
-        last_name = request.POST.get("last_name") 
+        last_name = request.POST.get("last_name")
+        dob = parse_date(request.POST.get("dob"))
+        gender = request.POST.get("gender")
+        blood_group = request.POST.get("blood_group")
+        mother_tongue = request.POST.get("mother_tongue")
+        differently_abled = request.POST.get("differently_abled")
+        religion = request.POST.get("religion")
+        community = request.POST.get("community")
+
+        #Educational Details
         reg_no = request.POST.get("reg_no")
-        program_name = request.POST.get("program_name") 
-        program_type = request.POST.get("program_type") 
+        program_name = request.POST.get("program_name")
+        program_type = request.POST.get("program_type")
         year_of_joining = parse_date(request.POST.get("year_of_joining"))
-        mentor_name = request.POST.get("mentor_name") 
-        father_name = request.POST.get("father_name") 
-        mother_name = request.POST.get("mother_name") 
-        dob = parse_date(request.POST.get("dob")) 
-        gender = request.POST.get("gender") 
-        blood_group = request.POST.get("blood_group") 
-        mother_tongue = request.POST.get("mother_tongue") 
-        differently_abled = request.POST.get("differently_abled") 
-        mobile_father = request.POST.get("mobile_father") 
-        mobile_mother = request.POST.get("mobile_mother") 
-        mobile_sibling = request.POST.get("mobile_sibling") 
-        mobile_guardian = request.POST.get("mobile_guardian") 
-        email = request.POST.get("email") 
-        address = request.POST.get("address") 
-        district = request.POST.get("district") 
-        pin_code = request.POST.get("pin_code") 
-        father_occupation = request.POST.get("father_occupation") 
-        aadhar_number = request.POST.get("aadhar_number") 
-        emis_number = request.POST.get("emis_number") 
-        sslc_mark = request.POST.get("sslc_mark") 
-        hsc_iti_mark = request.POST.get("hsc_iti_mark") 
-        govt_school = request.POST.get("govt_school") 
-        first_graduate = request.POST.get("first_graduate") 
-        hosteller = request.POST.get("hosteller") 
-        single_parent = request.POST.get("single_parent") 
-        bank_name = request.POST.get("bank_name") 
-        branch_name = request.POST.get("branch_name") 
-        account_number = request.POST.get("account_number") 
-        ifsc_code = request.POST.get("ifsc_code") 
-        extra_curricular = request.POST.get("extra_curricular") 
-        achievements = request.POST.get("achievements") 
-        religion = request.POST.get("religion") 
-        community = request.POST.get("community") 
+        mentor_name = request.POST.get("mentor_name")
+        sslc_mark = request.POST.get("sslc_mark")
+        hsc_iti_mark = request.POST.get("hsc_iti_mark")
+        govt_school = request.POST.get("govt_school")
+        emis_number = request.POST.get("emis_number")
+        hosteller = request.POST.get("hosteller")
+        extra_curricular = request.POST.get("extra_curricular")
+        achievements = request.POST.get("achievements")
+
+        #Identification Details 
+        aadhar_number = request.POST.get("aadhar_number")
+
+        #Family Details
+        father_name = request.POST.get("father_name")
+        mother_name = request.POST.get("mother_name")
+        mobile_father = request.POST.get("mobile_father")
+        mobile_mother = request.POST.get("mobile_mother")
+        mobile_sibling = request.POST.get("mobile_sibling")
+        mobile_guardian = request.POST.get("mobile_guardian")
+        father_occupation = request.POST.get("father_occupation")
+        single_parent = request.POST.get("single_parent")
+        first_graduate = request.POST.get("first_graduate")
+
+        #Contact Details
+        email = request.POST.get("email")
+        address = request.POST.get("address")
+        district = request.POST.get("district")
+        pin_code = request.POST.get("pin_code")
+
+        #Bank Details
+        bank_name = request.POST.get("bank_name")
+        branch_name = request.POST.get("branch_name")
+        account_number = request.POST.get("account_number")
+        ifsc_code = request.POST.get("ifsc_code")
+
+        first_name_error = {}
 
         if not first_name:
+            first_name_error['first_name_error'] = True
+
+        if first_name_error:
             messages.error(request, "Please Enter the Name of the student.")
 
             return render(request, 'users/add_stu.html', {
                 'first_name': first_name,
                 'last_name': last_name,
-                'reg_no': reg_no,
-                'program_name': program_name,
-                'program_type': program_type,
-                'year_of_joining': year_of_joining,
-                'mentor_name': mentor_name,
-                'father_name': father_name,
-                'mother_name': mother_name,
                 'dob': dob,
                 'gender': gender,
                 'blood_group': blood_group,
                 'mother_tongue': mother_tongue,
                 'differently_abled': differently_abled,
+                'religion': religion,
+                'community': community,
+                'reg_no': reg_no,
+                'program_name': program_name,
+                'program_type': program_type,
+                'year_of_joining': year_of_joining,
+                'mentor_name': mentor_name,
+                'sslc_mark': sslc_mark,
+                'hsc_iti_mark': hsc_iti_mark,
+                'govt_school': govt_school,
+                'emis_number': emis_number,
+                'hosteller': hosteller,
+                'extra_curricular': extra_curricular,
+                'achievements': achievements,
+                'aadhar_number': aadhar_number,
+                'father_name': father_name,
+                'mother_name': mother_name,
                 'mobile_father': mobile_father,
                 'mobile_mother': mobile_mother,
                 'mobile_sibling': mobile_sibling,
                 'mobile_guardian': mobile_guardian,
+                'father_occupation': father_occupation,
+                'single_parent': single_parent,
+                'first_graduate': first_graduate,
                 'email': email,
                 'address': address,
                 'district': district,
                 'pin_code': pin_code,
-                'father_occupation': father_occupation,
-                'aadhar_number': aadhar_number,
-                'emis_number': emis_number,
-                'sslc_mark': sslc_mark,
-                'hsc_iti_mark': hsc_iti_mark,
-                'govt_school': govt_school,
-                'first_graduate': first_graduate,
-                'hosteller': hosteller,
-                'single_parent': single_parent,
                 'bank_name': bank_name,
                 'branch_name': branch_name,
                 'account_number': account_number,
                 'ifsc_code': ifsc_code,
-                'extra_curricular': extra_curricular,
-                'achievements': achievements,
-                'religion': religion,
-                'community': community,
+                **first_name_error,  # Pass error flags to template
             })
         
+        last_name_error = {}
+        
         if not last_name:
+            last_name_error['last_name_error'] = True
+
+        if last_name_error:
             messages.error(request, "Please Enter the Lastname of the Student.")
 
             return render(request, 'users/add_stu.html', {
                 'first_name': first_name,
                 'last_name': last_name,
-                'reg_no': reg_no,
-                'program_name': program_name,
-                'program_type': program_type,
-                'year_of_joining': year_of_joining,
-                'mentor_name': mentor_name,
-                'father_name': father_name,
-                'mother_name': mother_name,
                 'dob': dob,
                 'gender': gender,
                 'blood_group': blood_group,
                 'mother_tongue': mother_tongue,
                 'differently_abled': differently_abled,
+                'religion': religion,
+                'community': community,
+                'reg_no': reg_no,
+                'program_name': program_name,
+                'program_type': program_type,
+                'year_of_joining': year_of_joining,
+                'mentor_name': mentor_name,
+                'sslc_mark': sslc_mark,
+                'hsc_iti_mark': hsc_iti_mark,
+                'govt_school': govt_school,
+                'emis_number': emis_number,
+                'hosteller': hosteller,
+                'extra_curricular': extra_curricular,
+                'achievements': achievements,
+                'aadhar_number': aadhar_number,
+                'father_name': father_name,
+                'mother_name': mother_name,
                 'mobile_father': mobile_father,
                 'mobile_mother': mobile_mother,
                 'mobile_sibling': mobile_sibling,
                 'mobile_guardian': mobile_guardian,
+                'father_occupation': father_occupation,
+                'single_parent': single_parent,
+                'first_graduate': first_graduate,
                 'email': email,
                 'address': address,
                 'district': district,
                 'pin_code': pin_code,
-                'father_occupation': father_occupation,
-                'aadhar_number': aadhar_number,
-                'emis_number': emis_number,
-                'sslc_mark': sslc_mark,
-                'hsc_iti_mark': hsc_iti_mark,
-                'govt_school': govt_school,
-                'first_graduate': first_graduate,
-                'hosteller': hosteller,
-                'single_parent': single_parent,
                 'bank_name': bank_name,
                 'branch_name': branch_name,
                 'account_number': account_number,
                 'ifsc_code': ifsc_code,
-                'extra_curricular': extra_curricular,
-                'achievements': achievements,
-                'religion': religion,
-                'community': community,
+                **last_name_error,  # Pass error flags to template
             })
 
 
@@ -190,43 +217,43 @@ def add_stu(request):
             return render(request, 'users/add_stu.html', {
                 'first_name': first_name,
                 'last_name': last_name,
-                'reg_no': reg_no,
-                'program_name': program_name,
-                'program_type': program_type,
-                'year_of_joining': year_of_joining,
-                'mentor_name': mentor_name,
-                'father_name': father_name,
-                'mother_name': mother_name,
                 'dob': dob,
                 'gender': gender,
                 'blood_group': blood_group,
                 'mother_tongue': mother_tongue,
                 'differently_abled': differently_abled,
+                'religion': religion,
+                'community': community,
+                'reg_no': reg_no,
+                'program_name': program_name,
+                'program_type': program_type,
+                'year_of_joining': year_of_joining,
+                'mentor_name': mentor_name,
+                'sslc_mark': sslc_mark,
+                'hsc_iti_mark': hsc_iti_mark,
+                'govt_school': govt_school,
+                'emis_number': emis_number,
+                'hosteller': hosteller,
+                'extra_curricular': extra_curricular,
+                'achievements': achievements,
+                'aadhar_number': aadhar_number,
+                'father_name': father_name,
+                'mother_name': mother_name,
                 'mobile_father': mobile_father,
                 'mobile_mother': mobile_mother,
                 'mobile_sibling': mobile_sibling,
                 'mobile_guardian': mobile_guardian,
+                'father_occupation': father_occupation,
+                'single_parent': single_parent,
+                'first_graduate': first_graduate,
                 'email': email,
                 'address': address,
                 'district': district,
                 'pin_code': pin_code,
-                'father_occupation': father_occupation,
-                'aadhar_number': aadhar_number,
-                'emis_number': emis_number,
-                'sslc_mark': sslc_mark,
-                'hsc_iti_mark': hsc_iti_mark,
-                'govt_school': govt_school,
-                'first_graduate': first_graduate,
-                'hosteller': hosteller,
-                'single_parent': single_parent,
                 'bank_name': bank_name,
                 'branch_name': branch_name,
                 'account_number': account_number,
                 'ifsc_code': ifsc_code,
-                'extra_curricular': extra_curricular,
-                'achievements': achievements,
-                'religion': religion,
-                'community': community,
                 **reg_no_error,  # Pass error flags to template
             })
         
@@ -245,43 +272,43 @@ def add_stu(request):
             return render(request, 'users/add_stu.html', {
                 'first_name': first_name,
                 'last_name': last_name,
-                'reg_no': reg_no,
-                'program_name': program_name,
-                'program_type': program_type,
-                'year_of_joining': year_of_joining,
-                'mentor_name': mentor_name,
-                'father_name': father_name,
-                'mother_name': mother_name,
                 'dob': dob,
                 'gender': gender,
                 'blood_group': blood_group,
                 'mother_tongue': mother_tongue,
                 'differently_abled': differently_abled,
+                'religion': religion,
+                'community': community,
+                'reg_no': reg_no,
+                'program_name': program_name,
+                'program_type': program_type,
+                'year_of_joining': year_of_joining,
+                'mentor_name': mentor_name,
+                'sslc_mark': sslc_mark,
+                'hsc_iti_mark': hsc_iti_mark,
+                'govt_school': govt_school,
+                'emis_number': emis_number,
+                'hosteller': hosteller,
+                'extra_curricular': extra_curricular,
+                'achievements': achievements,
+                'aadhar_number': aadhar_number,
+                'father_name': father_name,
+                'mother_name': mother_name,
                 'mobile_father': mobile_father,
                 'mobile_mother': mobile_mother,
                 'mobile_sibling': mobile_sibling,
                 'mobile_guardian': mobile_guardian,
+                'father_occupation': father_occupation,
+                'single_parent': single_parent,
+                'first_graduate': first_graduate,
                 'email': email,
                 'address': address,
                 'district': district,
                 'pin_code': pin_code,
-                'father_occupation': father_occupation,
-                'aadhar_number': aadhar_number,
-                'emis_number': emis_number,
-                'sslc_mark': sslc_mark,
-                'hsc_iti_mark': hsc_iti_mark,
-                'govt_school': govt_school,
-                'first_graduate': first_graduate,
-                'hosteller': hosteller,
-                'single_parent': single_parent,
                 'bank_name': bank_name,
                 'branch_name': branch_name,
                 'account_number': account_number,
                 'ifsc_code': ifsc_code,
-                'extra_curricular': extra_curricular,
-                'achievements': achievements,
-                'religion': religion,
-                'community': community,
                 **program_errors,  # Pass error flags to template
             })
         
@@ -296,43 +323,43 @@ def add_stu(request):
             return render(request, 'users/add_stu.html', {
                 'first_name': first_name,
                 'last_name': last_name,
-                'reg_no': reg_no,
-                'program_name': program_name,
-                'program_type': program_type,
-                'year_of_joining': year_of_joining,
-                'mentor_name': mentor_name,
-                'father_name': father_name,
-                'mother_name': mother_name,
                 'dob': dob,
                 'gender': gender,
                 'blood_group': blood_group,
                 'mother_tongue': mother_tongue,
                 'differently_abled': differently_abled,
+                'religion': religion,
+                'community': community,
+                'reg_no': reg_no,
+                'program_name': program_name,
+                'program_type': program_type,
+                'year_of_joining': year_of_joining,
+                'mentor_name': mentor_name,
+                'sslc_mark': sslc_mark,
+                'hsc_iti_mark': hsc_iti_mark,
+                'govt_school': govt_school,
+                'emis_number': emis_number,
+                'hosteller': hosteller,
+                'extra_curricular': extra_curricular,
+                'achievements': achievements,
+                'aadhar_number': aadhar_number,
+                'father_name': father_name,
+                'mother_name': mother_name,
                 'mobile_father': mobile_father,
                 'mobile_mother': mobile_mother,
                 'mobile_sibling': mobile_sibling,
                 'mobile_guardian': mobile_guardian,
+                'father_occupation': father_occupation,
+                'single_parent': single_parent,
+                'first_graduate': first_graduate,
                 'email': email,
                 'address': address,
                 'district': district,
                 'pin_code': pin_code,
-                'father_occupation': father_occupation,
-                'aadhar_number': aadhar_number,
-                'emis_number': emis_number,
-                'sslc_mark': sslc_mark,
-                'hsc_iti_mark': hsc_iti_mark,
-                'govt_school': govt_school,
-                'first_graduate': first_graduate,
-                'hosteller': hosteller,
-                'single_parent': single_parent,
                 'bank_name': bank_name,
                 'branch_name': branch_name,
                 'account_number': account_number,
                 'ifsc_code': ifsc_code,
-                'extra_curricular': extra_curricular,
-                'achievements': achievements,
-                'religion': religion,
-                'community': community,
                 **gender_error  # Pass error indicators
             })
 
@@ -350,43 +377,43 @@ def add_stu(request):
             return render(request, 'users/add_stu.html', {
                 'first_name': first_name,
                 'last_name': last_name,
-                'reg_no': reg_no,
-                'program_name': program_name,
-                'program_type': program_type,
-                'year_of_joining': year_of_joining,
-                'mentor_name': mentor_name,
-                'father_name': father_name,
-                'mother_name': mother_name,
                 'dob': dob,
                 'gender': gender,
                 'blood_group': blood_group,
                 'mother_tongue': mother_tongue,
                 'differently_abled': differently_abled,
+                'religion': religion,
+                'community': community,
+                'reg_no': reg_no,
+                'program_name': program_name,
+                'program_type': program_type,
+                'year_of_joining': year_of_joining,
+                'mentor_name': mentor_name,
+                'sslc_mark': sslc_mark,
+                'hsc_iti_mark': hsc_iti_mark,
+                'govt_school': govt_school,
+                'emis_number': emis_number,
+                'hosteller': hosteller,
+                'extra_curricular': extra_curricular,
+                'achievements': achievements,
+                'aadhar_number': aadhar_number,
+                'father_name': father_name,
+                'mother_name': mother_name,
                 'mobile_father': mobile_father,
                 'mobile_mother': mobile_mother,
                 'mobile_sibling': mobile_sibling,
                 'mobile_guardian': mobile_guardian,
+                'father_occupation': father_occupation,
+                'single_parent': single_parent,
+                'first_graduate': first_graduate,
                 'email': email,
                 'address': address,
                 'district': district,
                 'pin_code': pin_code,
-                'father_occupation': father_occupation,
-                'aadhar_number': aadhar_number,
-                'emis_number': emis_number,
-                'sslc_mark': sslc_mark,
-                'hsc_iti_mark': hsc_iti_mark,
-                'govt_school': govt_school,
-                'first_graduate': first_graduate,
-                'hosteller': hosteller,
-                'single_parent': single_parent,
                 'bank_name': bank_name,
                 'branch_name': branch_name,
                 'account_number': account_number,
                 'ifsc_code': ifsc_code,
-                'extra_curricular': extra_curricular,
-                'achievements': achievements,
-                'religion': religion,
-                'community': community,
                 **email_error  # Pass error indicators
             })
         
@@ -401,43 +428,43 @@ def add_stu(request):
             return render(request, 'users/add_stu.html', {
                 'first_name': first_name,
                 'last_name': last_name,
-                'reg_no': reg_no,
-                'program_name': program_name,
-                'program_type': program_type,
-                'year_of_joining': year_of_joining,
-                'mentor_name': mentor_name,
-                'father_name': father_name,
-                'mother_name': mother_name,
                 'dob': dob,
                 'gender': gender,
                 'blood_group': blood_group,
                 'mother_tongue': mother_tongue,
                 'differently_abled': differently_abled,
+                'religion': religion,
+                'community': community,
+                'reg_no': reg_no,
+                'program_name': program_name,
+                'program_type': program_type,
+                'year_of_joining': year_of_joining,
+                'mentor_name': mentor_name,
+                'sslc_mark': sslc_mark,
+                'hsc_iti_mark': hsc_iti_mark,
+                'govt_school': govt_school,
+                'emis_number': emis_number,
+                'hosteller': hosteller,
+                'extra_curricular': extra_curricular,
+                'achievements': achievements,
+                'aadhar_number': aadhar_number,
+                'father_name': father_name,
+                'mother_name': mother_name,
                 'mobile_father': mobile_father,
                 'mobile_mother': mobile_mother,
                 'mobile_sibling': mobile_sibling,
                 'mobile_guardian': mobile_guardian,
+                'father_occupation': father_occupation,
+                'single_parent': single_parent,
+                'first_graduate': first_graduate,
                 'email': email,
                 'address': address,
                 'district': district,
                 'pin_code': pin_code,
-                'father_occupation': father_occupation,
-                'aadhar_number': aadhar_number,
-                'emis_number': emis_number,
-                'sslc_mark': sslc_mark,
-                'hsc_iti_mark': hsc_iti_mark,
-                'govt_school': govt_school,
-                'first_graduate': first_graduate,
-                'hosteller': hosteller,
-                'single_parent': single_parent,
                 'bank_name': bank_name,
                 'branch_name': branch_name,
                 'account_number': account_number,
                 'ifsc_code': ifsc_code,
-                'extra_curricular': extra_curricular,
-                'achievements': achievements,
-                'religion': religion,
-                'community': community,
                 **aadhar_not_error  # Pass error indicators
             })
 
@@ -453,43 +480,43 @@ def add_stu(request):
             return render(request, 'users/add_stu.html', {
                 'first_name': first_name,
                 'last_name': last_name,
-                'reg_no': reg_no,
-                'program_name': program_name,
-                'program_type': program_type,
-                'year_of_joining': year_of_joining,
-                'mentor_name': mentor_name,
-                'father_name': father_name,
-                'mother_name': mother_name,
                 'dob': dob,
                 'gender': gender,
                 'blood_group': blood_group,
                 'mother_tongue': mother_tongue,
                 'differently_abled': differently_abled,
+                'religion': religion,
+                'community': community,
+                'reg_no': reg_no,
+                'program_name': program_name,
+                'program_type': program_type,
+                'year_of_joining': year_of_joining,
+                'mentor_name': mentor_name,
+                'sslc_mark': sslc_mark,
+                'hsc_iti_mark': hsc_iti_mark,
+                'govt_school': govt_school,
+                'emis_number': emis_number,
+                'hosteller': hosteller,
+                'extra_curricular': extra_curricular,
+                'achievements': achievements,
+                'aadhar_number': aadhar_number,
+                'father_name': father_name,
+                'mother_name': mother_name,
                 'mobile_father': mobile_father,
                 'mobile_mother': mobile_mother,
                 'mobile_sibling': mobile_sibling,
                 'mobile_guardian': mobile_guardian,
+                'father_occupation': father_occupation,
+                'single_parent': single_parent,
+                'first_graduate': first_graduate,
                 'email': email,
                 'address': address,
                 'district': district,
                 'pin_code': pin_code,
-                'father_occupation': father_occupation,
-                'aadhar_number': aadhar_number,
-                'emis_number': emis_number,
-                'sslc_mark': sslc_mark,
-                'hsc_iti_mark': hsc_iti_mark,
-                'govt_school': govt_school,
-                'first_graduate': first_graduate,
-                'hosteller': hosteller,
-                'single_parent': single_parent,
                 'bank_name': bank_name,
                 'branch_name': branch_name,
                 'account_number': account_number,
                 'ifsc_code': ifsc_code,
-                'extra_curricular': extra_curricular,
-                'achievements': achievements,
-                'religion': religion,
-                'community': community,
                 **aadhar_error  # Pass error indicators
             })
         
@@ -504,43 +531,43 @@ def add_stu(request):
             return render(request, 'users/add_stu.html', {
                 'first_name': first_name,
                 'last_name': last_name,
-                'reg_no': reg_no,
-                'program_name': program_name,
-                'program_type': program_type,
-                'year_of_joining': year_of_joining,
-                'mentor_name': mentor_name,
-                'father_name': father_name,
-                'mother_name': mother_name,
                 'dob': dob,
                 'gender': gender,
                 'blood_group': blood_group,
                 'mother_tongue': mother_tongue,
                 'differently_abled': differently_abled,
+                'religion': religion,
+                'community': community,
+                'reg_no': reg_no,
+                'program_name': program_name,
+                'program_type': program_type,
+                'year_of_joining': year_of_joining,
+                'mentor_name': mentor_name,
+                'sslc_mark': sslc_mark,
+                'hsc_iti_mark': hsc_iti_mark,
+                'govt_school': govt_school,
+                'emis_number': emis_number,
+                'hosteller': hosteller,
+                'extra_curricular': extra_curricular,
+                'achievements': achievements,
+                'aadhar_number': aadhar_number,
+                'father_name': father_name,
+                'mother_name': mother_name,
                 'mobile_father': mobile_father,
                 'mobile_mother': mobile_mother,
                 'mobile_sibling': mobile_sibling,
                 'mobile_guardian': mobile_guardian,
+                'father_occupation': father_occupation,
+                'single_parent': single_parent,
+                'first_graduate': first_graduate,
                 'email': email,
                 'address': address,
                 'district': district,
                 'pin_code': pin_code,
-                'father_occupation': father_occupation,
-                'aadhar_number': aadhar_number,
-                'emis_number': emis_number,
-                'sslc_mark': sslc_mark,
-                'hsc_iti_mark': hsc_iti_mark,
-                'govt_school': govt_school,
-                'first_graduate': first_graduate,
-                'hosteller': hosteller,
-                'single_parent': single_parent,
                 'bank_name': bank_name,
                 'branch_name': branch_name,
                 'account_number': account_number,
                 'ifsc_code': ifsc_code,
-                'extra_curricular': extra_curricular,
-                'achievements': achievements,
-                'religion': religion,
-                'community': community,
                 **emis_error  # Pass error indicators
             })
         
@@ -555,43 +582,43 @@ def add_stu(request):
             return render(request, 'users/add_stu.html', {
                 'first_name': first_name,
                 'last_name': last_name,
-                'reg_no': reg_no,
-                'program_name': program_name,
-                'program_type': program_type,
-                'year_of_joining': year_of_joining,
-                'mentor_name': mentor_name,
-                'father_name': father_name,
-                'mother_name': mother_name,
                 'dob': dob,
                 'gender': gender,
                 'blood_group': blood_group,
                 'mother_tongue': mother_tongue,
                 'differently_abled': differently_abled,
+                'religion': religion,
+                'community': community,
+                'reg_no': reg_no,
+                'program_name': program_name,
+                'program_type': program_type,
+                'year_of_joining': year_of_joining,
+                'mentor_name': mentor_name,
+                'sslc_mark': sslc_mark,
+                'hsc_iti_mark': hsc_iti_mark,
+                'govt_school': govt_school,
+                'emis_number': emis_number,
+                'hosteller': hosteller,
+                'extra_curricular': extra_curricular,
+                'achievements': achievements,
+                'aadhar_number': aadhar_number,
+                'father_name': father_name,
+                'mother_name': mother_name,
                 'mobile_father': mobile_father,
                 'mobile_mother': mobile_mother,
                 'mobile_sibling': mobile_sibling,
                 'mobile_guardian': mobile_guardian,
+                'father_occupation': father_occupation,
+                'single_parent': single_parent,
+                'first_graduate': first_graduate,
                 'email': email,
                 'address': address,
                 'district': district,
                 'pin_code': pin_code,
-                'father_occupation': father_occupation,
-                'aadhar_number': aadhar_number,
-                'emis_number': emis_number,
-                'sslc_mark': sslc_mark,
-                'hsc_iti_mark': hsc_iti_mark,
-                'govt_school': govt_school,
-                'first_graduate': first_graduate,
-                'hosteller': hosteller,
-                'single_parent': single_parent,
                 'bank_name': bank_name,
                 'branch_name': branch_name,
                 'account_number': account_number,
                 'ifsc_code': ifsc_code,
-                'extra_curricular': extra_curricular,
-                'achievements': achievements,
-                'religion': religion,
-                'community': community,
                 **sslc_error  # Pass error indicators
             })
         
@@ -610,43 +637,43 @@ def add_stu(request):
         Student.objects.create(
             first_name = first_name if first_name else None,
             last_name = last_name if last_name else None,
-            reg_no = reg_no if reg_no else None,
-            program_name = program_name if program_name else None,
-            program_type = program_type if program_type else None,
-            year_of_joining = year_of_joining if year_of_joining else None,
-            mentor_name = mentor_name if mentor_name else None,
-            father_name = father_name if father_name else None,
-            mother_name = mother_name if mother_name else None,
             dob = dob if dob else None,
             gender = gender if gender else None,
             blood_group = blood_group if blood_group else None,
             mother_tongue = mother_tongue if mother_tongue else None,
             differently_abled = differently_abled if differently_abled else None,
+            religion = religion if religion else None,
+            community = community if community else None,
+            reg_no = reg_no if reg_no else None,
+            program_name = program_name if program_name else None,
+            program_type = program_type if program_type else None,
+            year_of_joining = year_of_joining if year_of_joining else None,
+            mentor_name = mentor_name if mentor_name else None,
+            sslc_mark = sslc_mark if sslc_mark else None,
+            hsc_iti_mark = hsc_iti_mark if hsc_iti_mark else None,
+            govt_school = govt_school if govt_school else None,
+            emis_number = emis_number if emis_number else None,
+            hosteller = hosteller if hosteller else None,
+            extra_curricular = extra_curricular if extra_curricular else None,
+            achievements = achievements if achievements else None,
+            aadhar_number = aadhar_number if aadhar_number else None,
+            father_name = father_name if father_name else None,
+            mother_name = mother_name if mother_name else None,
             mobile_father = mobile_father if mobile_father else None,
             mobile_mother = mobile_mother if mobile_mother else None,
             mobile_sibling = mobile_sibling if mobile_sibling else None,
             mobile_guardian = mobile_guardian if mobile_guardian else None,
+            father_occupation = father_occupation if father_occupation else None,
+            single_parent = single_parent if single_parent else None,
+            first_graduate = first_graduate if first_graduate else None,
             email = email if email else None,
             address = address if address else None,
             district = district if district else None,
             pin_code = pin_code if pin_code else None,
-            father_occupation = father_occupation if father_occupation else None,
-            aadhar_number = aadhar_number if aadhar_number else None,
-            emis_number = emis_number if emis_number else None,
-            sslc_mark = sslc_mark if sslc_mark else None,
-            hsc_iti_mark = hsc_iti_mark if hsc_iti_mark else None,
-            govt_school = govt_school if govt_school else None,
-            first_graduate = first_graduate if first_graduate else None,
-            hosteller = hosteller if hosteller else None,
-            single_parent = single_parent if single_parent else None,
             bank_name = bank_name if bank_name else None,
             branch_name = branch_name if branch_name else None,
             account_number = account_number if account_number else None,
             ifsc_code = ifsc_code if ifsc_code else None,
-            extra_curricular = extra_curricular if extra_curricular else None,
-            achievements = achievements if achievements else None,
-            religion = religion if religion else None,
-            community = community if community else None,
         )
 
         messages.success(request, "Student' s data stored successfully!")
@@ -665,7 +692,7 @@ def view_stu(request):
     logged_in_user = request.user
     students = Student.objects.filter(mentor_name=logged_in_user.first_name)
 
-    return render(request, 'users/view_stu.html', {'students': students, 'search_made': False})
+    return render(request, 'users/view_stu.html', {'students': students})
 
 def view_stu_ajax(request):
     user = request.user
@@ -728,37 +755,40 @@ def delete_student(request, aadhar_number):
     return redirect('users:view_stu')  # Redirect to the student listing page
 
 
+
 def download_student_pdf(request, aadhar_number):
-    student = Student.objects.get(aadhar_number=aadhar_number)
+    try:
+        student = Student.objects.get(aadhar_number=aadhar_number)
+        html_content = render_to_string('users/student_detail_pdf.html', {'student': student})  # Use a dedicated PDF template
 
-    # Render your student_detail.html content to HTML string
-    html_content = render_to_string('users/student_detail.html', {'student': student})
+        # Configure pdfkit
+        config = pdfkit.configuration(wkhtmltopdf=settings.WKHTMLTOPDF_PATH)  # Use settings
 
-    config = pdfkit.configuration(wkhtmltopdf=r'C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe')
+        options = {
+            'page-size': 'A4',
+            'margin-top': '10mm',
+            'margin-right': '10mm',
+            'margin-bottom': '10mm',
+            'margin-left': '10mm',
+            'encoding': 'UTF-8',
+            'quiet': '',
+        }
 
-    # PDFKit options (for A4 size & quality)
-    options = {
-        'page-size': 'A4',
-        'margin-top': '10mm',
-        'margin-right': '10mm',
-        'margin-bottom': '10mm',
-        'margin-left': '10mm',
-        'encoding': 'UTF-8',
-        'enable-local-file-access': None,
-        'quiet': ''
-    }
+        pdf = pdfkit.from_string(html_content, False, options=options, configuration=config)
 
-    # Path to your CSS file (give full absolute path)
-    css_path = r'C:\\Users\\Vignesh Thilagaraj\\OneDrive\\Desktop\\empty\\gptu_mchub\\myproject\\static\\css\\style.css'
+        response = HttpResponse(pdf, content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="GPTUMCHUB Student.pdf"'
+        return response
 
-    # Generate PDF with HTML + CSS
-    pdf = pdfkit.from_string(html_content, False, options=options, configuration=config, css=css_path)
-
-    response = HttpResponse(pdf, content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="GPTUMCHUB Student.pdf"'
-    return response
+    except Student.DoesNotExist:
+        return HttpResponse("Student not found", status=404)
+    except Exception as e:
+        return HttpResponse(f"Error generating PDF: {e}", status=500)
 
 
 def logout(request):
     django_logout(request)  # Django handles session clearing
     return redirect('home:index')
+
+def pdf(request):
+    return render(request, 'users/student_detail_pdf.html')

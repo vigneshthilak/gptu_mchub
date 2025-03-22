@@ -8,20 +8,20 @@ class StudentAdmin(admin.ModelAdmin):
     list_filter = ('program_name', 'year_of_joining', 'gender', 'community', 'blood_group')
 
     fieldsets = (
-        ('Basic Information', {
-            'fields': ('first_name', 'last_name', 'reg_no', 'email', 'dob', 'gender', 'blood_group')
+        ('Personal Details', {
+            'fields': ('first_name', 'last_name', 'dob', 'gender', 'blood_group', 'mother_tongue', 'differently_abled', 'religion', 'community')
         }),
-        ('Program Details', {
-            'fields': ('program_name', 'program_type', 'year_of_joining', 'mentor_name')
+        ('Educational Details', {
+            'fields': ('reg_no', 'program_name', 'program_type', 'year_of_joining', 'mentor_name', 'sslc_mark', 'hsc_iti_mark', 'govt_school', 'emis_number', 'hosteller', 'extra_curricular', 'achievements')
+        }),
+        ('Identification Details', {
+            'fields': ('aadhar_number',)
         }),
         ('Family Details', {
-            'fields': ('father_name', 'mother_name', 'mobile_father', 'mobile_mother', 'mobile_guardian', 'single_parent')
+            'fields': ('father_name', 'mother_name', 'mobile_father', 'mobile_mother', 'mobile_sibling', 'mobile_guardian', 'father_occupation', 'single_parent', 'first_graduate')
         }),
-        ('Address & Contact', {
-            'fields': ('address', 'district', 'pin_code')
-        }),
-        ('Academics & Extra', {
-            'fields': ('sslc_mark', 'hsc_iti_mark', 'govt_school', 'first_graduate', 'hosteller', 'extra_curricular', 'achievements')
+        ('Contact Details', {
+            'fields': ('email', 'address', 'district', 'pin_code')
         }),
         ('Bank Details', {
             'fields': ('bank_name', 'branch_name', 'account_number', 'ifsc_code')
