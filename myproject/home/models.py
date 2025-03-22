@@ -22,7 +22,6 @@ class UserProfile(AbstractUser):
         ('dcse', 'DCSE'),
         ('dmx', 'DMX'),
         ('dmt', 'DMT'),
-        ('others', 'Others'),
     ]
 
     GENDER_CHOICES = [

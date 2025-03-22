@@ -6,6 +6,16 @@
     
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <script>
+        // Prevent users from navigating back to the login page
+        if (window.history.replaceState) {
+            window.history.replaceState(null, null, window.location.href);
+        }
+    </script>
+
     <title>GPTU MC Hub-Log In</title>
 
     <!-- The link for the Bootstrap -->
@@ -94,6 +104,16 @@
         <script src="{% static 'js/script.js' %}"></script>
 
     <!-- The Link for the Java Script file -->
+    
+    <script>
+        window.onload = function () {
+            // If a user tries to go forward to the dashboard without logging in, send them back to login
+            if (window.performance && window.performance.navigation.type === 2) {
+                window.location.href = "/";  // Redirect to login
+            }
+        };
+    </script>
+    
 
 </body>
 </html>

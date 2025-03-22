@@ -1,0 +1,256 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPTU MC Hub-View Student</title>
+
+    <!-- The link for the Bootstrap -->
+
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <!-- The link for the Bootstrap -->
+    
+    <!-- The link for the CSS Stylesheet -->
+    
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <!-- The link for the CSS Stylesheet -->
+
+    <!-- The link for the favicon -->
+
+        <link rel="shortcut icon" type="image/png" href="{% static 'images/GPTU Logo.png' %}">
+
+    <!-- The link for the favicon -->
+
+    <!-- The link for the font (Google Fonts) used in the web page -->
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,400;0,600;0,700;1,200&display=swap" rel="stylesheet">
+
+    <!-- The link for the font (Google Fonts) used in the web page-->
+
+    <!-- The link for the font awesome to import the icons -->
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- The link for the font awesome to import the icons -->
+
+</head>
+<body>
+
+    <!-- Navigation Bar (Menu Bar) -->
+   
+        <nav class="navbar navbar-expand-lg navbar-dark custom-navbar">
+            <div class="container-fluid">
+                
+                <!-- Logo -->
+                
+                    <a class="navbar-brand" href="{% url 'users:dashboard' %}"><img src="{% static 'images/logo.png' %}"></a>
+
+                <!-- Logo -->
+
+                <!-- Toggle Button for Mobile -->
+
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                <!-- Toggle Button for Mobile -->
+
+                <!-- Nav Links -->
+
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav ms-auto">
+                          <li class="nav-item">
+                            <a class="nav-link" href="{% url 'users:dashboard' %}">Home</a>
+                          </li>
+                          <li class="nav-item">
+                            <a class="nav-link" href="{% url 'users:add_stu' %}">Add Student</a>
+                          </li>
+                          <li class="nav-item">
+                            <a class="nav-link" href="{% url 'users:view_stu' %}">View Students</a>
+                          </li>
+                          <li class="nav-item">
+                            <a class="nav-link" href="{% url 'users:logout' %}">Log out</a>
+                          </li>
+                        </ul>
+                    </div>
+
+                <!-- Nav Links -->
+                
+            </div>
+        </nav>
+  
+    <!-- Navigation Bar (Menu Bar) -->
+
+    <!-- View Students Page content -->
+
+        <section class="gptu_mchub-users-viewstu-header">
+            <div class="container">
+                <div class="search-container">
+                    <input class="form-control me-2" type="search" name="search" id="studentSearch" placeholder="Search by Name or Reg. No" aria-label="Search" required>
+                </div>
+
+                <!-- To Display the Error Message -->
+            
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="custom-message {% if message.tags == 'error' %}error-message{% elif message.tags == 'success' %}success-message{% endif %}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+            
+                <!-- To Display the Error Message -->
+
+                <div class="table-responsive mt-3">
+                    <table class="table table-bordered table-striped">
+                        <thead class="custom-thead">
+                            <tr>
+                                <th>Reg. No</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Department</th>
+                                <th>Mentor</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="studentTableBody">
+                            {% if students %}
+                                {% for student in students %}
+                                    <tr>
+                                        <td>{{ student.reg_no }}</td>
+                                        <td>{{ student.first_name }} {{ student.last_name }}</td>
+                                        <td>{{ student.email }}</td>
+                                        <td>{{ student.program_name }}</td>
+                                        <td>{{ student.mentor_name }}</td>
+                                        <td>
+                                            <!-- View Button -->
+                                            <span data-bs-toggle="tooltip" data-bs-placement="bottom" title="View Student">
+                                                <a href="{% url 'users:student_detail' student.aadhar_number %}" class="btn btn-outline-dark btn-sm">
+                                                    <i class="fa fa-eye"></i>
+                                                </a>
+                                            </span>
+
+                                            <!-- Edit Button (Enabled only if mentor matches logged-in user) -->
+                                            {% if student.mentor_name == request.user.first_name %}
+                                                <span data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit Student">
+                                                    <a href="{% url 'users:delete_student' student.aadhar_number %}" class="btn btn-outline-dark btn-sm" onclick="return confirm('Are you sure you want to delete this student?');">
+                                                        <i class="fa fa-pencil-square-o"></i>
+                                                    </a>
+                                                </span>
+                                            {% else %}
+                                                <!-- Edit Button (Disabled) -->
+                                                <span data-bs-toggle="tooltip" data-bs-placement="bottom" title="You don't have permission to Edit this student.">
+                                                    <button class="btn btn-outline-dark btn-sm" disabled style="cursor: not-allowed;">
+                                                        <i class="fa fa-pencil-square-o"></i>
+                                                    </button>
+                                                </span>
+                                            {% endif %}
+
+                                            <!-- PDF Button -->
+                                            <span data-bs-toggle="tooltip" data-bs-placement="bottom" title="Download PDF">
+                                                <a href="{% url 'users:download_student_pdf' student.aadhar_number %}" class="btn btn-outline-dark btn-sm">
+                                                    <i class="fa fa-file-pdf-o"></i>
+                                                </a>
+                                            </span>
+
+                                            <!-- Delete Button (Enabled only if mentor matches logged-in user) -->
+                                            {% if student.mentor_name == request.user.first_name %}
+                                                <span data-bs-toggle="tooltip" data-bs-placement="bottom" title="Delete Student">
+                                                    <a href="{% url 'users:delete_student' student.aadhar_number %}" class="btn btn-outline-dark btn-sm" onclick="return confirm('Are you sure you want to delete this student?');">
+                                                        <i class="fa fa-trash"></i>
+                                                    </a>
+                                                </span>
+                                            {% else %}
+                                                <!-- Delete Button (Disabled) -->
+                                                <span data-bs-toggle="tooltip" data-bs-placement="bottom" title="You don't have permission to delete this student.">
+                                                    <button class="btn btn-outline-dark btn-sm" disabled style="cursor: not-allowed;">
+                                                        <i class="fa fa-trash"></i>
+                                                    </button>
+                                                </span>
+                                            {% endif %}
+                                        </td>                                    
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="6" class="text-center">The Table is empty.</td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div> 
+        </section>
+
+    <!-- View Students Page content -->
+
+    <!-- Footer of the webpage -->
+
+        <div class="gptu_mchub-footer">
+            <div class="container">
+                <h1>Govt. Polytechnic College Uthangarai</h1>
+                <div class="gptu_mchub-footer-dev">
+                    <hr>
+                    <p>
+                        © Govt Polytechnic College, Uthangarai. All Rights Reserved<br>
+                        <small>Developed by GPT Uthangarai from the Department of Computer Engineering</small>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    <!-- Footer of the webpage -->
+
+
+    <!-- The Link for the Bootstrap bundle Script -->
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+    <!-- The Link for the Bootstrap bundle Script -->
+
+    <!-- The Link for the Java Script file -->
+
+        <script src="{% static 'js/script.js' %}"></script>
+
+    <!-- The Link for the Java Script file -->
+
+        <script>
+
+            /* ---------- The script for the tooltip (Messeges) ----------*/
+
+                document.addEventListener("DOMContentLoaded", function () {
+                    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+                    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                        return new bootstrap.Tooltip(tooltipTriggerEl);
+                    });
+                });
+
+            /* ---------- The script for the tooltip (Messeges) ----------*/
+
+            /* ---------- The script for Live Search ----------*/
+
+                const searchInput = document.getElementById('studentSearch');
+                const tableBody = document.getElementById('studentTableBody');
+
+                searchInput.addEventListener('input', () => {
+                    const searchTerm = searchInput.value.trim();
+                    fetch(`/users/view_stu_ajax/?search=${encodeURIComponent(searchTerm)}`)
+                        .then(response => response.text())
+                        .then(data => {
+                            tableBody.innerHTML = data;
+                        });
+                });
+
+            /* ---------- The script for Live Search ----------*/
+
+        </script>
+    
+</body>
+</html>

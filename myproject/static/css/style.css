@@ -1,8 +1,28 @@
 *{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+html, body {
+  height: 100%; /* Ensure body takes full viewport height */
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+body::selection {
+  color: white;
+  background-color: black;
+}
+
+.gptu_mchub-footer h1::selection,
+.gptu_mchub-footer p::selection {
+  color: black;
+  background-color: white;
 }
 
 /*---------- Scroll Bar ----------*/
@@ -527,28 +547,10 @@
     color: white;
   }
 
-  .search-container {
-    display: flex;
-    justify-content: center;
-    margin: 20px;
-  }
-
-  .search-container .form-control {
-    border-radius: 20px;
-    padding-left: 20px;
-    width: 400px;
-    background: gainsboro;
-  }
-
-  .search-container .btn-primary {
-    display: none;
-  }
-
-  .search-container .form-control:focus,
-  .search-container .form-control:active {
-    box-shadow: none;
-    border: 1px solid black;
-    background: white;
+  .gptu_mchub-users-dashboard-content {
+    margin-top: 25px;
+    margin-bottom: 25px;
+    text-align: justify;
   }
 
   @media (max-width: 576px) {
@@ -560,22 +562,202 @@
 
 /*---------- Dashboard ----------*/
 
+/*---------- Add Student ----------*/
+
+  .add_stu {
+    background-color: whitesmoke;
+  }
+
+  .gptu_mchub-users-add_stu .container {
+    max-width: 1300px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .gptu_mchub-users-add_stu .container h2 {
+    font-weight: 600;
+  }
+
+  .gptu_mchub-users-add_stu .container .btn-primary {
+    width: 200px;
+    border-radius: 10px;
+  }
+
+  .gptu_mchub-users-add_stu .container .form-label {
+    color: gray;
+    font-size: small;
+  }
+
+  .gptu_mchub-users-add_stu .container .error-field {
+    border: 1px solid red;
+  }
+
+  .gptu_mchub-users-add_stu .container .form-control {
+    background-color: whitesmoke;
+  }
+
+  .gptu_mchub-users-add_stu .container .form-control:focus,
+  .gptu_mchub-users-add_stu .container .form-control:active {
+    box-shadow: none;
+    border: 1px solid black;
+    background-color: white;
+    color: black;
+  }
+
+  .gptu_mchub-users-add_stu .container .form-control::placeholder {
+    color: black;
+  }
+
+/*---------- Add Student ----------*/
+
+/*---------- View Student ----------*/
+
+  .table-responsive::-webkit-scrollbar {
+    display: none;
+  }
+
+  .table-responsive th,
+  .table-responsive td {
+    min-width: 100px;
+    white-space: nowrap;
+  }
+
+  .custom-thead {
+    background-color: black;
+    color: white;
+  }
+
+  .search-container {
+    display: flex;
+    justify-content: center;
+    margin: 20px;
+  }
+
+  .search-container .form-control {
+    border-radius: 20px;
+    padding-left: 20px;
+    width: 400px;
+    background-color: whitesmoke;
+  }
+
+  .search-container .form-control:focus,
+  .search-container .form-control:active {
+    box-shadow: none;
+    border: 1px solid black;
+    background: white;
+  }
+
+  .btn-outline-dark {
+    margin-right: 6px;
+  }
+
+/*---------- View Student ----------*/
+
+/*---------- Student Details ----------*/
+
+  .student_detail {
+    background-color: whitesmoke;
+  }
+
+  .gptu_mchub-users-student_detail {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 100px;
+    margin-bottom: 100px;
+    padding: 10px;
+  }
+  
+  .gptu_mchub-users-student_detail .container {
+    width: 900px;
+    background: white;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    border-radius: 20px;
+  }
+
+  .gptu_mchub-users-student_detail .container img {
+    width: 100%;
+  }
+
+  .student_content {
+    width: 100%;
+    padding: 10px;
+    text-align: left;
+  }
+
+  .details {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .details p {
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  .details span {
+    display: inline-block;
+    max-width: 225px; /* Adjust as needed for even colons */
+    width: 100%;
+    font-weight: bold;
+  }
+
+  @media (max-width: 768px) {
+    .container {
+      padding: 15px;
+    }
+    .student_content {
+      font-size: 14px;
+    }
+  }
+  @media (max-width: 480px) {
+    .container {
+      padding: 10px;
+    }
+    .content h3 {
+      font-size: 18px;
+    }
+    .content p {
+      font-size: 12px;
+    }
+  }
+
+  @media print {
+    .close-icon, .container {
+       box-shadow: none !important;
+       border: none !important;
+    }
+    .close-icon {
+       display: none !important;
+    }
+ }
+ 
+
+/*---------- Student Details ----------*/
+
 /*---------- Footer ----------*/
 
-    .gptu_mchub-footer {
-      background-color: black;
-      padding: 25px 0;
-    }
+  .gptu_mchub-footer {
+    margin-top: auto;
+    background-color: black;
+    padding: 25px 0;
+  }
 
-    .gptu_mchub-footer h1 {
-      color: white;
-      font-weight: 600;
-      text-align: center;
-    }
+  .gptu_mchub-footer h1 {
+    color: white;
+    font-weight: 600;
+    text-align: center;
+  }
 
-    .gptu_mchub-footer-dev{
-      color: white;
-      text-align: center;
-    }
+  .gptu_mchub-footer-dev{
+    color: white;
+    text-align: center;
+  }
 
 /*---------- Footer ----------*/

@@ -8,6 +8,8 @@ from django.utils.timezone import now, timedelta
 from django.core.mail import EmailMessage
 from django.conf import settings
 from django.contrib.auth import authenticate, login as auth_login
+from django.views.decorators.cache import never_cache
+from django.utils.cache import add_never_cache_headers
 import uuid
 import string
 import random
@@ -34,6 +36,7 @@ def index(request):
     return render(request, 'home/index.html')
 
 #To render the login.html file
+@never_cache 
 def login(request):
     if request.method == 'POST':
         user_input = request.POST.get('username')  # Input can be user_id or username
@@ -56,7 +59,9 @@ def login(request):
 
         return redirect('home:login')
 
-    return render(request, 'home/login.html')
+    response = render(request, 'home/login.html')
+    add_never_cache_headers(response)  # Prevents browser from storing login page
+    return response
 
 #To render the forgot_password.html file
 
@@ -141,10 +146,11 @@ def send_otp(email, request):
     request.session['otp'] = otp
     request.session['otp_expiry'] = expiry_time.timestamp()
 
-    subject = "Your OTP for Account Verification"
+    subject = "Your One-Time Password (OTP) for Verification"
     message = f"Your OTP is: {otp}. It will expire in 1 minute. Do not share this with anyone."
 
-    send_mail(subject, message, settings.EMAIL_HOST_USER, [email])  # Send email
+    from_email = f"GPTU MC HUB <{settings.EMAIL_HOST_USER}>"
+    send_mail(subject, message, from_email, [email])  # Send email
     return otp
 
 
@@ -170,6 +176,17 @@ def signup(request):
         
         if username[0] != '@':
             messages.error(request, "The Username must start with '@'")
+            return render(request, 'home/signup.html', {
+                'first_name': first_name,
+                'last_name': last_name, 
+                'email': email,
+                'user_id': user_id,
+                'department': department,
+                'gender': gender,
+            })
+
+        if not username.islower():
+            messages.error(request, 'Username must contain only lowercase letters.')
             return render(request, 'home/signup.html', {
                 'first_name': first_name,
                 'last_name': last_name, 
@@ -221,7 +238,25 @@ def signup(request):
         # Check if username already exists
         if UserProfile.objects.filter(username=username).exists():
             messages.error(request, "Username already taken. Please choose another one.")
-            return render(request, 'home/signup.html')
+            return render(request, 'home/signup.html', {
+                'first_name': first_name,
+                'last_name': last_name, 
+                'email': email,
+                'user_id': user_id,
+                'department': department,
+                'gender': gender,
+            })
+        
+        if UserProfile.objects.filter(user_id=user_id).exists():
+            messages.error(request, "User ID already exists.")
+            return render(request, 'home/signup.html', {
+                'first_name': first_name,
+                'last_name': last_name, 
+                'email': email,
+                'username': username,
+                'department': department,
+                'gender': gender,
+            })
         
         # Validate user_id and email against auth_users
         if not AuthUser.objects.filter(user_id=user_id, email=email).exists():
