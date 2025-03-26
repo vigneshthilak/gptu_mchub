@@ -11,5 +11,6 @@ urlpatterns = [
     path('view_stu_ajax/', views.view_stu_ajax, name='view_stu_ajax'),
     path('student-details/<str:aadhar_number>/', views.student_detail, name='student_detail'),
     path('student/pdf/<str:aadhar_number>/', views.download_student_pdf, name='download_student_pdf'),
+    #path('pdf/', views.pdf_view, name = 'pdf'),
     path('delete/<str:aadhar_number>/', views.delete_student, name='delete_student'),
 ]
