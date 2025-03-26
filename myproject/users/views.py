@@ -705,7 +705,7 @@ def view_stu_ajax(request):
 
     if search_term:
         if search_term.isdigit():
-            students = Student.objects.filter(reg_no=search_term)
+            students = Student.objects.filter(reg_no__startswith = search_term)
         else:
             students = Student.objects.filter(
                 Q(first_name__icontains=search_term) |

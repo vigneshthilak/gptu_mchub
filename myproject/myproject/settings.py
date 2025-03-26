@@ -167,3 +167,8 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 LOGIN_REDIRECT_URL = "/users/dashboard/"
 
 WKHTMLTOPDF_PATH = r'C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe'  # Replace with your actual path
+
+AUTHENTICATION_BACKENDS = [
+    'home.auth_backends.UserIDOrUsernameBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
