@@ -10,6 +10,7 @@ from django.conf import settings
 from django.contrib.auth import authenticate, login as auth_login
 from django.views.decorators.cache import never_cache
 from django.utils.cache import add_never_cache_headers
+from django.core.mail import EmailMultiAlternatives
 import uuid
 import string
 import random
@@ -39,7 +40,7 @@ def index(request):
 @never_cache 
 def login(request):
     if request.method == 'POST':
-        user_input = request.POST.get('username')  # Input can be user_id or username
+        user_input = request.POST.get('user_input')  # Input can be user_id or username
         password = request.POST.get('password')
 
         # Server-side validation
@@ -48,8 +49,7 @@ def login(request):
             return redirect('home:login')
         
         # Try authenticating with user_id or username
-        user = authenticate(request, user_id=user_input, password=password) or \
-               authenticate(request, username=user_input, password=password)
+        user = authenticate(request, username=user_input, password=password)
         
         if user:
             auth_login(request, user)  # Django manages session automatically
@@ -65,6 +65,7 @@ def login(request):
 
 #To render the forgot_password.html file
 
+
 def forgot_password(request):
     if request.method == "POST":
         email = request.POST.get('email').strip()
@@ -76,15 +77,42 @@ def forgot_password(request):
             # Save reset token in database
             PasswordResetToken.objects.create(user=user, token=token)
 
-            # Send email with reset link
+            # Create reset link
             reset_link = f"http://{settings.LOCAL_IP}:8000/reset-password/{token}/"
-            send_mail(
-                "Password Reset Request",
-                f"Click the link to reset your password: {reset_link}",
-                "GPTU MC HUB <your-email@example.com>",
-                [email],
-                fail_silently=False,
-            )
+
+            subject = "GPTU MC HUB - Password Reset Request"
+            from_email = f"GPTU MC HUB <{settings.EMAIL_HOST_USER}>"
+            text_content = f"Hello {user.first_name},\n\nWe received a request to reset your password.\nClick the following link to reset your password:\n{reset_link}\n\nIf you did not request this, please ignore this email.\n\nRegards,\nGPTU MC HUB Team"
+            
+            html_content = f"""
+            <html>
+            <body style="font-family: Arial, sans-serif; color: #333; padding: 20px;">
+                <h2>GPTU MC HUB - Password Reset Request</h2>
+                <p>Hello <strong>{user.first_name}</strong>,</p>
+                <p>We received a request to reset your password. Please click the button below to reset it:</p>
+                <p style="margin: 30px 0;">
+                    <a href="{reset_link}" target="_blank" 
+                       style="background-color: #2c3e50; color: #fff; padding: 12px 20px; text-decoration: none; border-radius: 5px; font-size: 16px; display: inline-block;">
+                       Reset Password
+                    </a>
+                </p>
+                <p>If the button above does not work, you can also copy and paste this link in your browser:</p>
+                <p><a href="{reset_link}" target="_blank">{reset_link}</a></p>
+                <br>
+                <p>If you did not request a password reset, please ignore this email or contact support.</p>
+                <br>
+                <p>Regards,</p>
+                <p style="font-weight: bold; color: #2c3e50;">GPTU MC HUB Team</p>
+                <hr>
+                <small>This is an automated email; please do not reply.</small>
+            </body>
+            </html>
+            """
+
+            # Send HTML email
+            msg = EmailMultiAlternatives(subject, text_content, from_email, [email])
+            msg.attach_alternative(html_content, "text/html")
+            msg.send()
 
             messages.success(request, "Password reset link sent to your email.")
             return redirect('home:forgot_password')
@@ -146,11 +174,31 @@ def send_otp(email, request):
     request.session['otp'] = otp
     request.session['otp_expiry'] = expiry_time.timestamp()
 
-    subject = "Your One-Time Password (OTP) for Verification"
-    message = f"Your OTP is: {otp}. It will expire in 1 minute. Do not share this with anyone."
-
+    subject = "Your GPTU MC HUB Email Verification Code"
     from_email = f"GPTU MC HUB <{settings.EMAIL_HOST_USER}>"
-    send_mail(subject, message, from_email, [email])  # Send email
+    text_content = f"Hello,\n\nYour OTP for email verification is: {otp}\nThis OTP will expire in 1 minute.\n\nPlease do not share this code with anyone.\n\nRegards,\nGPTU MC HUB Team"
+    
+    html_content = f"""
+    <html>
+    <body style="font-family: Arial, sans-serif; color: #333;">
+        <h2>GPTU MC HUB - Email Verification</h2>
+        <p>Hello,</p>
+        <p>Your One-Time Password (OTP) for verification is:</p>
+        <h1 style="color: #2c3e50;">{otp}</h1>
+        <p>This OTP will expire in <strong>1 minute</strong>.</p>
+        <p>Please do not share this code with anyone.</p>
+        <br>
+        <p>Regards,</p>
+        <p style="color: #2c3e50; font-weight: bold;">GPTU MC HUB Team</p>
+        <hr>
+        <small>This is an automated email; please do not reply.</small>
+    </body>
+    </html>
+    """
+
+    msg = EmailMultiAlternatives(subject, text_content, from_email, [email])
+    msg.attach_alternative(html_content, "text/html")
+    msg.send()
     return otp
 
 
@@ -344,33 +392,44 @@ def resend_otp(request):
             messages.error(request, "User email not found. Please sign up again.")
             return redirect("home:verify_otp")
 
-        # Debugging: Print Old OTP Before Replacing
-        old_otp = request.session.get("otp")
-        print(f"Old OTP before update: {old_otp}")
-
         # Remove Old OTP from Session
         request.session.pop("otp", None)
         request.session.pop("otp_expiry", None)
 
-        # Generate a New OTP
+        # Generate new OTP and expiry
         new_otp = ''.join(random.choices(string.digits, k=6))
-        expiry_time = now() + datetime.timedelta(minutes=1)
-
-        # Store the New OTP in Session
+        expiry_time = datetime.datetime.now() + datetime.timedelta(minutes=1)
         request.session["otp"] = new_otp
         request.session["otp_expiry"] = expiry_time.timestamp()
-        request.session.modified = True  # Ensures Django saves session changes
-        request.session.save() #Ensure session is saved immediately.
+        request.session.modified = True
 
-        # Debugging: Print New OTP After Replacing
-        print(f"New OTP after update: {request.session.get('otp')}, Expiry: {request.session.get('otp_expiry')}")
+        # HTML email content (copied from your send_otp style)
+        subject = "Your New OTP for GPTU MC HUB Verification"
+        from_email = f"GPTU MC HUB <{settings.EMAIL_HOST_USER}>"
+        text_content = f"Hello,\n\nYour new OTP for verification is: {new_otp}\nThis OTP will expire in 1 minute.\n\nPlease do not share this code with anyone.\n\nRegards,\nGPTU MC HUB Team"
 
-        # Send OTP via Email
-        subject = "Your New OTP for Account Verification"
-        message = f"Your new OTP is: {new_otp}. It will expire in 1 minute. Do not share this with anyone."
+        html_content = f"""
+        <html>
+        <body style="font-family: Arial, sans-serif; color: #333;">
+            <h2>GPTU MC HUB - Email Verification</h2>
+            <p>Hello,</p>
+            <p>Your new One-Time Password (OTP) for verification is:</p>
+            <h1 style="color: #2c3e50;">{new_otp}</h1>
+            <p>This OTP will expire in <strong>1 minute</strong>.</p>
+            <p>Please do not share this code with anyone.</p>
+            <br>
+            <p>Regards,</p>
+            <p style="color: #2c3e50; font-weight: bold;">GPTU MC HUB Team</p>
+            <hr>
+            <small>This is an automated email; please do not reply.</small>
+        </body>
+        </html>
+        """
 
         try:
-            send_mail(subject, message, settings.EMAIL_HOST_USER, [user_email])
+            msg = EmailMultiAlternatives(subject, text_content, from_email, [user_email])
+            msg.attach_alternative(html_content, "text/html")
+            msg.send()
             messages.success(request, "A new OTP has been sent to your email.")
         except Exception as e:
             messages.error(request, f"Error sending email: {e}")
@@ -405,7 +464,7 @@ def contactus(request):
         email_send = EmailMessage(
             subject=f"Feedback from {name}",
             body=email_body,
-            from_email="yourverifiedemail@example.com",  # Use a valid email
+            from_email=f"GPTU MC HUB <{settings.EMAIL_HOST_USER}>",  # Use a valid email
             to=['vigneshthilagaraj00@gmail.com'],
             reply_to=[email]  # This allows replies to go to the user's email
         )

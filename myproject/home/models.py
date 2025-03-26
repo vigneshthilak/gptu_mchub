@@ -15,13 +15,14 @@ from django.contrib.auth.models import User
 
 class UserProfile(AbstractUser):
     DEPARTMENT_CHOICES = [
-        ('dcivil', 'DCIVIL'),
-        ('dmech', 'DMECH'),
-        ('deee', 'DEEE'),
-        ('dece', 'DECE'),
-        ('dcse', 'DCSE'),
-        ('dmx', 'DMX'),
-        ('dmt', 'DMT'),
+        ('DCIVIL', 'DCIVIL'),
+        ('DMECH', 'DMECH'),
+        ('DEEE', 'DEEE'),
+        ('DECE', 'DECE'),
+        ('DCSE', 'DCSE'),
+        ('DMX', 'DMX'),
+        ('DMT', 'DMT'),
+        ('OTHERS', 'OTHERS'),
     ]
 
     GENDER_CHOICES = [

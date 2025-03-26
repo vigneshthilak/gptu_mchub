@@ -7,26 +7,95 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GPTU MC Hub</title>
+    <link rel="stylesheet" href="file://{{ STATIC_ROOT }}/css/style.css">
     <style>
-        body {
-            font-family: sans-serif;
-            font-size: 12px;
-            margin: 0;
-            padding: 20px;
+        *{
+          font-family: 'Poppins', sans-serif;
         }
 
-        .container {
-            width: 100%;
-            max-width: 800px;
-            margin: 0 auto;
+        .gptu_mchub-users-student_detail {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          padding: 10px;
+        }
+    
+        .gptu_mchub-users-student_detail .container {
+          width: 900px;
+          background: white;
+          padding: 20px;
+        }
+    
+        .gptu_mchub-users-student_detail .container img {
+          width: 100%;
+        }
+    
+        .student_content {
+          width: 100%;
+          padding: 10px;
+          text-align: left;
+        }
+    
+        .details {
+          display: flex;
+          flex-direction: column;
+          gap: 5px;
+        }
+    
+        .details p {
+          display: flex;
+          justify-content: flex-start;
+        }
+    
+        .details span {
+          display: inline-block;
+          max-width: 225px; /* Adjust as needed for even colons */
+          width: 100%;
+          font-weight: bold;
         }
 
         h3, h5 {
             text-align: center;
+            font-weight: 500;
+            margin: 0;
         }
 
-        .info p {
-            margin: 5px 0;
+        h3 {
+            font-size: 25px;
+        }
+
+        h5 {
+            font-size: 20px;
+        }
+    
+        @media (max-width: 768px) {
+          .container {
+            padding: 15px;
+          }
+          .student_content {
+            font-size: 14px;
+          }
+        }
+        @media (max-width: 480px) {
+          .container {
+            padding: 10px;
+          }
+          .content h3 {
+            font-size: 18px;
+          }
+          .content p {
+            font-size: 12px;
+          }
+        }
+    
+        @media print {
+          .close-icon, .container {
+             box-shadow: none !important;
+             border: none !important;
+          }
+          .close-icon {
+             display: none !important;
+          }
         }
     </style>
 
@@ -36,7 +105,7 @@
     <!-- Student Details Content -->
         <section class="gptu_mchub-users-student_detail">
             <div class="container">
-                <img src="{% static 'images/GPT_header_logo.png' %}" alt="">
+                <img src="data:image/png;base64,{{ base64_image }}">
                 <div>
                     <h3>Govt. Polytechnic College</h3>
                     <h5>Uthangarai-635207</h5><br>

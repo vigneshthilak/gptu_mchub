@@ -7,14 +7,12 @@ from .models import Student
 from django.contrib.auth.models import AnonymousUser
 from django.utils.dateparse import parse_date
 from django.db.models import Q
-import io
 from django.http import HttpResponse
-from django.conf import settings
-from django.template.loader import get_template
 from django.template.loader import render_to_string
-#from xhtml2pdf import pisa
+from django.conf import settings
 import pdfkit
-
+import os
+import base64
 
 """
 Uneccessary import methods
@@ -22,7 +20,10 @@ Uneccessary import methods
 from home.models import UserProfile
 from django.contrib.auth.models import User
 from django.db import connection
-import os
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+from io import BytesIO
+
 
 """
 
@@ -705,7 +706,7 @@ def view_stu_ajax(request):
 
     if search_term:
         if search_term.isdigit():
-            students = Student.objects.filter(reg_no=search_term)
+            students = Student.objects.filter(reg_no__startswith = search_term)
         else:
             students = Student.objects.filter(
                 Q(first_name__icontains=search_term) |
@@ -755,29 +756,43 @@ def delete_student(request, aadhar_number):
     return redirect('users:view_stu')  # Redirect to the student listing page
 
 
+def image_to_base64(image_path):
+    try:
+        with open(image_path, "rb") as image_file:
+            encoded_string = base64.b64encode(image_file.read()).decode('utf-8')
+        return encoded_string
+    except FileNotFoundError:
+        return None  # Handle the case where the file doesn't exist
 
 def download_student_pdf(request, aadhar_number):
     try:
         student = Student.objects.get(aadhar_number=aadhar_number)
-        html_content = render_to_string('users/student_detail_pdf.html', {'student': student})  # Use a dedicated PDF template
+        image_path = os.path.join(settings.STATIC_ROOT, 'images/GPT_header_logo.png')
+        base64_image = image_to_base64(image_path)
+        if base64_image is None:
+            return HttpResponse("Image not found", status=404)
 
-        # Configure pdfkit
-        config = pdfkit.configuration(wkhtmltopdf=settings.WKHTMLTOPDF_PATH)  # Use settings
+        html_content = render_to_string('users/student_detail_pdf.html', {
+            'student': student,
+            'base64_image': base64_image,
+        })
+
+        config = pdfkit.configuration(wkhtmltopdf=settings.WKHTMLTOPDF_PATH)
 
         options = {
             'page-size': 'A4',
             'margin-top': '10mm',
             'margin-right': '10mm',
             'margin-bottom': '10mm',
-            'margin-left': '10mm',
             'encoding': 'UTF-8',
             'quiet': '',
+            'enable-local-file-access': ''
         }
 
         pdf = pdfkit.from_string(html_content, False, options=options, configuration=config)
-
+        filename = f"GPTUMCHUB {student.first_name} {student.last_name}.pdf"
         response = HttpResponse(pdf, content_type='application/pdf')
-        response['Content-Disposition'] = 'attachment; filename="GPTUMCHUB Student.pdf"'
+        response['Content-Disposition'] = f'attachment; filename="{filename}"'
         return response
 
     except Student.DoesNotExist:
@@ -790,5 +805,5 @@ def logout(request):
     django_logout(request)  # Django handles session clearing
     return redirect('home:index')
 
-def pdf(request):
+def pdf_view(request):
     return render(request, 'users/student_detail_pdf.html')
