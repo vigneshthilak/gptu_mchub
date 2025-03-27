@@ -564,11 +564,13 @@ body::selection {
 
 /*---------- Add Student ----------*/
 
-  .add_stu {
+  .add_stu,
+  .edit_stu {
     background-color: whitesmoke;
   }
 
-  .gptu_mchub-users-add_stu .container {
+  .gptu_mchub-users-add_stu .container,
+  .gptu_mchub-users-edit_stu .container {
     max-width: 1300px;
     margin-top: 50px;
     margin-bottom: 50px;
@@ -578,38 +580,62 @@ body::selection {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   }
 
-  .gptu_mchub-users-add_stu .container h2 {
+  .gptu_mchub-users-add_stu .container h2,
+  .gptu_mchub-users-edit_stu .container h2 {
     font-weight: 600;
   }
 
-  .gptu_mchub-users-add_stu .container .btn-primary {
+  .gptu_mchub-users-add_stu .container .btn-primary,
+  .gptu_mchub-users-edit_stu .container .btn-primary {
     width: 200px;
     border-radius: 10px;
   }
 
-  .gptu_mchub-users-add_stu .container .form-label {
+  .gptu_mchub-users-add_stu .container .form-label,
+  .gptu_mchub-users-edit_stu .container .form-label {
     color: gray;
     font-size: small;
   }
 
-  .gptu_mchub-users-add_stu .container .error-field {
+  .gptu_mchub-users-add_stu .container .error-field,
+  .gptu_mchub-users-edit_stu .container .error-field {
     border: 1px solid red;
   }
 
-  .gptu_mchub-users-add_stu .container .form-control {
+  .gptu_mchub-users-add_stu .container .form-control,
+  .gptu_mchub-users-edit .container .form-control {
     background-color: whitesmoke;
   }
 
   .gptu_mchub-users-add_stu .container .form-control:focus,
-  .gptu_mchub-users-add_stu .container .form-control:active {
+  .gptu_mchub-users-add_stu .container .form-control:active,
+  .gptu_mchub-users-edit_stu .container .form-control:focus,
+  .gptu_mchub-users-edit_stu .container .form-control:active {
     box-shadow: none;
     border: 1px solid black;
     background-color: white;
     color: black;
   }
 
-  .gptu_mchub-users-add_stu .container .form-control::placeholder {
+  .gptu_mchub-users-add_stu .container .form-control::placeholder,
+  .gptu_mchub-users-edit_stu .container .form-control::placeholder {
     color: black;
+  }
+
+  .custom-btn {
+    width: 100%;
+    border: 1px solid gray;
+    color: gray;
+    padding: 15px;
+    border-radius: 40px;
+    font-weight: 600;
+    margin-right: 7px;
+    outline: none;
+  }
+  
+  .gptu_mchub-users-edit_stu .container .custom-btn {
+    width: 200px;
+    border-radius: 10px;
   }
 
 /*---------- Add Student ----------*/

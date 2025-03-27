@@ -655,8 +655,8 @@ def add_stu(request):
             govt_school = govt_school if govt_school else None,
             emis_number = emis_number if emis_number else None,
             hosteller = hosteller if hosteller else None,
-            extra_curricular = extra_curricular if extra_curricular else None,
-            achievements = achievements if achievements else None,
+            extra_curricular = extra_curricular if extra_curricular.strip() else None,
+            achievements = achievements if achievements.strip() else None,
             aadhar_number = aadhar_number if aadhar_number else None,
             father_name = father_name if father_name else None,
             mother_name = mother_name if mother_name else None,
@@ -679,7 +679,6 @@ def add_stu(request):
 
         messages.success(request, "Student' s data stored successfully!")
         return redirect('users:add_stu')
-
 
     return render(request, "users/add_stu.html", context)
 
@@ -721,6 +720,72 @@ def view_stu_ajax(request):
         students = Student.objects.filter(mentor_name=logged_in_user.first_name)
 
     return render(request, 'users/student_table_rows.html', {'students': students})
+
+def edit_student(request, aadhar_number):
+    student = get_object_or_404(Student, aadhar_number=aadhar_number)
+    
+    if request.method == "POST":
+        # Helper function to handle empty values
+        def clean_input(value):
+            return value.strip() if value and value.strip() else None
+
+        # Personal Details
+        student.first_name = clean_input(request.POST.get("first_name"))
+        student.last_name = clean_input(request.POST.get("last_name"))
+        student.dob = parse_date(request.POST.get("dob")) or None
+        student.gender = clean_input(request.POST.get("gender"))
+        student.blood_group = clean_input(request.POST.get("blood_group"))
+        student.mother_tongue = clean_input(request.POST.get("mother_tongue"))
+        student.differently_abled = clean_input(request.POST.get("differently_abled"))
+        student.religion = clean_input(request.POST.get("religion"))
+        student.community = clean_input(request.POST.get("community"))
+
+        # Educational Details
+        student.reg_no = clean_input(request.POST.get("reg_no"))
+        student.program_name = clean_input(request.POST.get("program_name"))
+        student.program_type = clean_input(request.POST.get("program_type"))
+        student.year_of_joining = parse_date(request.POST.get("year_of_joining")) or None
+        student.mentor_name = clean_input(request.POST.get("mentor_name"))
+        student.sslc_mark = clean_input(request.POST.get("sslc_mark"))
+        student.hsc_iti_mark = clean_input(request.POST.get("hsc_iti_mark"))
+        student.govt_school = clean_input(request.POST.get("govt_school"))
+        student.emis_number = clean_input(request.POST.get("emis_number"))
+        student.hosteller = clean_input(request.POST.get("hosteller"))
+        student.extra_curricular = clean_input(request.POST.get("extra_curricular"))
+        student.achievements = clean_input(request.POST.get("achievements"))
+
+        # Identification Details
+        student.aadhar_number = clean_input(request.POST.get("aadhar_number"))
+
+        # Family Details
+        student.father_name = clean_input(request.POST.get("father_name"))
+        student.mother_name = clean_input(request.POST.get("mother_name"))
+        student.mobile_father = clean_input(request.POST.get("mobile_father"))
+        student.mobile_mother = clean_input(request.POST.get("mobile_mother"))
+        student.mobile_sibling = clean_input(request.POST.get("mobile_sibling"))
+        student.mobile_guardian = clean_input(request.POST.get("mobile_guardian"))
+        student.father_occupation = clean_input(request.POST.get("father_occupation"))
+        student.single_parent = clean_input(request.POST.get("single_parent"))
+        student.first_graduate = clean_input(request.POST.get("first_graduate"))
+
+        # Contact Details
+        student.email = clean_input(request.POST.get("email"))
+        student.address = clean_input(request.POST.get("address"))
+        student.district = clean_input(request.POST.get("district"))
+        student.pin_code = clean_input(request.POST.get("pin_code"))
+
+        # Bank Details
+        student.bank_name = clean_input(request.POST.get("bank_name"))
+        student.branch_name = clean_input(request.POST.get("branch_name"))
+        student.account_number = clean_input(request.POST.get("account_number"))
+        student.ifsc_code = clean_input(request.POST.get("ifsc_code"))
+
+        # Save changes
+        student.save()
+        
+        return redirect("users:dashboard")  # Redirect to student dashboard after editing
+
+    return render(request, "users/edit_student.html", {"student": student})
 
 @login_required
 def student_detail(request, aadhar_number):
@@ -805,5 +870,4 @@ def logout(request):
     django_logout(request)  # Django handles session clearing
     return redirect('home:index')
 
-def pdf_view(request):
-    return render(request, 'users/student_detail_pdf.html')
+

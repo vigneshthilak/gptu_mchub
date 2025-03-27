@@ -61,7 +61,7 @@
                     <!-- Edit Button (Enabled only if mentor matches logged-in user) -->
                     {% if student.mentor_name == request.user.first_name %}
                         <span data-bs-toggle="tooltip" data-bs-placement="bottom" title="Edit Student">
-                            <a href="{% url 'users:delete_student' student.aadhar_number %}" class="btn btn-outline-dark btn-sm" onclick="return confirm('Are you sure you want to delete this student?');">
+                            <a href="{% url 'users:edit_student' student.aadhar_number %}" class="btn btn-outline-dark btn-sm">
                                 <i class="fa fa-pencil-square-o"></i>
                             </a>
                         </span>
@@ -119,18 +119,20 @@
 
     <!-- The Link for the Java Script file -->
 
-    <!-- The script for the tooltip (Messeges) -->
+    <script>
 
-        <script>
+        /* ---------- The script for the tooltip (Messeges) ----------*/
+
             document.addEventListener("DOMContentLoaded", function () {
                 var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
                 var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
                     return new bootstrap.Tooltip(tooltipTriggerEl);
                 });
             });
-        </script>
 
-    <!-- The script for the tooltip (Messeges) -->
+        /* ---------- The script for the tooltip (Messeges) ----------*/
+
+    </script>
     
 </body>
 </html>
