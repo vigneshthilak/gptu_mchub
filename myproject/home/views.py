@@ -32,11 +32,11 @@ from django.utils.http import urlsafe_base64_decode
 
 # Create your views here.
 
-#To render the index.html file
+# To render the Home page of the web application (index.html)
 def index(request):
     return render(request, 'home/index.html')
 
-#To render the login.html file
+# To render the Log-In page file
 @never_cache 
 def login(request):
     if request.method == 'POST':
@@ -63,9 +63,8 @@ def login(request):
     add_never_cache_headers(response)  # Prevents browser from storing login page
     return response
 
-#To render the forgot_password.html file
-
-
+# To render the Forgot Password page
+# Used to change the users password if the user forgot their password
 def forgot_password(request):
     if request.method == "POST":
         email = request.POST.get('email').strip()
@@ -123,8 +122,7 @@ def forgot_password(request):
     return render(request, 'home/forgot_password.html')
 
 
-#To render the reset_password.html file
-
+# To render the Reset Password page according to the reset link which is sent to user's corresponding E-Mail ID
 def reset_password(request, token):
     try:
         reset_token = PasswordResetToken.objects.get(token=token)
@@ -168,6 +166,7 @@ def reset_password(request, token):
 
     return render(request, 'home/reset_password.html', {"token": token})
 
+# Function used to Generate and send the 6 digit OTP to users corresponding E-Mail ID
 def send_otp(email, request):
     otp = ''.join(random.choices(string.digits, k=6))  # Generate 6-digit OTP
     expiry_time = datetime.datetime.now() + datetime.timedelta(minutes=1)
@@ -202,11 +201,11 @@ def send_otp(email, request):
     return otp
 
 
-#To render the signup.html file
-
+# To render the Signup page
 def signup(request):
     if request.method == "POST":
 
+        # To get the input values from the users to create an account
         first_name = request.POST.get('firstName', '').strip()
         last_name = request.POST.get('lastName', '').strip()
         email = request.POST.get('email', '').strip()
@@ -222,6 +221,7 @@ def signup(request):
             messages.error(request, 'All fields are required! Please fill in all fields.')
             return render(request, 'home/signup.html')
         
+        # To Ensure the given username is starts with '@'
         if username[0] != '@':
             messages.error(request, "The Username must start with '@'")
             return render(request, 'home/signup.html', {
@@ -232,7 +232,8 @@ def signup(request):
                 'department': department,
                 'gender': gender,
             })
-
+        
+        # To Ensure the given username contains only lowercase letters
         if not username.islower():
             messages.error(request, 'Username must contain only lowercase letters.')
             return render(request, 'home/signup.html', {
@@ -245,7 +246,7 @@ def signup(request):
             })
 
 
-        # Check if passwords match
+        # To check the Password and Confirm Password both are same or not
         if password != confirm_password:
             messages.error(request, 'Password do not match!')
             return render(request, 'home/signup.html', {
@@ -258,6 +259,7 @@ def signup(request):
                 'gender': gender,
             })
         
+        # To Ensure the given password has at least 8 charactes
         if len(password) < 8:
             messages.error(request, 'Password length must be at least 8 characters!')
             return render(request, 'home/signup.html', {
@@ -270,6 +272,7 @@ def signup(request):
                 'gender': gender,
             })
         
+        # To Ensure the given password contains at least one special character
         special_chars = set(string.punctuation)
         if not any(char in special_chars for char in password):
             messages.error(request, 'Password must contain at least one special character!')
@@ -295,6 +298,7 @@ def signup(request):
                 'gender': gender,
             })
         
+        # Check if user_id already exists
         if UserProfile.objects.filter(user_id=user_id).exists():
             messages.error(request, "User ID already exists.")
             return render(request, 'home/signup.html', {
@@ -311,10 +315,7 @@ def signup(request):
             messages.error(request, "You're not eligible to create an account!")
             return render(request, 'home/signup.html')
 
-        # Hash the password before saving it
-        #hashed_password = make_password(password)
-
-        # Send OTP for verification
+        # Calling the send_otp() to send the otp if the given inputs are correct
         otp = send_otp(email, request)  
         request.session['otp'] = otp  
         request.session['user_data'] = {
@@ -332,8 +333,7 @@ def signup(request):
 
     return render(request, 'home/signup.html')
 
-#To verify the otp
-
+# To verify the otp
 def verify_otp(request):
     if request.method == "POST":
         entered_otp = request.POST.get("otp", "").strip()
@@ -381,8 +381,7 @@ def verify_otp(request):
     return render(request, 'home/verify_otp.html')
 
 
-#To resend the OTP
-
+# To resend the OTP
 def resend_otp(request):
     if request.method == "POST":
         user_data = request.session.get("user_data", {})
@@ -438,8 +437,7 @@ def resend_otp(request):
 
     return redirect("home:verify_otp")
 
-#To render the contactus.html file
-
+#To render the Contact Us page
 def contactus(request):
     if request.method == "POST":
         name = request.POST.get("name", "").strip()
@@ -477,5 +475,6 @@ def contactus(request):
 
     return render(request, 'home/contactus.html')
 
+# To render the About Us page
 def aboutus(request):
     return render(request, 'home/aboutus.html')
