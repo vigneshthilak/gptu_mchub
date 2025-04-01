@@ -26,7 +26,8 @@ from io import BytesIO
 
 
 """
-
+# To render the Dashboard for the corresponding logged-in users
+# Only logged-in users can access the dashboard
 @login_required(login_url='/')  # Ensures only logged-in users can access the dashboard
 @cache_control(no_store=True, no_cache=True, must_revalidate=True)  # Prevents browser from storing dashboard page
 def dashboard(request):
@@ -41,6 +42,8 @@ def dashboard(request):
 
     return render(request, "users/dashboard.html", context)
 
+# To render the Add Student page
+# Only logged-in users can access this page
 def add_stu(request):
     user = request.user
 
@@ -52,6 +55,7 @@ def add_stu(request):
         "mentor_name": user.first_name,
     }
 
+    # Get the input of the student details from the user
     if request.method == 'POST':
         #Personal Details
         first_name = request.POST.get("first_name")
@@ -104,6 +108,7 @@ def add_stu(request):
         account_number = request.POST.get("account_number")
         ifsc_code = request.POST.get("ifsc_code")
 
+        # Display the error message if the Firstname error occurs
         first_name_error = {}
 
         if not first_name:
@@ -155,6 +160,7 @@ def add_stu(request):
                 **first_name_error,  # Pass error flags to template
             })
         
+        # Display the error message if the Lastname error occurs
         last_name_error = {}
         
         if not last_name:
@@ -206,7 +212,7 @@ def add_stu(request):
                 **last_name_error,  # Pass error flags to template
             })
 
-
+        # Display the error message if the Reg.No error occurs
         reg_no_error = {}
 
         if Student.objects.filter(reg_no=reg_no).exists():
@@ -258,6 +264,7 @@ def add_stu(request):
                 **reg_no_error,  # Pass error flags to template
             })
         
+        # Display the error message if the Program name or Program type error occurs
         program_errors = {}
 
         if not program_name:
@@ -313,6 +320,7 @@ def add_stu(request):
                 **program_errors,  # Pass error flags to template
             })
         
+        # Display the error message if the Gender error occurs
         gender_error = {}
 
         if not gender:
@@ -364,9 +372,11 @@ def add_stu(request):
                 **gender_error  # Pass error indicators
             })
 
+        # It will set the value as No if the user does not give the value
         if not differently_abled:
             differently_abled = 'No'
 
+        # Display the error message if the Email error occurs
         email_error = {}
 
         if Student.objects.filter(email=email).exists():
@@ -418,6 +428,7 @@ def add_stu(request):
                 **email_error  # Pass error indicators
             })
         
+        # If the user does not give the Aadhar Number then it will display the error message
         aadhar_not_error = {}
         
         if not aadhar_number:
@@ -469,7 +480,7 @@ def add_stu(request):
                 **aadhar_not_error  # Pass error indicators
             })
 
-        
+        # Display the error message if the Aadhar Number error occurs
         aadhar_error = {}
 
         if Student.objects.filter(aadhar_number=aadhar_number).exists():
@@ -521,6 +532,7 @@ def add_stu(request):
                 **aadhar_error  # Pass error indicators
             })
         
+        # Display the error message if the EMIS number error occurs
         emis_error = {}
 
         if Student.objects.filter(emis_number=emis_number).exists():
@@ -572,6 +584,7 @@ def add_stu(request):
                 **emis_error  # Pass error indicators
             })
         
+        # Display the error message if the SSLC mark error occurs
         sslc_error = {}
 
         if not sslc_mark:
@@ -623,18 +636,23 @@ def add_stu(request):
                 **sslc_error  # Pass error indicators
             })
         
+        # It will set the value as No if the user does not give the value
         if not govt_school:
             govt_school = 'No'
 
+        # It will set the value as No if the user does not give the value
         if not first_graduate:
             first_graduate = 'No'
 
+        # It will set the value as No if the user does not give the value
         if not hosteller:
             hosteller = 'No'
 
+        # It will set the value as No if the user does not give the value
         if not single_parent:
             single_parent = 'No'
         
+        # To store the given input value into the users_student tabel
         Student.objects.create(
             first_name = first_name if first_name else None,
             last_name = last_name if last_name else None,
@@ -682,18 +700,25 @@ def add_stu(request):
 
     return render(request, "users/add_stu.html", context)
 
-
+# To render the View Student page
+# Only logged-in users can access this page
 def view_stu(request):
     user = request.user
 
     if isinstance(user, AnonymousUser) or not user.is_authenticated:
         return redirect('home:index')
 
-    logged_in_user = request.user
-    students = Student.objects.filter(mentor_name=logged_in_user.first_name)
+    # If the user is a superuser (admin), show all students
+    if user.is_superuser:
+        students = Student.objects.all()
+    else:
+        # Show only students assigned to the logged-in user
+        students = Student.objects.filter(mentor_name=user.first_name)
 
     return render(request, 'users/view_stu.html', {'students': students})
 
+# To retrieve the student data imediatly when the user starts to search (Live filter)
+# It will be render in the same view_stu.html page
 def view_stu_ajax(request):
     user = request.user
 
@@ -717,10 +742,17 @@ def view_stu_ajax(request):
             )
 
     else:
-        students = Student.objects.filter(mentor_name=logged_in_user.first_name)
+        # If the user is a superuser (admin), show all students
+        if user.is_superuser:
+            students = Student.objects.all()
+        else:
+            # Show only students assigned to the logged-in user
+            students = Student.objects.filter(mentor_name=user.first_name)
 
     return render(request, 'users/student_table_rows.html', {'students': students})
 
+# To render the Edit Student page
+# Only logged-in users can access this page
 def edit_student(request, aadhar_number):
     student = get_object_or_404(Student, aadhar_number=aadhar_number)
     
@@ -787,6 +819,8 @@ def edit_student(request, aadhar_number):
 
     return render(request, "users/edit_student.html", {"student": student})
 
+# To render the Student Details page according to the student Aadhar number
+# Only logged-in users can access this page
 @login_required
 def student_detail(request, aadhar_number):
     user = request.user
@@ -801,7 +835,7 @@ def student_detail(request, aadhar_number):
     student = get_object_or_404(Student, aadhar_number=aadhar_number)
     return render(request, 'users/student_detail.html', {'student': student})
 
-
+# To delete the student record from the Database according to the student aadhar number
 @login_required
 def delete_student(request, aadhar_number):
     # Try to find the student by reg_no first, otherwise use first_name
@@ -820,7 +854,7 @@ def delete_student(request, aadhar_number):
 
     return redirect('users:view_stu')  # Redirect to the student listing page
 
-
+# Function to conver the image file into Base64 code
 def image_to_base64(image_path):
     try:
         with open(image_path, "rb") as image_file:
@@ -829,6 +863,7 @@ def image_to_base64(image_path):
     except FileNotFoundError:
         return None  # Handle the case where the file doesn't exist
 
+# To download the student details as PDF from the webpage
 def download_student_pdf(request, aadhar_number):
     try:
         student = Student.objects.get(aadhar_number=aadhar_number)
@@ -844,6 +879,7 @@ def download_student_pdf(request, aadhar_number):
 
         config = pdfkit.configuration(wkhtmltopdf=settings.WKHTMLTOPDF_PATH)
 
+        # Configuring the page size (A4 sheet size)
         options = {
             'page-size': 'A4',
             'margin-top': '10mm',
@@ -865,7 +901,7 @@ def download_student_pdf(request, aadhar_number):
     except Exception as e:
         return HttpResponse(f"Error generating PDF: {e}", status=500)
 
-
+# To logout from the users profile
 def logout(request):
     django_logout(request)  # Django handles session clearing
     return redirect('home:index')

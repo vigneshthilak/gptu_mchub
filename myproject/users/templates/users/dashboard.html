@@ -78,6 +78,11 @@
                           <li class="nav-item">
                             <a class="nav-link" href="{% url 'users:logout' %}">Log out</a>
                           </li>
+                          <li class="nav-item">
+                              <a class="nav-link" href="">
+                                  <i class="fa fa-user-circle"></i> My Profile
+                              </a>
+                          </li>
                         </ul>
                     </div>
 
@@ -94,12 +99,17 @@
             <div class="container">
                 <div class="dashboard-user">
                     <h5>Welcome to GPTU MC HUB</h5>
-                    {% if mentor_gender == "female" %}
-                        <h1>Ms. {{ mentor_first_name }} {{ mentor_last_name }}</h1>
-                    {% elif mentor_gender == "male" %}
-                        <h1>Mr. {{ mentor_first_name }} {{ mentor_last_name }}</h1>
+
+                    {% if mentor_first_name and mentor_last_name %}
+                        {% if mentor_gender == "female" %}
+                            <h1>Ms. {{ mentor_first_name }} {{ mentor_last_name }}</h1>
+                        {% elif mentor_gender == "male" %}
+                            <h1>Mr. {{ mentor_first_name }} {{ mentor_last_name }}</h1>
+                        {% else %}
+                            <h1>{{ mentor_first_name }} {{ mentor_last_name }}</h1>
+                        {% endif %}
                     {% else %}
-                        <h1>{{ mentor_first_name }} {{ mentor_last_name }}</h1>
+                        <h1>User GPTU MC HUB</h1>
                     {% endif %}
 
                     {% if mentor_department == "DCIVIL" %}
