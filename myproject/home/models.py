@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 import uuid
@@ -31,14 +32,20 @@ class UserProfile(AbstractUser):
         ('others', 'Others')
     ]
 
-    first_name = models.CharField(max_length=50,null=True)
-    last_name = models.CharField(max_length=50)
+    first_name = models.CharField(max_length=50, blank=True, null=True)
+    last_name = models.CharField(max_length=50, blank=True, null=True)
     email = models.EmailField(unique=True)
     user_id = models.CharField(max_length=20, unique=True)
     username = models.CharField(max_length=50, unique=True)
     password = models.CharField(max_length=100)
-    department = models.CharField(max_length=10, choices=DEPARTMENT_CHOICES)
-    gender = models.CharField(max_length=10, choices=GENDER_CHOICES, default='Female')
+    department = models.CharField(max_length=10, choices=DEPARTMENT_CHOICES, blank=True, null=True)
+    gender = models.CharField(max_length=10, choices=GENDER_CHOICES, default='Female', blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        # Hash the password only if it's not already hashed
+        if not self.password.startswith('pbkdf2_sha256$'):
+            self.password = make_password(self.password)
+        super().save(*args, **kwargs)
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['user_id', 'email']
@@ -47,7 +54,7 @@ class UserProfile(AbstractUser):
         return self.username
 
 #Model for Authorised user Verification
-
+"""
 class AuthUser(models.Model):
     id = models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')
     user_id = models.CharField(max_length=20, unique=True)  # Changed from regno to user_id
@@ -55,6 +62,7 @@ class AuthUser(models.Model):
 
     def __str__(self):
         return f"{self.user_id} - {self.email}"
+"""
 
 
 #Models for Password reset token

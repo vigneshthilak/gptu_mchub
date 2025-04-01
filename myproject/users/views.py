@@ -708,8 +708,12 @@ def view_stu(request):
     if isinstance(user, AnonymousUser) or not user.is_authenticated:
         return redirect('home:index')
 
-    logged_in_user = request.user
-    students = Student.objects.filter(mentor_name=logged_in_user.first_name)
+    # If the user is a superuser (admin), show all students
+    if user.is_superuser:
+        students = Student.objects.all()
+    else:
+        # Show only students assigned to the logged-in user
+        students = Student.objects.filter(mentor_name=user.first_name)
 
     return render(request, 'users/view_stu.html', {'students': students})
 
@@ -738,7 +742,12 @@ def view_stu_ajax(request):
             )
 
     else:
-        students = Student.objects.filter(mentor_name=logged_in_user.first_name)
+        # If the user is a superuser (admin), show all students
+        if user.is_superuser:
+            students = Student.objects.all()
+        else:
+            # Show only students assigned to the logged-in user
+            students = Student.objects.filter(mentor_name=user.first_name)
 
     return render(request, 'users/student_table_rows.html', {'students': students})
 

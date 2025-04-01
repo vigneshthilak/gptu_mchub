@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .models import UserProfile, AuthUser, PasswordResetToken
-from django.core.mail import send_mail
+from .models import UserProfile, PasswordResetToken
 from home.models import UserProfile, PasswordResetToken
 from django.contrib.auth.hashers import make_password
 from django.utils.timezone import now, timedelta
@@ -27,6 +26,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_decode
+from django.core.mail import send_mail
 
 """
 
@@ -37,7 +37,7 @@ def index(request):
     return render(request, 'home/index.html')
 
 # To render the Log-In page file
-@never_cache 
+@never_cache
 def login(request):
     if request.method == 'POST':
         user_input = request.POST.get('user_input')  # Input can be user_id or username
@@ -310,10 +310,12 @@ def signup(request):
                 'gender': gender,
             })
         
+        """
         # Validate user_id and email against auth_users
         if not AuthUser.objects.filter(user_id=user_id, email=email).exists():
             messages.error(request, "You're not eligible to create an account!")
             return render(request, 'home/signup.html')
+        """
 
         # Calling the send_otp() to send the otp if the given inputs are correct
         otp = send_otp(email, request)  
@@ -463,7 +465,7 @@ def contactus(request):
             subject=f"Feedback from {name}",
             body=email_body,
             from_email=f"GPTU MC HUB <{settings.EMAIL_HOST_USER}>",  # Use a valid email
-            to=['vigneshthilagaraj00@gmail.com'],
+            to=['www.mr.comp@gmail.com'],
             reply_to=[email]  # This allows replies to go to the user's email
         )
 
