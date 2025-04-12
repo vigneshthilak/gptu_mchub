@@ -44,50 +44,65 @@
 <body>
 
     <!-- Navigation Bar (Menu Bar) -->
-   
+
         <nav class="navbar navbar-expand-lg navbar-dark custom-navbar">
             <div class="container-fluid">
-                
-                <!-- Logo -->
-                
-                    <a class="navbar-brand" href="{% url 'users:dashboard' %}"><img src="{% static 'images/logo.png' %}"></a>
-
-                <!-- Logo -->
-
-                <!-- Toggle Button for Mobile -->
-
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-
-                <!-- Toggle Button for Mobile -->
-
-                <!-- Nav Links -->
-
-                    <div class="collapse navbar-collapse" id="navbarNav">
-                        <ul class="navbar-nav ms-auto">
-                          <li class="nav-item">
+                <a class="navbar-brand" href="{% url 'users:dashboard' %}">
+                    <img src="{% static 'images/logo.png' %}">
+                </a>
+        
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+        
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
                             <a class="nav-link" href="{% url 'users:dashboard' %}">Home</a>
-                          </li>
-                          <li class="nav-item">
-                            <a class="nav-link" href="{% url 'users:add_stu' %}">Add Student</a>
-                          </li>
-                          <li class="nav-item">
-                            <a class="nav-link" href="{% url 'users:view_stu' %}">View Students</a>
-                          </li>
-                          <li class="nav-item">
-                            <a class="nav-link" href="{% url 'users:logout' %}">Log out</a>
-                          </li>
-                          <li class="nav-item">
-                              <a class="nav-link" href="">
-                                  <i class="fa fa-user-circle"></i> My Profile
-                              </a>
-                          </li>
-                        </ul>
-                    </div>
-
-                <!-- Nav Links -->
-                
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="studentsDropdown" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                Students
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="studentsDropdown">
+                                <li><a class="dropdown-item" href="{% url 'users:add_stu' %}">Add Student</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{% url 'users:view_stu' %}">View Students</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{% url 'users:upload_stu' %}">Upload Students</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                Profile
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="profileDropdown">
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'users:my_profile' %}">
+                                        <i class="fa fa-user-circle"></i> My Profile
+                                    </a>
+                                </li>
+                                {% if user.is_superuser %}
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <a class="dropdown-item" href="#">
+                                            <i class="fa fa-user-plus"></i> Add User
+                                        </a>
+                                    </li>
+                                {% endif %}
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'users:logout' %}">
+                                        <i class="fa fa-sign-out"></i> Log out
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </nav>
   

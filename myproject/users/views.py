@@ -4,15 +4,32 @@ from django.contrib.auth import logout as django_logout
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import cache_control
 from .models import Student
+from home.models import UserProfile
 from django.contrib.auth.models import AnonymousUser
 from django.utils.dateparse import parse_date
 from django.db.models import Q
 from django.http import HttpResponse
 from django.template.loader import render_to_string
 from django.conf import settings
+from PIL import Image
+from io import BytesIO
+from django.urls import reverse
+from django.core.mail import EmailMultiAlternatives
+from django.core.files.uploadedfile import InMemoryUploadedFile
+from django.contrib.auth.hashers import check_password, make_password
+from django.db.models.functions import Concat, Lower
+from django.db.models import Value
+from django.core.files.storage import FileSystemStorage
+from django.http import HttpResponse
+import pandas as pd
 import pdfkit
 import os
+import io
 import base64
+import string
+import datetime
+import random
+import smtplib
 
 """
 Uneccessary import methods
@@ -32,6 +49,26 @@ from io import BytesIO
 @cache_control(no_store=True, no_cache=True, must_revalidate=True)  # Prevents browser from storing dashboard page
 def dashboard(request):
     user = request.user  # Fetch authenticated user
+
+    # Check for missing profile fields
+    missing_fields = []
+
+    if not user.first_name:
+        missing_fields.append("First Name")
+    if not user.last_name:
+        missing_fields.append("Last Name")
+    if not user.email:
+        missing_fields.append("Email")
+    if not user.user_id:
+        missing_fields.append("User ID")
+    if not user.department:
+        missing_fields.append("Department")
+
+    # Store in session only if missing fields exist
+    if missing_fields:
+        request.session['missing_fields'] = missing_fields
+    else:
+        request.session.pop('missing_fields', None)
 
     context = {
         "mentor_first_name": user.first_name,
@@ -708,12 +745,14 @@ def view_stu(request):
     if isinstance(user, AnonymousUser) or not user.is_authenticated:
         return redirect('home:index')
 
-    # If the user is a superuser (admin), show all students
     if user.is_superuser:
-        students = Student.objects.all()
+        students = Student.objects.annotate(
+            full_name=Concat('first_name', Value(' '), 'last_name')
+        ).order_by(Lower('full_name')) #case insensitive sort
     else:
-        # Show only students assigned to the logged-in user
-        students = Student.objects.filter(mentor_name=user.first_name)
+        students = Student.objects.filter(mentor_name=user.first_name).annotate(
+            full_name=Concat('first_name', Value(' '), 'last_name')
+        ).order_by(Lower('full_name')) # case insensitive sort
 
     return render(request, 'users/view_stu.html', {'students': students})
 
@@ -726,7 +765,6 @@ def view_stu_ajax(request):
         return render(request, 'home/index.html')
 
     search_term = request.GET.get('search', '').strip()
-    logged_in_user = request.user
 
     if search_term:
         if search_term.isdigit():
@@ -742,14 +780,119 @@ def view_stu_ajax(request):
             )
 
     else:
-        # If the user is a superuser (admin), show all students
         if user.is_superuser:
-            students = Student.objects.all()
+            students = Student.objects.annotate(
+                full_name=Concat('first_name', Value(' '), 'last_name')
+            ).order_by(Lower('full_name')) #case insensitive sort
         else:
-            # Show only students assigned to the logged-in user
-            students = Student.objects.filter(mentor_name=user.first_name)
+            students = Student.objects.filter(mentor_name=user.first_name).annotate(
+                full_name=Concat('first_name', Value(' '), 'last_name')
+            ).order_by(Lower('full_name')) # case insensitive sort
 
     return render(request, 'users/student_table_rows.html', {'students': students})
+
+def upload_stu(request):
+    if request.method == 'POST' and request.FILES.get('file'):
+        excel_file = request.FILES['file']
+
+        try:
+            # Load Excel file into a DataFrame
+            df = pd.read_excel(excel_file)
+
+            # Clean whitespace
+            df = df.applymap(lambda x: x.strip() if isinstance(x, str) else x)
+
+            # Convert NaN (float) to None
+            df = df.where(pd.notnull(df), None)
+
+            # Extra: Convert "nan", "NaN", or empty strings ("") to None
+            df = df.applymap(lambda x: None if str(x).strip().lower() in ['nan', ''] else x)
+
+            # Set default value "No" for specific fields if they are empty
+            default_no_fields = ['Studied in Govt. School', 'First Graduate', 'Hosteller', 'Single Parent', 'Differently abled']
+            
+            for field in default_no_fields:
+                df[field] = df[field].apply(lambda x: x if x not in [None, '', 'nan', 'NaN'] else 'No')
+
+            # Loop through rows and save to DB
+            for index, row in df.iterrows():
+                Student.objects.create(
+                    first_name = row['First Name'],
+                    last_name = row['Last Name'],
+                    dob = row['Date of Birth'],
+                    gender = row['Gender'],
+                    blood_group = row['Blood Group'],
+                    mother_tongue = row['Mother Tongue'],
+                    differently_abled = row['Differently abled'],
+                    religion = row['Religion'],
+                    community = row['Community'],
+                    reg_no = row['Register number'],
+                    program_name = row['Program Name'],
+                    program_type = row['Program Type'],
+                    year_of_joining = row['Year of Joining'],
+                    mentor_name = row['Name of the Mentor'],
+                    sslc_mark = row['SSLC Mark'],
+                    hsc_iti_mark = row['HSC/ITI Mark'],
+                    govt_school = row['Studied in Govt. School'],
+                    emis_number = row['EMIS Number'],
+                    hosteller = row['Hosteller'],
+                    extra_curricular = row['Extra Curricular (Optional)'],
+                    achievements = row['Any achievements (Optional)'],
+                    aadhar_number = row['Aadhar Card Number'],
+                    father_name = row['Father Name'],
+                    mother_name = row['Mother Name'],
+                    mobile_father = row['Mobile Number - Father'],
+                    mobile_mother = row['Mobile Number - Mother'],
+                    mobile_sibling = row['Mobile Number - Sibling (Optional)'],
+                    mobile_guardian = row['Mobile Number - Guardian (Optional)'],
+                    father_occupation = row['Father Occupation'],
+                    single_parent = row['Single Parent'],
+                    first_graduate = row['First Graduate'],
+                    email = row['E-Mail ID'],
+                    address = row['Address'],
+                    district = row['District'],
+                    pin_code = row['PIN Code'],
+                    bank_name = row['Name of the Bank'],
+                    branch_name = row['Branch Name'],
+                    account_number = row['Account Number'],
+                    ifsc_code = row['IFSC Code'],
+                    # add all other fields from your model
+                )
+
+            messages.success(request, "Students uploaded successfully.")
+            return redirect('users:upload_stu')  # replace with actual URL name
+
+        except Exception as e:
+            messages.error(request, f"Error uploading file: {str(e)}")
+            return redirect('users:upload_stu')  # replace with actual URL name
+
+    return render(request, 'users/upload_stu.html')  # fallback GET request
+
+def download_stu_format(request):
+    """
+    Downloads the student format as an Excel (.xlsx) file.
+    """
+    try:
+        headers = ['Student ID', 'Name', 'Class', 'Major']
+        df = pd.DataFrame(columns=headers)
+
+        output = io.BytesIO()
+        with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
+            df.to_excel(writer, sheet_name='StudentFormat', index=False)
+
+        output.seek(0)
+        file_data = output.getvalue()
+
+        response = HttpResponse(
+            file_data,
+            content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        )
+        response['Content-Disposition'] = 'attachment; filename="student_format.xlsx"'
+        return response
+    except Exception as e:
+        print(f"Error in download_stu_format: {str(e)}")
+        return HttpResponse(f"An error occurred: {str(e)}", status=500)
+
 
 # To render the Edit Student page
 # Only logged-in users can access this page
@@ -900,6 +1043,229 @@ def download_student_pdf(request, aadhar_number):
         return HttpResponse("Student not found", status=404)
     except Exception as e:
         return HttpResponse(f"Error generating PDF: {e}", status=500)
+
+
+def resize_image(image, max_size=(500, 500)):
+    """Resizes an image if it exceeds the specified maximum dimensions."""
+    try:
+        if isinstance(image, InMemoryUploadedFile):
+            img = Image.open(image)
+        else:
+            img = Image.open(image)
+
+        width, height = img.size
+
+        if width > max_size[0] or height > max_size[1]:
+            img.thumbnail(max_size)
+
+            output = BytesIO()
+            img.save(output, format='JPEG', quality=85)
+            output.seek(0)
+
+            resized_image = InMemoryUploadedFile(
+                output,
+                'ImageField',
+                image.name,
+                'image/jpeg',
+                output.tell,
+                None
+            )
+
+            return resized_image
+        else:
+            return image
+    except Exception as e:
+        print(f"Error resizing image: {e}")
+        return image
+
+# Function used to Generate and send the 6 digit OTP to users corresponding E-Mail ID
+def send_otp(email, request):
+    otp = ''.join(random.choices(string.digits, k=6))  # Generate 6-digit OTP
+    expiry_time = datetime.datetime.now() + datetime.timedelta(minutes=1)
+    request.session['otp'] = otp
+    request.session['otp_expiry'] = expiry_time.timestamp()
+
+    subject = "Your GPTU MC HUB OTP for Password Change Verification Code"
+    from_email = f"GPTU MC HUB <{settings.EMAIL_HOST_USER}>"
+    text_content = f"Hello,\n\nYour OTP for password change verification is: {otp}\nThis OTP will expire in 1 minute.\n\nPlease do not share this code with anyone.\n\nRegards,\nGPTU MC HUB Team"
+    
+    html_content = f"""
+    <html>
+    <body style="font-family: Arial, sans-serif; color: #333;">
+        <h2>GPTU MC HUB - OTP for Password Change Verification Code</h2>
+        <p>Hello,</p>
+        <p>Your One-Time Password (OTP) for verification is:</p>
+        <h1 style="color: #2c3e50;">{otp}</h1>
+        <p>This OTP will expire in <strong>1 minute</strong>.</p>
+        <p>Please do not share this code with anyone.</p>
+        <br>
+        <p>Regards,</p>
+        <p style="color: #2c3e50; font-weight: bold;">GPTU MC HUB Team</p>
+        <hr>
+        <small>This is an automated email; please do not reply.</small>
+    </body>
+    </html>
+    """
+
+    msg = EmailMultiAlternatives(subject, text_content, from_email, [email])
+    msg.attach_alternative(html_content, "text/html")
+    msg.send()
+    return otp
+
+
+def my_profile(request):
+    
+    if request.method == "GET":
+        # Only clear if not redirected from OTP generation
+        if request.GET.get("otp_sent") != "1":
+            for key in ["otp", "otp_expiry", "pending_password", "otp_sent"]:
+                request.session.pop(key, None)
+
+    try:
+        profile = UserProfile.objects.get(username=request.user.username) # Use the correct relation
+    except UserProfile.DoesNotExist:
+        profile = UserProfile.objects.create(username=request.user.username) # create if does not exist.
+
+    special_chars = set(string.punctuation)
+
+
+    #profile = UserProfile.objects.get(username=request.user.username)
+
+    if request.method == "POST":
+        if 'update_profile' in request.POST:
+            # Helper to clean input
+            def clean_input(value):
+                return value.strip() if value and value.strip() else None
+
+            profile.first_name = clean_input(request.POST.get("first_name"))
+            profile.last_name = clean_input(request.POST.get("last_name"))
+            profile.email = clean_input(request.POST.get("email"))
+            profile.department = clean_input(request.POST.get("department"))
+            profile.gender = clean_input(request.POST.get("gender"))
+
+            profile.save()
+
+        elif 'upload_picture' in request.POST and request.FILES.get("profile_picture"):
+            uploaded_image = request.FILES["profile_picture"]
+            resized_image = resize_image(uploaded_image)
+
+            if resized_image:
+                profile.profile_picture = resized_image
+                profile.save()
+
+        elif 'generate_otp' in request.POST:
+            old_password = request.POST.get('old_password')
+            new_password = request.POST.get('new_password')
+            confirm_password = request.POST.get('confirm_password')
+
+            if not old_password or not new_password or not confirm_password:
+                messages.error(request, "All password fields are required.", extra_tags='password_form')
+                return redirect(reverse("users:my_profile") + "#password-section")
+
+            if not check_password(old_password, profile.password):
+                messages.error(request, "Old password is incorrect.", extra_tags='password_form')
+                return redirect(reverse("users:my_profile") + "#password-section")
+
+            if new_password != confirm_password:
+                messages.error(request, "Passwords do not match.", extra_tags='password_form')
+                return redirect(reverse("users:my_profile") + "#password-section")
+
+            if len(new_password) < 8:
+                messages.error(request, "Password must be at least 8 characters.")
+                return redirect(reverse("users:my_profile") + "#password-section")
+            
+            if not any(char in special_chars for char in new_password):
+                messages.error(request, 'Password must contain at least one special character!', extra_tags='password_form')
+                return redirect(reverse("users:my_profile") + "#password-section")
+
+            # Store new password temporarily in session
+            request.session['pending_password'] = new_password
+
+            # Send OTP using your custom function
+            send_otp(profile.email, request)
+            messages.success(request, "OTP sent successfully to your email ID.", extra_tags='password_form')
+            request.session['otp_sent'] = True  # Set the flag in session
+            return redirect(reverse("users:my_profile") + "?otp_sent=1#password-section")
+
+        elif 'verify_otp' in request.POST:
+            entered_otp = request.POST.get("otp")
+            stored_otp = request.session.get("otp")
+            expiry_time = request.session.get("otp_expiry")
+            new_password = request.session.get("pending_password")
+
+            if expiry_time and datetime.datetime.now().timestamp() > expiry_time:
+                messages.error(request, "OTP has expired. Please request a new one.", extra_tags='otp_form')
+                return redirect(reverse("users:my_profile") + "#password-section")
+
+            if entered_otp == stored_otp and new_password:
+                profile.password = make_password(new_password)
+                profile.save()
+                # Cleanup
+                for key in ["otp", "otp_expiry", "pending_password", "show_otp_modal", "last_otp_sent"]:
+                    request.session.pop(key, None)
+                messages.success(request, "Password updated successfully.", extra_tags='otp_form')
+                request.session.pop('otp_sent', None)
+                return redirect("users:my_profile")
+            else:
+                messages.error(request, "Invalid OTP.", extra_tags='otp_form')
+                return redirect(reverse("users:my_profile") + "#password-section")
+            
+        elif 'resend_otp' in request.POST:
+            if request.session.get('otp') and profile.email:
+
+                # Remove Old OTP from Session
+                request.session.pop("otp", None)
+                request.session.pop("otp_expiry", None)
+
+                # Generate new OTP and expiry
+                new_otp = ''.join(random.choices(string.digits, k=6))
+                expiry_time = datetime.datetime.now() + datetime.timedelta(minutes=1)
+                request.session["otp"] = new_otp
+                request.session["otp_expiry"] = expiry_time.timestamp()
+
+                # HTML email content (copied from your send_otp style)
+                subject = "Your New OTP for GPTU MC HUB Verification"
+                from_email = f"GPTU MC HUB <{settings.EMAIL_HOST_USER}>"
+                text_content = f"Hello,\n\nYour new OTP for verification is: {new_otp}\nThis OTP will expire in 1 minute.\n\nPlease do not share this code with anyone.\n\nRegards,\nGPTU MC HUB Team"
+
+                html_content = f"""
+                <html>
+                <body style="font-family: Arial, sans-serif; color: #333;">
+                    <h2>GPTU MC HUB - OTP for Password Change Verification Code</h2>
+                    <p>Hello,</p>
+                    <p>Your new One-Time Password (OTP) for verification is:</p>
+                    <h1 style="color: #2c3e50;">{new_otp}</h1>
+                    <p>This OTP will expire in <strong>1 minute</strong>.</p>
+                    <p>Please do not share this code with anyone.</p>
+                    <br>
+                    <p>Regards,</p>
+                    <p style="color: #2c3e50; font-weight: bold;">GPTU MC HUB Team</p>
+                    <hr>
+                    <small>This is an automated email; please do not reply.</small>
+                </body>
+                </html>
+                """
+
+                try:
+                    msg = EmailMultiAlternatives(subject, text_content, from_email, [profile.email])
+                    msg.attach_alternative(html_content, "text/html")
+                    msg.send()
+                    messages.success(request, "A new OTP has been sent to your email.")
+                except smtplib.SMTPException as e:
+                    # Log the error internally (e.g., using logging module)
+                    import logging
+                    logger = logging.getLogger(__name__)
+                    logger.error(f"Failed to send OTP email: {e}")
+                    messages.error(request, "Failed to send OTP. Please try again later.")
+                return redirect(reverse("users:my_profile") + "#password-section")
+
+            else:
+                messages.error(request, "Something went wrong. Please try again.")
+                return redirect(reverse("users:my_profile") + "#password-section")
+
+    return render(request, 'users/my_profile.html', {
+        'profile': profile,
+    })
 
 # To logout from the users profile
 def logout(request):

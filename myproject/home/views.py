@@ -14,6 +14,7 @@ import uuid
 import string
 import random
 import datetime
+import logging
 
 """
 Uneccessary import methods
@@ -36,6 +37,8 @@ from django.core.mail import send_mail
 def index(request):
     return render(request, 'home/index.html')
 
+logger = logging.getLogger(__name__)
+
 # To render the Log-In page file
 @never_cache
 def login(request):
@@ -43,19 +46,29 @@ def login(request):
         user_input = request.POST.get('user_input')  # Input can be user_id or username
         password = request.POST.get('password')
 
+        logger.info(f"Login attempt: user_input={user_input}, password={password}")
+
         # Server-side validation
         if not user_input or not password:
             messages.error(request, 'Both username/user ID and password are required.')
             return redirect('home:login')
+
+        user_by_username = authenticate(request, username=user_input, password=password)
+        user_by_userid = authenticate(request, user_id=user_input, password=password)
+
+        user = user_by_username or user_by_userid
         
         # Try authenticating with user_id or username
-        user = authenticate(request, username=user_input, password=password)
+        #user = authenticate(request, username=user_input, password=password)
         
         if user:
             auth_login(request, user)  # Django manages session automatically
+            logger.info(f"Login successful: user={user}")
+
             return redirect('users:dashboard')
         else:
             messages.error(request, 'Invalid username/user ID or password.')
+            logger.warning(f"Login failed: user_input={user_input}")
 
         return redirect('home:login')
 

@@ -7,9 +7,13 @@ import string
 import random
 
 def generate_password():
-    """Generate a random 10-character password."""
+    """Generate a random 10-character password starting with 'gptu'."""
     characters = string.ascii_letters + string.digits + string.punctuation
-    return ''.join(random.choice(characters) for i in range(10))
+    # Ensure the password starts with 'gptu'
+    prefix = "gptu"
+    # Generate the remaining 6 characters
+    remaining_chars = ''.join(random.choice(characters) for i in range(6))
+    return prefix + remaining_chars
 
 @admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):
@@ -34,17 +38,24 @@ class UserProfileAdmin(admin.ModelAdmin):
             # HTML email content
             html_content = f"""
             <html>
-            <body style="font-family: Arial, sans-serif; padding: 20px;">
-                <h2 style="color: #333;">Welcome to GPTU MC HUB!</h2>
-                <p style="color: #333;">Dear <strong>User</strong>,</p>
+            <body style="font-family: Arial, sans-serif; color: #333; padding: 20px;">
+                <h2 style="color: #2c3e50;">Welcome to GPTU MC HUB!</h2>
+                <p style="color: #2c3e50;">Dear <strong>User</strong>,</p>
                 <p>Your account has been successfully created. Below are your login details:</p>
-                <p style="color: #333;"><strong>User ID:</strong>&nbsp;&nbsp;&nbsp;&nbsp;{obj.user_id}</p>
-                <p style="color: #333;"><strong>Password:</strong>&nbsp;&nbsp;&nbsp;{password}</p>
+                <table style="width: 50%; border-collapse: collapse;">
+                    <tr>
+                        <td style="font-weight: bold; width: 25%; padding-right: 10px; color: none;">User ID:</td>
+                        <td style="color: #2c3e50; width: 75%;">{obj.user_id}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold; width: 25%; padding-right: 10px; color: none;">Password:</td>
+                        <td style="color: #2c3e50; width: 75%;">{password}</td>
+                    </tr>
+                </table>
                 <p>Please log in and change your password immediately for security reasons.</p>
-                <p>If you have any issues, feel free to contact our support team.</p>
                 <br>
                 <p>Regards,</p>
-                <p style="font-weight: bold; color: #333;">GPTU MC HUB Team</p>
+                <p style="font-weight: bold; color: #2c3e50;">GPTU MC HUB Team</p>
                 <hr>
                 <small>This is an automated email; please do not reply.</small>
             </body>

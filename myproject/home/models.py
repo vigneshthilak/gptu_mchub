@@ -15,6 +15,7 @@ from django.contrib.auth.models import User
 # Models for user Profile
 
 class UserProfile(AbstractUser):
+    
     DEPARTMENT_CHOICES = [
         ('DCIVIL', 'DCIVIL'),
         ('DMECH', 'DMECH'),
@@ -40,6 +41,7 @@ class UserProfile(AbstractUser):
     password = models.CharField(max_length=100)
     department = models.CharField(max_length=10, choices=DEPARTMENT_CHOICES, blank=True, null=True)
     gender = models.CharField(max_length=10, choices=GENDER_CHOICES, default='Female', blank=True, null=True)
+    profile_picture = models.ImageField(upload_to='profile_pictures/', blank=True, null=True)
 
     def save(self, *args, **kwargs):
         # Hash the password only if it's not already hashed

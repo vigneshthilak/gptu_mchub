@@ -75,6 +75,35 @@ body::selection {
       margin-right: 20px;
     }
 
+    /* Dropdown Styles */
+    .dropdown-menu-dark {
+      background-color: black; /* Match navbar background */
+    }
+
+    .dropdown-item {
+      color: white; /* Match navbar link color */
+    }
+
+    .dropdown-item:hover, .dropdown-item:focus {
+      background-color: #222; /* Slightly lighter background on hover */
+      color: white;
+    }
+
+    /* Hover dropdowns */
+    .dropdown:hover > .dropdown-menu {
+      display: block;
+    }
+
+    .dropdown > .dropdown-toggle:active {
+      /*Without this, clicking will make it sticky*/
+      pointer-events: none;
+    }
+
+    .dropdown-menu-end {
+      right: 0; /* Align to the right edge */
+      left: auto; /* Prevent default left alignment */
+    }
+
   /*---------- Navbar Toggler Icon Color ----------*/
 
 /*---------- Navigation Bar (Menu Bar) ----------*/
@@ -150,7 +179,8 @@ body::selection {
     .login-container .form-control,
     .gptu_mchub-home-fp .form-control,
     .gptu_mchub-home-rp .form-control,
-    .otp-container .form-control {
+    .otp-container .form-control,
+    .otp_dialog .form-control {
       border-radius: 40px;
       padding: 17px;
       font-size: small;
@@ -163,6 +193,8 @@ body::selection {
     .signup-container .form-control:active,
     .otp-container .form-control:focus,
     .otp-container .form-control:active,
+    .otp_dialog .form-control:focus,
+    .otp_dialog .form-control:active,
     .gptu_mchub-home-fp .form-control:focus,
     .gptu_mchub-home-fp .form-control:active,
     .gptu_mchub-home-rp .form-control:focus,
@@ -409,9 +441,9 @@ body::selection {
 }
 
 #timer {
-    margin-top: 10px;
-    color: #555;
-    font-size: 14px;
+  margin-top: 10px;
+  color: #555;
+  font-size: 14px;
 }
 
 /*---------- Web access styles ----------*/
@@ -683,6 +715,75 @@ body::selection {
 
 /*---------- View Student ----------*/
 
+/*---------- Upload Student ----------*/
+  
+  .gptu_mchub-users-upload_stu {
+    margin-top: 25px;
+  }
+
+  .gptu_mchub-users-upload_stu .upload-box {
+    margin-top: 50px;
+    padding: 30px;
+    background-color: #e7ffe8;
+    border: 2px dashed #198754;
+    border-radius: 10px;
+    text-align: center;
+  }
+
+  .gptu_mchub-users-upload_stu .upload-box img {
+    width: 64px;
+    margin-bottom: 20px;
+  }
+
+  @media (max-width: 768px) {
+    .gptu_mchub-users-upload_stu .upload-box {
+      flex-direction: column;
+      width: 90%;
+    }
+  }
+
+  .gptu_mchub-users-upload_stu .excel-label {
+    font-weight: 500;
+    margin-bottom: 20px;
+    font-size: 16px;
+    color: #333;
+  }
+
+  .gptu_mchub-users-upload_stu .custom-file-upload {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+  }
+  
+  .gptu_mchub-users-upload_stu .custom-file-upload input[type="text"] {
+    flex: 1;
+    pointer-events: none;
+    background-color: #f8f9fa;
+    border: 1px solid #198754;
+    height: 45px;
+    padding: 0 10px;
+    border-radius: 5px;
+  }
+  
+  .gptu_mchub-users-upload_stu .custom-file-upload label {
+    height: 45px;
+    padding: 0 20px;
+    background-color: #198754;
+    color: white;
+    display: flex;
+    align-items: center;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+  }
+  
+  .gptu_mchub-users-upload_stu input[type="file"] {
+    display: none;
+  }
+  
+
+/*---------- Upload Student ----------*/
+
 /*---------- Student Details ----------*/
 
   .student_detail {
@@ -765,6 +866,218 @@ body::selection {
  }
  
 /*---------- Student Details ----------*/
+
+/*---------- Dialog Box ----------*/
+
+  .modal-content {
+    padding: 10px;
+    border-radius: 20px;
+  }
+
+  .modal-content .btn-close {
+    border: 1px solid black;
+    border-radius: 40px;
+    padding: 15px;
+  }
+
+/*---------- Dialog Box ----------*/
+
+/*---------- My Profile Page ----------*/
+
+  .gptu_mchub-users-pass_reset .form-label,
+  .gptu_mchub-users-profile .form-label {
+    color: gray;
+    font-size: small;
+  }
+
+  .gptu_mchub-users-pass_reset {
+    margin-bottom: 25px;
+  }
+
+  .gptu_mchub-users-pass_reset .form-control:focus,
+  .gptu_mchub-users-pass_reset .form-control:active,
+  .gptu_mchub-users-profile .form-control:focus,
+  .gptu_mchub-users-profile .form-control:active {
+    box-shadow: none;
+    border: 1px solid black;
+    background-color: white;
+    color: black;
+  }
+
+  .gptu_mchub-users-profile-pic,
+  .gptu_mchub-users-profile {
+    margin-top: 30px;
+  }
+
+  .gptu_mchub-users-profile-pic .profile-container {
+    display: flex; /* Use flexbox for layout */
+    justify-content: space-between; /* Space between info and buttons */
+    align-items: center; /* Align items vertically */
+  }
+
+  .profile-container {
+    background: whitesmoke;
+    padding: 40px;
+    border-radius: 10px;
+  }
+
+  .profile-info {
+    display: flex;
+    align-items: center;
+  }
+
+  .profile-image img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 20px;
+  }
+
+  .profile-details {
+    text-align: left;
+  }
+
+  .profile-details p {
+    margin: 5px 0;
+  }
+
+  .profile-upload {
+    text-align: right; /* Align buttons to the right */
+  }
+
+  .upload-buttons {
+    display: flex; /* Arrange buttons horizontally */
+  }
+
+  .image-upload-label,
+  #upload-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 10px; /* Space between buttons */
+  }
+
+  #upload-button {
+    background-color: #008CBA;
+  }
+
+  #selected-image-name {
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  .logout-button {
+    border: 1px solid black;
+    width: 120px;
+    margin-top: 10px;
+  }
+
+  .logout-button:hover {
+    color: white;
+    background-color: black;
+  }
+  
+  .edit-btn {
+    float: right;
+    border: 1px solid black;
+    width: 120px;
+  }
+
+  .edit-btn:hover {
+    color: white;
+    background-color: black;
+  }
+
+  .gptu_mchub-users-pass_reset .gen-otp,
+  .gptu_mchub-users-pass_reset .resend-otp {
+    border: 1px solid black;
+    width: 100%;
+  }
+
+  .gptu_mchub-users-pass_reset .verify-otp {
+    border: 1px solid black;
+  }
+
+  .gptu_mchub-users-pass_reset .otp-form,
+  .gptu_mchub-users-pass_reset .verify-otp {
+    margin-top: 25px;
+  }
+
+  .gptu_mchub-users-pass_reset .gen-otp:hover,
+  .gptu_mchub-users-pass_reset .verify-otp:hover {
+    background-color: black;
+    color: white;
+  }
+
+  .gptu_mchub-users-profile .btn-success {
+    width: 200px;
+    background-color: whitesmoke;
+    color: black;
+    border: 1px solid black;
+  }
+
+  .gptu_mchub-users-profile .btn-success:hover {
+    background-color: black;
+    color: white;
+  }
+
+  @media (max-width: 768px) {
+    .gptu_mchub-users-profile-pic .profile-container {
+      flex-direction: column;
+      align-items: center;
+      padding: 15px;
+    }
+
+    .profile-info {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .profile-details {
+      width: 100%;
+      text-align: center;
+    }
+
+    .profile-image img {
+      width: 120px;
+      height: 120px;
+    }
+
+    .profile-upload {
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .image-upload-label,
+    #upload-button {
+      width: 100%;
+    }
+
+    .gptu_mchub-users-pass_reset .verify-otp {
+      margin-top: 0;
+    }
+
+    .gptu_mchub-users-pass_reset .otp-form {
+      margin-top: 30px;
+      margin-bottom: 0;
+    }
+  }
+
+  .gptu_mchub-users-pass_reset .form-title {
+    margin-top: 20px;
+  }
+
+  .gptu_mchub-users-pass_reset input {
+    margin-bottom: 15px;
+  }
+
+/*---------- My Profile Page ----------*/
 
 /*---------- Footer ----------*/
 
