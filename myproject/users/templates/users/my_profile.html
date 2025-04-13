@@ -110,7 +110,7 @@
 
     <section class="gptu_mchub-users-profile-pic">
         <div class="container">
-            <form method="POST" enctype="multipart/form-data">
+            <form method="POST" action="{% url 'users:my_profile' %}" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="profile-container">
                     <div class="profile-info">
@@ -146,7 +146,7 @@
                 <button id="editBtn" class="btn edit-btn">Edit</button>
             </div>
             <div class="profile-container">
-                <form method="POST" enctype="multipart/form-data">
+                <form method="POST" action="{% url 'users:my_profile' %}" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="row mb-3">
                         <div class="col-md-6">
@@ -213,7 +213,7 @@
                     <div class="col-md-6">
                         <div class="form-container">
                             <div id="password-section">
-                                <form class="row g-2 stack-lg" method="POST" id="passwordChangeForm">
+                                <form class="row g-2 stack-lg" method="POST" action="{% url 'users:my_profile' %}" id="passwordChangeForm">
                                     {% csrf_token %}
                                     <div class="col-12">
                                         <label class="form-label">Old Password</label>
@@ -244,20 +244,20 @@
                                         <button type="submit" name="generate_otp" class="btn gen-otp">Generate OTP</button>
                                     </div>
                                 </form>
-                                <form class="row g-2 stack-lg" action="" method="post">
-                                    {% csrf_token %}
-                                    <!-- New input field and button in the same row -->
-                                    <div class="col-8">
-                                        <input type="text" id="otpInput" class="form-control otp-form" name="otp" placeholder="Enter OTP" maxlength="6">
-                                    </div>
-                                    <div class="col-4">
-                                        <button type="submit" name="verify_otp" class="btn verify-otp w-100">Verify</button>
-                                    </div>
-                                </form>
                                 {% if request.session.otp_sent %}
-                                    <form method="post">
+                                    <form class="row g-2 stack-lg" action="{% url 'users:my_profile' %}" method="post">
                                         {% csrf_token %}
-                                        <button id="resendOtpButton" name="resend_otp" class="btn resend-otp">Resend OTP</button>
+                                        <!-- New input field and button in the same row -->
+                                        <div class="col-8">
+                                            <input type="text" id="otpInput" class="form-control otp-form" name="otp" placeholder="Enter OTP" maxlength="6">
+                                        </div>
+                                        <div class="col-4">
+                                            <button type="submit" name="verify_otp" class="btn verify-otp w-100">Verify</button>
+                                        </div>
+                                    </form>
+                                    <form method="post" action="{% url 'users:my_profile' %}">
+                                        {% csrf_token %}
+                                        <button id="resendOtpButton" type="submit"  value="1" name="otp_resend" class="btn resend-otp">Resend OTP</button>
                                         <p class="text-center" id="timer">You can resend OTP in <span id="countdown">30</span>s</p>
                                     </form>
                                 {% endif %}
@@ -354,42 +354,6 @@
                 uploadButton.disabled = true; // Disable the button
                 profilePictureDisplay.src = "{% if profile.profile_picture %}{{ profile.profile_picture.url }}{% else %}{% static 'images/default-avatar.png' %}{% endif %}";
             }
-        });
-
-        document.addEventListener("DOMContentLoaded", function () { 
-            let resendButton = document.getElementById("resendOtpButton");
-            let countdownElement = document.getElementById("countdown");
-            let timerText = document.getElementById("timer");
-            let countdown = 30;
-            let form = resendButton.closest("form"); // Get the form containing the button
-
-            function updateTimer() {
-                if (countdown > 0) {
-                    countdownElement.textContent = countdown;
-                    countdown--;
-                    setTimeout(updateTimer, 1000);
-                } else {
-                    resendButton.disabled = false; // Enable button after countdown
-                    timerText.style.display = "none";
-                }
-            }
-        
-            // Disable button initially when page loads
-            resendButton.disabled = true;
-            updateTimer();
-        
-            resendButton.addEventListener("click", function (event) {
-                event.preventDefault(); // Prevent default only to handle timer
-                resendButton.disabled = true; // Disable button immediately after click
-                countdown = 30;
-                timerText.style.display = "block";
-                updateTimer();
-            
-                // Submit the form manually after disabling button
-                setTimeout(() => {
-                    form.submit();
-                }, 100); // Small delay to ensure button is disabled before form submission
-            });
         });
 
     </script>

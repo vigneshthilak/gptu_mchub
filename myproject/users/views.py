@@ -1112,11 +1112,11 @@ def send_otp(email, request):
     msg.send()
     return otp
 
-
 def my_profile(request):
-    
+    # Debug for GET cleanup
     if request.method == "GET":
-        # Only clear if not redirected from OTP generation
+        print("🔍 GET request received")
+        print("otp_sent in session (GET):", request.session.get("otp_sent"))
         if request.GET.get("otp_sent") != "1":
             for key in ["otp", "otp_expiry", "pending_password", "otp_sent"]:
                 request.session.pop(key, None)
@@ -1132,7 +1132,10 @@ def my_profile(request):
     #profile = UserProfile.objects.get(username=request.user.username)
 
     if request.method == "POST":
+        print("✅ POST received")
+        print("request.POST keys:", request.POST.keys())
         if 'update_profile' in request.POST:
+            print('update profile')
             # Helper to clean input
             def clean_input(value):
                 return value.strip() if value and value.strip() else None
@@ -1146,6 +1149,7 @@ def my_profile(request):
             profile.save()
 
         elif 'upload_picture' in request.POST and request.FILES.get("profile_picture"):
+            print('upload picture')
             uploaded_image = request.FILES["profile_picture"]
             resized_image = resize_image(uploaded_image)
 
@@ -1154,6 +1158,7 @@ def my_profile(request):
                 profile.save()
 
         elif 'generate_otp' in request.POST:
+            print('generate otp')
             old_password = request.POST.get('old_password')
             new_password = request.POST.get('new_password')
             confirm_password = request.POST.get('confirm_password')
@@ -1188,6 +1193,7 @@ def my_profile(request):
             return redirect(reverse("users:my_profile") + "?otp_sent=1#password-section")
 
         elif 'verify_otp' in request.POST:
+            print('verify otp')
             entered_otp = request.POST.get("otp")
             stored_otp = request.session.get("otp")
             expiry_time = request.session.get("otp_expiry")
@@ -1195,22 +1201,26 @@ def my_profile(request):
 
             if expiry_time and datetime.datetime.now().timestamp() > expiry_time:
                 messages.error(request, "OTP has expired. Please request a new one.", extra_tags='otp_form')
-                return redirect(reverse("users:my_profile") + "#password-section")
+                return redirect(reverse("users:my_profile") + "?otp_sent=1#password-section")
 
             if entered_otp == stored_otp and new_password:
                 profile.password = make_password(new_password)
                 profile.save()
                 # Cleanup
-                for key in ["otp", "otp_expiry", "pending_password", "show_otp_modal", "last_otp_sent"]:
+                for key in ["otp", "otp_expiry", "pending_password"]:
                     request.session.pop(key, None)
                 messages.success(request, "Password updated successfully.", extra_tags='otp_form')
                 request.session.pop('otp_sent', None)
                 return redirect("users:my_profile")
             else:
                 messages.error(request, "Invalid OTP.", extra_tags='otp_form')
-                return redirect(reverse("users:my_profile") + "#password-section")
+                return redirect(reverse("users:my_profile") + "?otp_sent=1#password-section")
             
-        elif 'resend_otp' in request.POST:
+        elif 'otp_resend' in request.POST:
+            print('resend otp')
+            print("otp in session:", request.session.get("otp"))
+            print("otp_sent in session:", request.session.get("otp_sent"))
+
             if request.session.get('otp') and profile.email:
 
                 # Remove Old OTP from Session
@@ -1257,11 +1267,11 @@ def my_profile(request):
                     logger = logging.getLogger(__name__)
                     logger.error(f"Failed to send OTP email: {e}")
                     messages.error(request, "Failed to send OTP. Please try again later.")
-                return redirect(reverse("users:my_profile") + "#password-section")
+                return redirect(reverse("users:my_profile") + "?otp_sent=1#password-section")
 
             else:
                 messages.error(request, "Something went wrong. Please try again.")
-                return redirect(reverse("users:my_profile") + "#password-section")
+                return redirect(reverse("users:my_profile") + "?otp_sent=1#password-section")
 
     return render(request, 'users/my_profile.html', {
         'profile': profile,
