@@ -76,6 +76,49 @@ def login(request):
     add_never_cache_headers(response)  # Prevents browser from storing login page
     return response
 
+# To render the Account Request page
+def acc_req(request):
+    if request.method == 'POST':
+        user_email = request.POST.get('email')
+
+        if user_email:
+            try:
+                subject = "New Account Request - GPTU MC HUB"
+                from_email = f"GPTU MC HUB <{settings.EMAIL_HOST_USER}>"
+                to_email = "vigneshthilagaraj00@gmail.com"
+
+                text_content = f"A new user has requested an account.\n\nEmail: {user_email}\n\nPlease review and take appropriate action.\n\nRegards,\nGPTU MC HUB"
+
+                html_content = f"""
+                <html>
+                <body style="font-family: Arial, sans-serif; color: #333; padding: 20px;">
+                    <h2 style="color: #2c3e50;">New Account Request</h2>
+                    <p>You have received a new account request from a user.</p>
+                    <p><strong>Email Address:</strong> {user_email}</p>
+                    <p>Please review and take the necessary action to approve or deny this request.</p>
+                    <br>
+                    <p>Regards,</p>
+                    <p style="font-weight: bold; color: #2c3e50;">GPTU MC HUB System</p>
+                    <hr>
+                    <small>This is an automated message. Please do not reply directly to this email.</small>
+                </body>
+                </html>
+                """
+
+                msg = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
+                msg.attach_alternative(html_content, "text/html")
+                msg.send()
+
+                messages.success(request, "Your request has been sent successfully!")
+            except Exception as e:
+                messages.error(request, f"Failed to send email. Error: {e}")
+        else:
+            messages.error(request, "Please provide a valid email.")
+
+        return redirect('home:acc_req')
+
+    return render(request, 'home/acc_req.html')
+
 # To render the Forgot Password page
 # Used to change the users password if the user forgot their password
 def forgot_password(request):

@@ -179,6 +179,7 @@ body::selection {
     .login-container .form-control,
     .gptu_mchub-home-fp .form-control,
     .gptu_mchub-home-rp .form-control,
+    .gptu_mchub-home-acc_req .form-control,
     .otp-container .form-control,
     .otp_dialog .form-control {
       border-radius: 40px;
@@ -198,7 +199,9 @@ body::selection {
     .gptu_mchub-home-fp .form-control:focus,
     .gptu_mchub-home-fp .form-control:active,
     .gptu_mchub-home-rp .form-control:focus,
-    .gptu_mchub-home-rp .form-control:active {
+    .gptu_mchub-home-rp .form-control:active,
+    .gptu_mchub-home-acc_req .form-control:focus,
+    .gptu_mchub-home-acc_req .form-control:active {
       box-shadow: none;
       border: 1px solid black;
     }
@@ -306,7 +309,8 @@ body::selection {
   /*---------- Account password reseting ----------*/
 
     .gptu_mchub-home-fp,
-    .gptu_mchub-home-rp {
+    .gptu_mchub-home-rp,
+    .gptu_mchub-home-acc_req {
       display: flex;
       justify-content: center;
       align-items: center;
@@ -323,12 +327,14 @@ body::selection {
     }
   
     .gptu_mchub-home-fp .custom-message,
-    .gptu_mchub-home-rp .custom-message {
+    .gptu_mchub-home-rp .custom-message,
+    .gptu_mchub-home-acc_req .custom-message {
       text-align: left;
     }
   
     .gptu_mchub-home-fp .col-md-6,
-    .gptu_mchub-home-rp .col-md-6 {
+    .gptu_mchub-home-rp .col-md-6,
+    .gptu_mchub-home-acc_req .col-md-6 {
       color: gray;
     }
   
@@ -342,10 +348,12 @@ body::selection {
           margin: 8px 0;
       }
       .gptu_mchub-home-fp .col-md-6,
-      .gptu_mchub-home-rp .col-md-6 {
+      .gptu_mchub-home-rp .col-md-6,
+      .gptu_mchub-home-acc_req .col-md-6 {
         margin-top: 15px;
       }
-      .form-title {
+      .form-title,
+      .form-cont {
         text-align: center;
       }
     }
