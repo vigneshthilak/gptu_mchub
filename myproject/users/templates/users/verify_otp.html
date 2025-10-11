@@ -43,19 +43,19 @@
 </head>
 <body>
 
-    <section class="gptu_mchub-home-verify-otp">
+    <section class="gptu_mchub-users-verify-otp">
         <div class="otp-container">
-            <span class="close-icon" data-url="{% url 'home:login' %}" onclick="redirectToPage()">&times;</span>
+            <span class="close-icon" onclick="goBack()">&times;</span>
             <h1 class="text-center mb-4">OTP Verification</h1>
             <p>Enter the OTP sent to your email</p>
-            <form action="{% url 'home:verify_otp' %}" method="post">
+            <form action="{% url 'users:verify_otp' %}" method="post">
                 {% csrf_token %}
                 <div class="mb-3">
                     <input type="text" id="otpInput" class="form-control" name="otp" placeholder="Enter OTP" maxlength="6">
                 </div>
                 <button id="verifyOtpButton" class="verify-btn">Verify OTP</button>
             </form>
-            <form action="{% url 'home:resend_otp' %}" method="post">
+            <form action="{% url 'users:resend_otp' %}" method="post">
                 {% csrf_token %}
                 <button id="resendOtpButton" class="resend-btn">Resend OTP</button>
                 <p id="timer">You can resend OTP in <span id="countdown">30</span>s</p>
@@ -87,5 +87,15 @@
         <script src="{% static 'js/script.js' %}"></script>
 
     <!-- The Link for the Java Script file -->
+
+    <!-- The Script for go back -->
+
+        <script>
+            function goBack() {
+              window.history.back();
+            }
+        </script>
+
+    <!-- The Script for go back -->
 </body>
 </html>

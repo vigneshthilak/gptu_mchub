@@ -80,21 +80,31 @@ def login(request):
 def acc_req(request):
     if request.method == 'POST':
         user_email = request.POST.get('email')
+        user_id = request.POST.get('user_id')
 
-        if user_email:
+        if user_email and user_id:
             try:
                 subject = "New Account Request - GPTU MC HUB"
                 from_email = f"GPTU MC HUB <{settings.EMAIL_HOST_USER}>"
-                to_email = "vigneshthilagaraj00@gmail.com"
+                to_email = "vigneshthilagaraj00@gmail.com"  # admin's email
 
-                text_content = f"A new user has requested an account.\n\nEmail: {user_email}\n\nPlease review and take appropriate action.\n\nRegards,\nGPTU MC HUB"
+                # Plain text content
+                text_content = (
+                    f"A new user has requested an account.\n\n"
+                    f"Email: {user_email}\n"
+                    f"User ID: {user_id}\n\n"
+                    f"Please review and take appropriate action.\n\n"
+                    f"Regards,\nGPTU MC HUB"
+                )
 
+                # HTML content
                 html_content = f"""
                 <html>
                 <body style="font-family: Arial, sans-serif; color: #333; padding: 20px;">
                     <h2 style="color: #2c3e50;">New Account Request</h2>
                     <p>You have received a new account request from a user.</p>
                     <p><strong>Email Address:</strong> {user_email}</p>
+                    <p><strong>User ID:</strong> {user_id}</p>
                     <p>Please review and take the necessary action to approve or deny this request.</p>
                     <br>
                     <p>Regards,</p>
@@ -113,11 +123,12 @@ def acc_req(request):
             except Exception as e:
                 messages.error(request, f"Failed to send email. Error: {e}")
         else:
-            messages.error(request, "Please provide a valid email.")
+            messages.error(request, "Please provide both Email and User ID.")
 
         return redirect('home:acc_req')
 
     return render(request, 'home/acc_req.html')
+
 
 # To render the Forgot Password page
 # Used to change the users password if the user forgot their password
@@ -221,279 +232,6 @@ def reset_password(request, token):
         return redirect('home:forgot_password')
 
     return render(request, 'home/reset_password.html', {"token": token})
-
-# Function used to Generate and send the 6 digit OTP to users corresponding E-Mail ID
-def send_otp(email, request):
-    otp = ''.join(random.choices(string.digits, k=6))  # Generate 6-digit OTP
-    expiry_time = datetime.datetime.now() + datetime.timedelta(minutes=1)
-    request.session['otp'] = otp
-    request.session['otp_expiry'] = expiry_time.timestamp()
-
-    subject = "Your GPTU MC HUB Email Verification Code"
-    from_email = f"GPTU MC HUB <{settings.EMAIL_HOST_USER}>"
-    text_content = f"Hello,\n\nYour OTP for email verification is: {otp}\nThis OTP will expire in 1 minute.\n\nPlease do not share this code with anyone.\n\nRegards,\nGPTU MC HUB Team"
-    
-    html_content = f"""
-    <html>
-    <body style="font-family: Arial, sans-serif; color: #333;">
-        <h2>GPTU MC HUB - Email Verification</h2>
-        <p>Hello,</p>
-        <p>Your One-Time Password (OTP) for verification is:</p>
-        <h1 style="color: #2c3e50;">{otp}</h1>
-        <p>This OTP will expire in <strong>1 minute</strong>.</p>
-        <p>Please do not share this code with anyone.</p>
-        <br>
-        <p>Regards,</p>
-        <p style="color: #2c3e50; font-weight: bold;">GPTU MC HUB Team</p>
-        <hr>
-        <small>This is an automated email; please do not reply.</small>
-    </body>
-    </html>
-    """
-
-    msg = EmailMultiAlternatives(subject, text_content, from_email, [email])
-    msg.attach_alternative(html_content, "text/html")
-    msg.send()
-    return otp
-
-
-# To render the Signup page
-def signup(request):
-    if request.method == "POST":
-
-        # To get the input values from the users to create an account
-        first_name = request.POST.get('firstName', '').strip()
-        last_name = request.POST.get('lastName', '').strip()
-        email = request.POST.get('email', '').strip()
-        user_id = request.POST.get('userId', '').strip()
-        username = request.POST.get('username', '').strip()
-        password = request.POST.get('password', '').strip()
-        confirm_password = request.POST.get('confirmPassword', '').strip()
-        department = request.POST.get('department', '').strip()
-        gender = request.POST.get('gender', '').strip()
-
-        # Check if any field is empty
-        if not all([first_name, last_name, email, user_id, username, password, confirm_password, department, gender]):
-            messages.error(request, 'All fields are required! Please fill in all fields.')
-            return render(request, 'home/signup.html')
-        
-        # To Ensure the given username is starts with '@'
-        if username[0] != '@':
-            messages.error(request, "The Username must start with '@'")
-            return render(request, 'home/signup.html', {
-                'first_name': first_name,
-                'last_name': last_name, 
-                'email': email,
-                'user_id': user_id,
-                'department': department,
-                'gender': gender,
-            })
-        
-        # To Ensure the given username contains only lowercase letters
-        if not username.islower():
-            messages.error(request, 'Username must contain only lowercase letters.')
-            return render(request, 'home/signup.html', {
-                'first_name': first_name,
-                'last_name': last_name, 
-                'email': email,
-                'user_id': user_id,
-                'department': department,
-                'gender': gender,
-            })
-
-
-        # To check the Password and Confirm Password both are same or not
-        if password != confirm_password:
-            messages.error(request, 'Password do not match!')
-            return render(request, 'home/signup.html', {
-                'first_name': first_name,
-                'last_name': last_name, 
-                'email': email,
-                'user_id': user_id,
-                'username': username,
-                'department': department,
-                'gender': gender,
-            })
-        
-        # To Ensure the given password has at least 8 charactes
-        if len(password) < 8:
-            messages.error(request, 'Password length must be at least 8 characters!')
-            return render(request, 'home/signup.html', {
-                'first_name': first_name,
-                'last_name': last_name, 
-                'email': email,
-                'user_id': user_id,
-                'username': username,
-                'department': department,
-                'gender': gender,
-            })
-        
-        # To Ensure the given password contains at least one special character
-        special_chars = set(string.punctuation)
-        if not any(char in special_chars for char in password):
-            messages.error(request, 'Password must contain at least one special character!')
-            return render(request, 'home/signup.html', {
-                'first_name': first_name,
-                'last_name': last_name, 
-                'email': email,
-                'user_id': user_id,
-                'username': username,
-                'department': department,
-                'gender': gender,
-            })
-
-        # Check if username already exists
-        if UserProfile.objects.filter(username=username).exists():
-            messages.error(request, "Username already taken. Please choose another one.")
-            return render(request, 'home/signup.html', {
-                'first_name': first_name,
-                'last_name': last_name, 
-                'email': email,
-                'user_id': user_id,
-                'department': department,
-                'gender': gender,
-            })
-        
-        # Check if user_id already exists
-        if UserProfile.objects.filter(user_id=user_id).exists():
-            messages.error(request, "User ID already exists.")
-            return render(request, 'home/signup.html', {
-                'first_name': first_name,
-                'last_name': last_name, 
-                'email': email,
-                'username': username,
-                'department': department,
-                'gender': gender,
-            })
-        
-        """
-        # Validate user_id and email against auth_users
-        if not AuthUser.objects.filter(user_id=user_id, email=email).exists():
-            messages.error(request, "You're not eligible to create an account!")
-            return render(request, 'home/signup.html')
-        """
-
-        # Calling the send_otp() to send the otp if the given inputs are correct
-        otp = send_otp(email, request)  
-        request.session['otp'] = otp  
-        request.session['user_data'] = {
-            'first_name': first_name,
-            'last_name': last_name,
-            'email': email,
-            'user_id': user_id,
-            'username': username,
-            'department': department,
-            'gender': gender,
-            'password': password,  # Store plain password temporarily for user creation
-        }
-
-        return redirect('home:verify_otp')  # Redirect to OTP verification page
-
-    return render(request, 'home/signup.html')
-
-# To verify the otp
-def verify_otp(request):
-    if request.method == "POST":
-        entered_otp = request.POST.get("otp", "").strip()
-        stored_otp = request.session.get("otp")
-        otp_expiry = request.session.get("otp_expiry")
-
-        # Validate OTP existence and expiration
-        if not stored_otp or not otp_expiry or now().timestamp() > otp_expiry:
-            messages.error(request, "OTP has expired! Please request a new one.")
-            return redirect("home:verify_otp")
-
-        # Validate OTP match
-        if entered_otp == stored_otp:
-            user_data = request.session.get("user_data", {})
-
-            if user_data:
-                try:
-                    # Create user in Django authentication system
-                    user = UserProfile.objects.create_user(
-                        username=user_data['username'],
-                        email=user_data['email'],
-                        password=user_data['password'],  # Django hashes password automatically
-                        first_name=user_data['first_name'],
-                        last_name=user_data['last_name'],
-                        user_id=user_data['user_id'],  
-                        department=user_data['department'],
-                        gender=user_data['gender'],
-                    )
-
-                    # Clear session data
-                    request.session.pop("otp", None)
-                    request.session.pop("user_data", None)
-                    request.session.pop("otp_expiry", None)
-
-                    messages.success(request, "Account created successfully!")
-                    return redirect("home:login")
-                
-                except Exception as e:
-                    messages.error(request, f"Error creating account: {e}")
-                    return redirect("home:verify_otp")
-        else:
-            messages.error(request, "Invalid OTP! Please try again.")
-            return render(request, 'home/verify_otp.html')
-
-    return render(request, 'home/verify_otp.html')
-
-
-# To resend the OTP
-def resend_otp(request):
-    if request.method == "POST":
-        user_data = request.session.get("user_data", {})
-        user_email = user_data.get("email")
-
-        if not user_email:
-            messages.error(request, "User email not found. Please sign up again.")
-            return redirect("home:verify_otp")
-
-        # Remove Old OTP from Session
-        request.session.pop("otp", None)
-        request.session.pop("otp_expiry", None)
-
-        # Generate new OTP and expiry
-        new_otp = ''.join(random.choices(string.digits, k=6))
-        expiry_time = datetime.datetime.now() + datetime.timedelta(minutes=1)
-        request.session["otp"] = new_otp
-        request.session["otp_expiry"] = expiry_time.timestamp()
-        request.session.modified = True
-
-        # HTML email content (copied from your send_otp style)
-        subject = "Your New OTP for GPTU MC HUB Verification"
-        from_email = f"GPTU MC HUB <{settings.EMAIL_HOST_USER}>"
-        text_content = f"Hello,\n\nYour new OTP for verification is: {new_otp}\nThis OTP will expire in 1 minute.\n\nPlease do not share this code with anyone.\n\nRegards,\nGPTU MC HUB Team"
-
-        html_content = f"""
-        <html>
-        <body style="font-family: Arial, sans-serif; color: #333;">
-            <h2>GPTU MC HUB - Email Verification</h2>
-            <p>Hello,</p>
-            <p>Your new One-Time Password (OTP) for verification is:</p>
-            <h1 style="color: #2c3e50;">{new_otp}</h1>
-            <p>This OTP will expire in <strong>1 minute</strong>.</p>
-            <p>Please do not share this code with anyone.</p>
-            <br>
-            <p>Regards,</p>
-            <p style="color: #2c3e50; font-weight: bold;">GPTU MC HUB Team</p>
-            <hr>
-            <small>This is an automated email; please do not reply.</small>
-        </body>
-        </html>
-        """
-
-        try:
-            msg = EmailMultiAlternatives(subject, text_content, from_email, [user_email])
-            msg.attach_alternative(html_content, "text/html")
-            msg.send()
-            messages.success(request, "A new OTP has been sent to your email.")
-        except Exception as e:
-            messages.error(request, f"Error sending email: {e}")
-
-        return redirect("home:verify_otp")
-
-    return redirect("home:verify_otp")
 
 #To render the Contact Us page
 def contactus(request):

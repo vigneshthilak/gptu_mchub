@@ -105,6 +105,79 @@
                         <p><span>Religion</span>: {{ student.religion }}</p>
                         <p><span>Community</span>: {{ student.community }}</p>
                     </div>
+                    <div class="">
+                        <h2 class="mb-4">SSLC Marks</h2>
+
+                        <!-- Check if the data is passed -->
+                        {% if sslc_marks %}
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Subject</th>
+                                        <th>Mark</th>
+                                        <th>Result</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for mark in sslc_marks %}
+                                        <tr>
+                                            <td>{{ mark.subject }}</td>
+                                            <td>{{ mark.marks }}</td>
+                                            <td>{{ mark.result }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                    <tr>
+                                        <td><strong>Total</strong></td>
+                                        <td><strong>{{ total_marks }}</strong></td>
+                                        <td><strong>{{ final_result }}</strong></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <p>No SSLC marks found.</p>
+                        {% endif %}
+                    </div>
+                    <div class="">
+                        <h4 class="mb-3">College Marks - Semester {{ collegemark.semester }}</h4>
+                        <table class="table table-bordered text-center align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Subject</th>
+                                    <th>Mark</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Subject 1</td><td>{{ collegemark.subject1 }}</td></tr>
+                                <tr><td>Subject 2</td><td>{{ collegemark.subject2 }}</td></tr>
+                                <tr><td>Subject 3</td><td>{{ collegemark.subject3 }}</td></tr>
+                                <tr><td>Subject 4</td><td>{{ collegemark.subject4 }}</td></tr>
+                                <tr><td>Subject 5</td><td>{{ collegemark.subject5 }}</td></tr>
+                                <tr><td>Subject 6</td><td>{{ collegemark.subject6 }}</td></tr>
+                                <tr><td>Subject 7</td><td>{{ collegemark.subject7 }}</td></tr>
+                            
+                                <tr class="table-secondary">
+                                    <td><strong>Total</strong></td>
+                                    <td>
+                                        <strong>
+                                            {{
+                                                collegemark.subject1|add:collegemark.subject2|add:collegemark.subject3|add:collegemark.subject4|
+                                                add:collegemark.subject5|add:collegemark.subject6|add:collegemark.subject7
+                                            }}
+                                        </strong>
+                                    </td>
+                                </tr>
+                            
+                                {% if collegemark.result == 'Pass' %}
+                                    <tr class="table-success">
+                                {% else %}
+                                    <tr class="table-danger">
+                                {% endif %}
+                                    <td><strong>Result</strong></td>
+                                    <td><strong>{{ collegemark.result }}</strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </section>

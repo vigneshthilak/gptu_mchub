@@ -90,3 +90,86 @@ class Student(models.Model):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name or ''} ({self.reg_no})"
+    
+
+class SSLCMark(models.Model):
+    student_name = models.CharField(max_length=100)
+    reg_no = models.CharField(max_length=20, unique=True)
+    dob = models.DateField()
+
+    tamil = models.IntegerField()
+    english = models.IntegerField()
+    maths = models.IntegerField()
+    science = models.IntegerField()
+    social = models.IntegerField()
+
+    total = models.IntegerField()
+    percentage = models.FloatField()
+    
+    result = models.CharField(
+        max_length=10,
+        choices=[('Pass', 'Pass'), ('Fail', 'Fail')],
+        default='Pass'
+    )
+
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.student_name} - {self.reg_no}"
+    
+class HSCMark(models.Model):
+    student_name = models.CharField(max_length=100)
+    reg_no = models.CharField(max_length=20, unique=True)
+    dob = models.DateField()
+
+    subject_1 = models.IntegerField()
+    subject_2 = models.IntegerField()
+    subject_3 = models.IntegerField()
+    subject_4 = models.IntegerField()
+    subject_5 = models.IntegerField()
+    subject_6 = models.IntegerField()
+
+    total = models.IntegerField()
+    percentage = models.FloatField()
+    result = models.CharField(max_length=10)  # Eg: 'Pass', 'Fail'
+
+    def __str__(self):
+        return f"{self.student_name} - {self.reg_no}"
+    
+class ITIMark(models.Model):
+    student_name = models.CharField(max_length=100)
+    reg_no = models.CharField(max_length=20, unique=True)
+    dob = models.DateField()
+
+    subject_1 = models.IntegerField()
+    subject_2 = models.IntegerField()
+    subject_3 = models.IntegerField()
+    subject_4 = models.IntegerField()
+    subject_5 = models.IntegerField()
+    subject_6 = models.IntegerField()
+
+    total = models.IntegerField()
+    percentage = models.FloatField()
+    result = models.CharField(max_length=10)  # Eg: 'Pass', 'Fail'
+
+    def __str__(self):
+        return f"{self.student_name} - {self.reg_no}"
+    
+class CollegeMark(models.Model):
+    SEMESTER_CHOICES = [(f"{i}", f"{i} Semester") for i in range(1, 7)]
+
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    semester = models.CharField(max_length=2, choices=SEMESTER_CHOICES)
+
+    subject1 = models.IntegerField()
+    subject2 = models.IntegerField()
+    subject3 = models.IntegerField()
+    subject4 = models.IntegerField()
+    subject5 = models.IntegerField()
+    subject6 = models.IntegerField()
+    subject7 = models.IntegerField()
+
+    result = models.CharField(max_length=20)
+
+    def __str__(self):
+        return f"{self.student.name} - Sem {self.semester}"

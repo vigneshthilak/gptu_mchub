@@ -72,6 +72,8 @@
                                 <li><a class="dropdown-item" href="{% url 'users:view_stu' %}">View Students</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="{% url 'users:upload_stu' %}">Upload Students</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{% url 'users:upload_stu_mark' %}">Upload Student marks</a></li>
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
@@ -231,11 +233,9 @@
 
                                         {% if messages %}
                                             {% for message in messages %}
-                                                {% if 'password_form' in message.tags %}
-                                                    <div class="custom-message {% if 'error' in message.tags %}error-message{% elif 'success' in message.tags %}success-message{% endif %}">
-                                                        {{ message }}
-                                                    </div>
-                                                {% endif %}
+                                                <div class="custom-message {% if 'error' in message.tags %}error-message{% elif 'success' in message.tags %}success-message{% endif %}">
+                                                    {{ message }}
+                                                </div>
                                             {% endfor %}
                                         {% endif %}
                                         
@@ -244,36 +244,6 @@
                                         <button type="submit" name="generate_otp" class="btn gen-otp">Generate OTP</button>
                                     </div>
                                 </form>
-                                {% if request.session.otp_sent %}
-                                    <form class="row g-2 stack-lg" action="{% url 'users:my_profile' %}" method="post">
-                                        {% csrf_token %}
-                                        <!-- New input field and button in the same row -->
-                                        <div class="col-8">
-                                            <input type="text" id="otpInput" class="form-control otp-form" name="otp" placeholder="Enter OTP" maxlength="6">
-                                        </div>
-                                        <div class="col-4">
-                                            <button type="submit" name="verify_otp" class="btn verify-otp w-100">Verify</button>
-                                        </div>
-                                    </form>
-                                    <form method="post" action="{% url 'users:my_profile' %}">
-                                        {% csrf_token %}
-                                        <button id="resendOtpButton" type="submit"  value="1" name="otp_resend" class="btn resend-otp">Resend OTP</button>
-                                        <p class="text-center" id="timer">You can resend OTP in <span id="countdown">30</span>s</p>
-                                    </form>
-                                {% endif %}
-                                <!-- To Display the Error Message -->
-
-                                    {% if messages %}
-                                        {% for message in messages %}
-                                            {% if 'otp_form' in message.tags %}
-                                                <div class="custom-message {% if 'error' in message.tags %}error-message{% elif 'success' in message.tags %}success-message{% endif %}">
-                                                    {{ message }}
-                                                </div>
-                                            {% endif %}
-                                        {% endfor %}
-                                    {% endif %}
-                                    
-                                <!-- To Display the Error Message -->
                             </div>
                         </div>
                     </div>
@@ -304,7 +274,7 @@
                     <hr>
                     <p>
                         © Govt Polytechnic College, Uthangarai. All Rights Reserved<br>
-                        <small>Developed by GPT Uthangarai from the Department of Computer Engineering (2022 - 2025)</small>
+                        <small>Developed by GPT Uthangarai from the Department of Computer Engineering (2024 - 2025)</small>
                     </p>
                 </div>
             </div>

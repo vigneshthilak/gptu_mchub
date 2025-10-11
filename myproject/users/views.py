@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.contrib.auth import logout as django_logout 
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import cache_control
-from .models import Student
+from .models import Student, SSLCMark, HSCMark, CollegeMark
 from home.models import UserProfile
 from django.contrib.auth.models import AnonymousUser
 from django.utils.dateparse import parse_date
@@ -19,10 +19,12 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.contrib.auth.hashers import check_password, make_password
 from django.db.models.functions import Concat, Lower
 from django.db.models import Value
+from django.utils.timezone import now, timedelta
 from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponse
 import pandas as pd
 import pdfkit
+import openpyxl
 import os
 import io
 import base64
@@ -997,6 +999,180 @@ def delete_student(request, aadhar_number):
 
     return redirect('users:view_stu')  # Redirect to the student listing page
 
+def upload_stu_mark(request):
+    return render(request, 'users/upload_stu_mark.html')
+
+def upload_sslc_mark(request):
+    if request.method == 'POST' and request.FILES.get('excel_file'):
+        excel_file = request.FILES['excel_file']
+
+        try:
+            wb = openpyxl.load_workbook(excel_file)
+            sheet = wb.active
+
+            rows_skipped = 0
+            for row in sheet.iter_rows(min_row=2, values_only=True):
+                student_name, reg_no, dob, tamil, english, maths, science, social, total, percentage, result = row
+
+                if SSLCMark.objects.filter(reg_no=reg_no).exists():
+                    rows_skipped += 1
+                    continue
+
+                SSLCMark.objects.create(
+                    student_name=student_name,
+                    reg_no=reg_no,
+                    dob=dob,
+                    tamil=int(tamil),
+                    english=int(english),
+                    maths=int(maths),
+                    science=int(science),
+                    social=int(social),
+                    total=int(total),
+                    percentage=float(percentage),
+                    result=result.strip().capitalize()
+                )
+
+            messages.success(request, f"SSLC Marks uploaded successfully! Rows skipped (duplicate reg_no): {rows_skipped}")
+            return redirect('users:upload_stu_mark')
+
+        except Exception as e:
+            messages.error(request, f"Error processing the file: {e}")
+            return redirect('users:upload_stu_mark')
+
+    return render(request, 'users/upload_stu_mark.html')
+
+def upload_hsc_mark(request):
+    if request.method == 'POST' and request.FILES.get('file'):
+        file = request.FILES['file']
+        try:
+            df = pd.read_excel(file)
+
+            required_columns = ['student_name', 'reg_no', 'dob', 'subject_1', 'subject_2', 'subject_3', 'subject_4', 'subject_5', 'subject_6']
+            if not all(col in df.columns for col in required_columns):
+                messages.error(request, "Excel sheet is missing required columns.")
+                return redirect('users:upload_stu_mark')
+
+            for _, row in df.iterrows():
+                # Parse and calculate fields
+                subject_marks = [row['subject_1'], row['subject_2'], row['subject_3'],
+                                 row['subject_4'], row['subject_5'], row['subject_6']]
+                total = sum(subject_marks)
+                percentage = round(total / 6, 2)
+                result = "Pass" if all(m >= 35 for m in subject_marks) else "Fail"
+
+                # Convert date string to date object if needed
+                dob = row['dob']
+                if isinstance(dob, str):
+                    dob = datetime.strptime(dob, "%Y-%m-%d").date()
+
+                # Create and save the object
+                HSCMark.objects.create(
+                    student_name=row['student_name'],
+                    reg_no=row['reg_no'],
+                    dob=dob,
+                    subject_1=row['subject_1'],
+                    subject_2=row['subject_2'],
+                    subject_3=row['subject_3'],
+                    subject_4=row['subject_4'],
+                    subject_5=row['subject_5'],
+                    subject_6=row['subject_6'],
+                    total=total,
+                    percentage=percentage,
+                    result=result
+                )
+            messages.success(request, "HSC marks uploaded successfully.")
+        except Exception as e:
+            messages.error(request, f"Error uploading file: {e}")
+        return redirect('users:upload_stu_mark')
+
+    return render(request, 'users/upload_stu_mark.html')
+
+def upload_iti_mark(request):
+    if request.method == 'POST' and request.FILES.get('file'):
+        file = request.FILES['file']
+        try:
+            df = pd.read_excel(file)
+
+            required_columns = ['student_name', 'reg_no', 'dob', 'subject_1', 'subject_2', 'subject_3', 'subject_4', 'subject_5', 'subject_6']
+            if not all(col in df.columns for col in required_columns):
+                messages.error(request, "Excel sheet is missing required columns.")
+                return redirect('users:upload_stu_mark')
+
+            for _, row in df.iterrows():
+                # Parse and calculate fields
+                subject_marks = [row['subject_1'], row['subject_2'], row['subject_3'],
+                                 row['subject_4'], row['subject_5'], row['subject_6']]
+                total = sum(subject_marks)
+                percentage = round(total / 6, 2)
+                result = "Pass" if all(m >= 35 for m in subject_marks) else "Fail"
+
+                # Convert date string to date object if needed
+                dob = row['dob']
+                if isinstance(dob, str):
+                    dob = datetime.strptime(dob, "%Y-%m-%d").date()
+
+                # Create and save the object
+                HSCMark.objects.create(
+                    student_name=row['student_name'],
+                    reg_no=row['reg_no'],
+                    dob=dob,
+                    subject_1=row['subject_1'],
+                    subject_2=row['subject_2'],
+                    subject_3=row['subject_3'],
+                    subject_4=row['subject_4'],
+                    subject_5=row['subject_5'],
+                    subject_6=row['subject_6'],
+                    total=total,
+                    percentage=percentage,
+                    result=result
+                )
+            messages.success(request, "HSC marks uploaded successfully.")
+        except Exception as e:
+            messages.error(request, f"Error uploading file: {e}")
+        return redirect('users:upload_stu_mark')
+
+    return render(request, 'users/upload_stu_mark.html')
+
+def upload_college_marks(request):
+    if request.method == 'POST':
+        file = request.FILES.get('file')
+        if not file:
+            messages.error(request, "No file selected.")
+            return redirect('users:upload_stu_mark')
+
+        try:
+            df = pd.read_excel(file)
+
+            for _, row in df.iterrows():
+                # Get student object by name and reg_no
+                try:
+                    student = Student.objects.get(first_name=row['first_name'], last_name=row['last_name'], reg_no=row['reg_no'])
+                except Student.DoesNotExist:
+                    messages.warning(request, f"Student {row['Name']} with Reg No {row['reg_no']} not found.")
+                    continue
+
+                # Create college mark entry
+                CollegeMark.objects.create(
+                    student=student,
+                    semester=row['semester'],
+                    subject1=row['subject1'],
+                    subject2=row['subject2'],
+                    subject3=row['subject3'],
+                    subject4=row['subject4'],
+                    subject5=row['subject5'],
+                    subject6=row['subject6'],
+                    subject7=row['subject7'],
+                    result=row['result']
+                )
+
+            messages.success(request, "College marks uploaded successfully.")
+        except Exception as e:
+            messages.error(request, f"Error processing the file: {str(e)}")
+        
+        return redirect('users:upload_stu_mark')
+
+    return render(request, 'users/upload_stu_mark.html')
+
 # Function to conver the image file into Base64 code
 def image_to_base64(image_path):
     try:
@@ -1113,14 +1289,6 @@ def send_otp(email, request):
     return otp
 
 def my_profile(request):
-    # Debug for GET cleanup
-    if request.method == "GET":
-        print("🔍 GET request received")
-        print("otp_sent in session (GET):", request.session.get("otp_sent"))
-        if request.GET.get("otp_sent") != "1":
-            for key in ["otp", "otp_expiry", "pending_password", "otp_sent"]:
-                request.session.pop(key, None)
-
     try:
         profile = UserProfile.objects.get(username=request.user.username) # Use the correct relation
     except UserProfile.DoesNotExist:
@@ -1132,8 +1300,6 @@ def my_profile(request):
     #profile = UserProfile.objects.get(username=request.user.username)
 
     if request.method == "POST":
-        print("✅ POST received")
-        print("request.POST keys:", request.POST.keys())
         if 'update_profile' in request.POST:
             print('update profile')
             # Helper to clean input
@@ -1164,23 +1330,24 @@ def my_profile(request):
             confirm_password = request.POST.get('confirm_password')
 
             if not old_password or not new_password or not confirm_password:
-                messages.error(request, "All password fields are required.", extra_tags='password_form')
+                messages.error(request, "All password fields are required.")
                 return redirect(reverse("users:my_profile") + "#password-section")
 
             if not check_password(old_password, profile.password):
-                messages.error(request, "Old password is incorrect.", extra_tags='password_form')
+                messages.error(request, "Old password is incorrect.")
                 return redirect(reverse("users:my_profile") + "#password-section")
 
             if new_password != confirm_password:
-                messages.error(request, "Passwords do not match.", extra_tags='password_form')
+                messages.error(request, "Passwords do not match.")
                 return redirect(reverse("users:my_profile") + "#password-section")
 
             if len(new_password) < 8:
                 messages.error(request, "Password must be at least 8 characters.")
+                print('password must be above 8 char')
                 return redirect(reverse("users:my_profile") + "#password-section")
             
             if not any(char in special_chars for char in new_password):
-                messages.error(request, 'Password must contain at least one special character!', extra_tags='password_form')
+                messages.error(request, 'Password must contain at least one special character!')
                 return redirect(reverse("users:my_profile") + "#password-section")
 
             # Store new password temporarily in session
@@ -1188,94 +1355,116 @@ def my_profile(request):
 
             # Send OTP using your custom function
             send_otp(profile.email, request)
-            messages.success(request, "OTP sent successfully to your email ID.", extra_tags='password_form')
-            request.session['otp_sent'] = True  # Set the flag in session
-            return redirect(reverse("users:my_profile") + "?otp_sent=1#password-section")
-
-        elif 'verify_otp' in request.POST:
-            print('verify otp')
-            entered_otp = request.POST.get("otp")
-            stored_otp = request.session.get("otp")
-            expiry_time = request.session.get("otp_expiry")
-            new_password = request.session.get("pending_password")
-
-            if expiry_time and datetime.datetime.now().timestamp() > expiry_time:
-                messages.error(request, "OTP has expired. Please request a new one.", extra_tags='otp_form')
-                return redirect(reverse("users:my_profile") + "?otp_sent=1#password-section")
-
-            if entered_otp == stored_otp and new_password:
-                profile.password = make_password(new_password)
-                profile.save()
-                # Cleanup
-                for key in ["otp", "otp_expiry", "pending_password"]:
-                    request.session.pop(key, None)
-                messages.success(request, "Password updated successfully.", extra_tags='otp_form')
-                request.session.pop('otp_sent', None)
-                return redirect("users:my_profile")
-            else:
-                messages.error(request, "Invalid OTP.", extra_tags='otp_form')
-                return redirect(reverse("users:my_profile") + "?otp_sent=1#password-section")
-            
-        elif 'otp_resend' in request.POST:
-            print('resend otp')
-            print("otp in session:", request.session.get("otp"))
-            print("otp_sent in session:", request.session.get("otp_sent"))
-
-            if request.session.get('otp') and profile.email:
-
-                # Remove Old OTP from Session
-                request.session.pop("otp", None)
-                request.session.pop("otp_expiry", None)
-
-                # Generate new OTP and expiry
-                new_otp = ''.join(random.choices(string.digits, k=6))
-                expiry_time = datetime.datetime.now() + datetime.timedelta(minutes=1)
-                request.session["otp"] = new_otp
-                request.session["otp_expiry"] = expiry_time.timestamp()
-
-                # HTML email content (copied from your send_otp style)
-                subject = "Your New OTP for GPTU MC HUB Verification"
-                from_email = f"GPTU MC HUB <{settings.EMAIL_HOST_USER}>"
-                text_content = f"Hello,\n\nYour new OTP for verification is: {new_otp}\nThis OTP will expire in 1 minute.\n\nPlease do not share this code with anyone.\n\nRegards,\nGPTU MC HUB Team"
-
-                html_content = f"""
-                <html>
-                <body style="font-family: Arial, sans-serif; color: #333;">
-                    <h2>GPTU MC HUB - OTP for Password Change Verification Code</h2>
-                    <p>Hello,</p>
-                    <p>Your new One-Time Password (OTP) for verification is:</p>
-                    <h1 style="color: #2c3e50;">{new_otp}</h1>
-                    <p>This OTP will expire in <strong>1 minute</strong>.</p>
-                    <p>Please do not share this code with anyone.</p>
-                    <br>
-                    <p>Regards,</p>
-                    <p style="color: #2c3e50; font-weight: bold;">GPTU MC HUB Team</p>
-                    <hr>
-                    <small>This is an automated email; please do not reply.</small>
-                </body>
-                </html>
-                """
-
-                try:
-                    msg = EmailMultiAlternatives(subject, text_content, from_email, [profile.email])
-                    msg.attach_alternative(html_content, "text/html")
-                    msg.send()
-                    messages.success(request, "A new OTP has been sent to your email.")
-                except smtplib.SMTPException as e:
-                    # Log the error internally (e.g., using logging module)
-                    import logging
-                    logger = logging.getLogger(__name__)
-                    logger.error(f"Failed to send OTP email: {e}")
-                    messages.error(request, "Failed to send OTP. Please try again later.")
-                return redirect(reverse("users:my_profile") + "?otp_sent=1#password-section")
-
-            else:
-                messages.error(request, "Something went wrong. Please try again.")
-                return redirect(reverse("users:my_profile") + "?otp_sent=1#password-section")
+            return redirect("users:verify_otp")
 
     return render(request, 'users/my_profile.html', {
         'profile': profile,
     })
+
+# To verify the otp
+def verify_otp(request):
+
+    try:
+        profile = UserProfile.objects.get(username=request.user.username) # Use the correct relation
+    except UserProfile.DoesNotExist:
+        profile = UserProfile.objects.create(username=request.user.username) # create if does not exist.
+
+    if request.method == "POST":
+        entered_otp = request.POST.get("otp", "").strip()
+        stored_otp = request.session.get("otp")
+        otp_expiry = request.session.get("otp_expiry")
+
+        # Validate OTP existence and expiration
+        if not stored_otp or not otp_expiry or now().timestamp() > otp_expiry:
+            messages.error(request, "OTP has expired! Please request a new one.")
+            return redirect("home:verify_otp")
+
+        # Validate OTP match
+        if entered_otp == stored_otp:
+            user_pass = request.session.get("pending_password", {})
+
+            if user_pass:
+                try:
+                    profile.password = make_password(user_pass)
+                    profile.save()
+
+                    # Clear session data
+                    request.session.pop("otp", None)
+                    request.session.pop("pending_password", None)
+                    request.session.pop("otp_expiry", None)
+
+                    messages.success(request, "Your password has been changed successfully! Please log in to your account again.")
+                    return redirect("users:dashboard")
+
+                except Exception as e:
+                    messages.error(request, f"Error creating account: {e}")
+                    return redirect("home:verify_otp")
+        else:
+            messages.error(request, "Incorrect OTP.")
+            return redirect("users:verify_otp")
+    
+    return render(request, 'users/verify_otp.html')
+
+# To resend the OTP
+def resend_otp(request):
+
+    try:
+        profile = UserProfile.objects.get(username=request.user.username) # Use the correct relation
+    except UserProfile.DoesNotExist:
+        profile = UserProfile.objects.create(username=request.user.username) # create if does not exist.
+
+    if request.method == "POST":
+        user_email = profile.email
+
+        if not user_email:
+            messages.error(request, "User email not found. Please sign up again.")
+            return redirect("home:verify_otp")
+
+        # Remove Old OTP from Session
+        request.session.pop("otp", None)
+        request.session.pop("otp_expiry", None)
+
+        # Generate new OTP and expiry
+        new_otp = ''.join(random.choices(string.digits, k=6))
+        expiry_time = datetime.datetime.now() + datetime.timedelta(minutes=1)
+        request.session["otp"] = new_otp
+        request.session["otp_expiry"] = expiry_time.timestamp()
+        request.session.modified = True
+
+        # HTML email content (copied from your send_otp style)
+        subject = "Your New OTP for GPTU MC HUB Verification"
+        from_email = f"GPTU MC HUB <{settings.EMAIL_HOST_USER}>"
+        text_content = f"Hello,\n\nYour new OTP for verification is: {new_otp}\nThis OTP will expire in 1 minute.\n\nPlease do not share this code with anyone.\n\nRegards,\nGPTU MC HUB Team"
+
+        html_content = f"""
+        <html>
+        <body style="font-family: Arial, sans-serif; color: #333;">
+            <h2>GPTU MC HUB - OTP for Password Change Verification Code</h2>
+            <p>Hello,</p>
+            <p>Your new One-Time Password (OTP) for verification is:</p>
+            <h1 style="color: #2c3e50;">{new_otp}</h1>
+            <p>This OTP will expire in <strong>1 minute</strong>.</p>
+            <p>Please do not share this code with anyone.</p>
+            <br>
+            <p>Regards,</p>
+            <p style="color: #2c3e50; font-weight: bold;">GPTU MC HUB Team</p>
+            <hr>
+            <small>This is an automated email; please do not reply.</small>
+        </body>
+        </html>
+        """
+
+        try:
+            msg = EmailMultiAlternatives(subject, text_content, from_email, [user_email])
+            msg.attach_alternative(html_content, "text/html")
+            msg.send()
+            messages.success(request, "A new OTP has been sent to your email.")
+        except Exception as e:
+            messages.error(request, "Failed to send OTP. Please try again later.")
+
+        return redirect("users:verify_otp")
+
+    return redirect("users:verify_otp")
 
 # To logout from the users profile
 def logout(request):

@@ -161,7 +161,7 @@ body::selection {
 
     .gptu_mchub-home-login,
     .gptu_mchub-home-signup,
-    .gptu_mchub-home-verify-otp {
+    .gptu_mchub-users-verify-otp {
       background-color: whitesmoke;
       display: flex;
       justify-content: center;
