@@ -146,6 +146,9 @@ STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
@@ -162,8 +165,8 @@ EMAIL_HOST = 'smtp.gmail.com'  # Gmail SMTP server
 EMAIL_PORT = 587  # Use 587 for TLS, 465 for SSL
 EMAIL_USE_TLS = True
 #EMAIL_USE_SSL = False
-EMAIL_HOST_USER = env('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+EMAIL_HOST_USER = 'gptumchub@gmail.com'
+EMAIL_HOST_PASSWORD = 'uylz jwtq kplz zdse'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 

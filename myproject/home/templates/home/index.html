@@ -117,7 +117,7 @@
                     <hr>
                     <p>
                         © Govt Polytechnic College, Uthangarai. All Rights Reserved<br>
-                        <small>Developed by GPT Uthangarai from the Department of Computer Engineering</small>
+                        <small>Developed by GPT Uthangarai from the Department of Computer Engineering (2024 - 2025)</small>
                     </p>
                 </div>
             </div>
@@ -137,5 +137,19 @@
         <script src="{% static 'js/script.js' %}"></script>
 
     <!-- The Link for the Java Script file -->
+
+    {% if messages %}
+        <ul id="django-messages" style="display:none;">
+            {% for message in messages %}
+              <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        <script>
+            const messages = document.querySelectorAll('#django-messages li');
+            messages.forEach(msg => {
+              alert(msg.textContent);
+            });
+        </script>
+    {% endif %}
 </body>
 </html>

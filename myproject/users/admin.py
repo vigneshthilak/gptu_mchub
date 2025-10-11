@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Student
+from .models import Student, SSLCMark, HSCMark, ITIMark, CollegeMark
 
 @admin.register(Student)
 class StudentAdmin(admin.ModelAdmin):
@@ -27,3 +27,22 @@ class StudentAdmin(admin.ModelAdmin):
             'fields': ('bank_name', 'branch_name', 'account_number', 'ifsc_code')
         }),
     )
+
+
+@admin.register(SSLCMark)
+class SSLCMarkAdmin(admin.ModelAdmin):
+    list_display = ('student_name', 'reg_no', 'total', 'percentage', 'result', 'uploaded_at')
+
+@admin.register(HSCMark)
+class HSCMarkAdmin(admin.ModelAdmin):
+    list_display = ('student_name', 'reg_no', 'total', 'percentage', 'result')
+
+@admin.register(ITIMark)
+class HSCMarkAdmin(admin.ModelAdmin):
+    list_display = ('student_name', 'reg_no', 'total', 'percentage', 'result')
+
+@admin.register(CollegeMark)
+class CollegeMarkAdmin(admin.ModelAdmin):
+    list_display = ('student', 'semester', 'subject1', 'subject2', 'subject3', 'subject4', 'subject5', 'subject6', 'subject7', 'result')
+    list_filter = ('semester', 'result')
+    search_fields = ('student__name', 'student__user_id') 

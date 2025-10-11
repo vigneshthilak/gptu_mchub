@@ -82,7 +82,10 @@
 
 )
 
-harigaran@2004
-
 #To update the requirements.txt file
     >pip freeze > requirements.txt
+
+#GPTUMCHUB
+    gptumchub@gmail.com
+    @gptumchub_cse
+
